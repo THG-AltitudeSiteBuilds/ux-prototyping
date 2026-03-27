@@ -1,0 +1,21 @@
+{
+  "name": "astro-basic-starter",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "wrangler dev",
+    "astro": "astro",
+    "wrangler:dev": "astro build && wrangler dev"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "12.6.12",
+    "@thg-altitude/astro-adapter": "^5.0.1",
+    "astro": "^5.17.1"
+  },
+  "devDependencies": {
+    "wrangler": "^4.61.1"
+  }
+}

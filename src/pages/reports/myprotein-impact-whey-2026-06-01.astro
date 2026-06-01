@@ -1,0 +1,317 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+import FindingCard from '@/components/FindingCard.astro';
+---
+
+<ReportLayout title="Impact Whey Protein Milkshake — Myprotein PDP">
+
+  <section class="report-intro">
+    <h1 class="report-h1">UX Audit: Impact Whey Protein Milkshake</h1>
+    <p class="report-meta">Myprotein PDP &mdash; Audited 1 June 2026</p>
+    <p class="report-summary">
+      This audit covers the product detail page for the Impact Whey Protein Milkshake range on
+      Myprotein. Ten findings are documented across desktop and mobile viewports, spanning
+      information architecture, visual design, accessibility, and conversion friction.
+    </p>
+  </section>
+
+  <section class="findings-section">
+    <h2 class="section-heading">Findings</h2>
+
+    <!-- HIGH PRIORITY -->
+
+    <FindingCard title="Variant selector overwhelm — 88 flavours shown with no filtering" viewport="Both" priority="high">
+      <p slot="what">
+        The flavour dropdown lists all 88 variants in a single unscrolled list. There is no search
+        field, no grouping, and no way to surface popular or new options first.
+      </p>
+      <p slot="why">
+        Choice overload is a well-documented conversion barrier (Iyengar &amp; Lepper, 2000).
+        Users forced to scan 88 options are more likely to abandon than choose.
+      </p>
+      <p slot="fix">
+        Add a text-filter input at the top of the dropdown. Surface the top 6–8 bestseller
+        flavours by default with a "Show all" expansion. Consider a visual swatch grid for
+        flavours with distinct colour associations.
+      </p>
+    </FindingCard>
+
+    <FindingCard title="Add-to-bag CTA is below the fold on mobile at default font size" viewport="Mobile" priority="high">
+      <p slot="what">
+        On a 390 px viewport at the default 16 px browser font, the primary
+        <code>Add to Bag</code> button does not appear until the user scrolls past the image
+        carousel, price block, and the full variant selector.
+      </p>
+      <p slot="why">
+        The primary conversion action must be visible without scrolling on mobile. Every extra
+        scroll reduces the likelihood of a tap.
+      </p>
+      <p slot="fix">
+        Introduce a sticky bottom bar on mobile containing the price, selected variant summary,
+        and the Add to Bag CTA. This pattern is used by Amazon, ASOS, and Nike mobile PDPs.
+      </p>
+    </FindingCard>
+
+    <!-- MEDIUM PRIORITY -->
+
+    <FindingCard title="Nutrition table is collapsed by default with no teaser content" viewport="Both" priority="medium">
+      <p slot="what">
+        The full nutrition panel is hidden behind an accordion. No macros or serving-size data
+        are shown in the collapsed state — users see only the label "Nutritional Information".
+      </p>
+      <p slot="why">
+        For a protein supplement, macros (protein per serving, calories, carbs) are primary
+        purchase signals. Hiding them creates an extra tap barrier at a critical decision point.
+      </p>
+      <p slot="fix">
+        Show protein per serving, calories, and carbs inline on the card in the collapsed state.
+        The accordion can still exist for the full table, but the headline numbers should be
+        scannable immediately.
+      </p>
+    </FindingCard>
+
+    <FindingCard title="Flavour-specific images are not loaded — all variants show the same pack shot" viewport="Both" priority="medium">
+      <p slot="what">
+        Selecting a flavour such as "Salted Caramel" does not update the product image. The
+        same Chocolate Smooth bag is shown for every selection.
+      </p>
+      <p slot="why">
+        Flavour-matched imagery reduces purchase uncertainty and builds confidence. Showing the
+        wrong pack colour increases post-purchase disappointment and potential returns.
+      </p>
+      <p slot="fix">
+        Map flavour variant IDs to their corresponding image assets. Where flavour-specific
+        photography is unavailable, show a colour-tinted placeholder that matches the expected
+        packaging colour.
+      </p>
+    </FindingCard>
+
+    <FindingCard title="Subscription saving is buried in a secondary tab with no inline signpost" viewport="Both" priority="medium">
+      <p slot="what">
+        The subscribe-and-save option (typically 20% off) lives in a tab below the main
+        purchase block. First-time visitors see only the one-off price with no prompt that a
+        recurring saving exists.
+      </p>
+      <p slot="why">
+        Subscription revenue is higher LTV. If users never discover the option it cannot
+        convert. A visible saving anchor also makes the one-off price feel less competitive.
+      </p>
+      <p slot="fix">
+        Add a small callout pill adjacent to the price — e.g. "Subscribe &amp; save 20%" — that
+        scrolls to or expands the subscription section when tapped.
+      </p>
+    </FindingCard>
+
+    <FindingCard title="Review score shown but review count is not linked to the review panel" viewport="Desktop" priority="medium">
+      <p slot="what">
+        The star rating and aggregate score (e.g. 4.6/5) appear near the title, but clicking
+        them does not anchor-scroll to the reviews section further down the page.
+      </p>
+      <p slot="why">
+        Social proof is a key trust signal. Users who want to validate the score should be able
+        to reach the reviews in one click. A dead star rating is a missed engagement hook.
+      </p>
+      <p slot="fix">
+        Wrap the rating block in an anchor tag pointing to <code>#reviews</code>. Ensure the
+        reviews section has that corresponding <code>id</code> attribute.
+      </p>
+    </FindingCard>
+
+    <FindingCard title="Size selector defaults to 1 kg but 2.5 kg is the bestseller — no bestseller label" viewport="Both" priority="medium">
+      <p slot="what">
+        The size selector opens on the 1 kg option. The 2.5 kg SKU reportedly drives the
+        majority of volume but carries no visual differentiator (no "Best Value" or "Most
+        Popular" badge).
+      </p>
+      <p slot="why">
+        Defaulting to the wrong size creates friction for returning customers and misses an
+        opportunity to anchor users toward higher-AOV SKUs.
+      </p>
+      <p slot="fix">
+        Default the size selector to the bestselling SKU. Add a "Best Value" or "Most Popular"
+        label to that option within the selector.
+      </p>
+    </FindingCard>
+
+    <!-- LOW PRIORITY -->
+
+    <FindingCard title="Page title tag does not include the flavour variant or size" viewport="Both" priority="low">
+      <p slot="what">
+        The <code>&lt;title&gt;</code> element reads "Impact Whey Protein | Myprotein" regardless
+        of which variant is selected. Size and flavour parameters are not reflected.
+      </p>
+      <p slot="why">
+        Specific titles improve CTR from search results pages and make browser tabs identifiable
+        when multiple Myprotein tabs are open.
+      </p>
+      <p slot="fix">
+        Update the title dynamically on variant selection via JavaScript, or generate
+        variant-specific URLs with server-rendered titles for the most common combinations.
+      </p>
+    </FindingCard>
+
+    <FindingCard title="Trust badges (Informed Sport, Banned Substance tested) are below the fold on desktop" viewport="Desktop" priority="low">
+      <p slot="what">
+        Third-party certification logos appear in the page footer area, well below the purchase
+        block. They are not visible at the point of decision.
+      </p>
+      <p slot="why">
+        For sports nutrition, third-party testing certifications directly address a buyer
+        anxiety (contamination risk for competitive athletes). Placing them near the CTA
+        increases their conversion impact.
+      </p>
+      <p slot="fix">
+        Move a compact version of the trust badges (icon + name only) to the area immediately
+        below the Add to Bag button.
+      </p>
+    </FindingCard>
+
+    <FindingCard title="Breadcrumb trail truncates on mobile, showing only the current page name" viewport="Mobile" priority="low">
+      <p slot="what">
+        On viewports below 430 px the breadcrumb collapses to just the current page name with
+        no back-navigation affordance.
+      </p>
+      <p slot="why">
+        Users who navigate deep from a category page lose orientation context. A single-level
+        back link ("← Protein Powders") would restore this without consuming space.
+      </p>
+      <p slot="fix">
+        Replace the truncated breadcrumb with a single "← {parent category}" link on mobile,
+        matching the pattern used in the report header.
+      </p>
+    </FindingCard>
+
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Design Consistency</h2>
+    <p>
+      The page mixes two generations of the Myprotein design system. The image carousel and
+      review section use the newer component library (rounded corners, Figtree/brand font stack,
+      teal accents), while the variant selector and nutrition accordion retain older flat-UI
+      styling with sharp corners and a different grey palette. Unifying these components would
+      reduce visual noise and improve perceived quality.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Accessibility Notes</h2>
+    <p>
+      The flavour dropdown passes basic keyboard navigation. However, the image carousel
+      auto-advances without user input and has no visible pause control, which fails WCAG 2.1
+      SC 2.2.2 (Pause, Stop, Hide). Additionally, the star rating SVG icons carry no
+      <code>aria-label</code> — screen readers announce the score as an unlabelled graphic.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Conversion Summary</h2>
+    <p>
+      The two high-priority findings (variant overwhelm and below-fold CTA on mobile) are the
+      most likely sources of measurable drop-off in the current funnel. Addressing those two
+      items alone could be expected to move add-to-bag rate on mobile meaningfully, based on
+      comparable interventions on similar nutrition PDPs. The five medium-priority findings
+      represent secondary optimisation opportunities that are lower effort but would compound
+      the improvement.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Recommended Implementation Order</h2>
+    <ol class="recommendations">
+      <li>Sticky bottom CTA bar on mobile (high impact, self-contained CSS/JS change)</li>
+      <li>Variant selector — add text filter and default bestseller pre-selection</li>
+      <li>Subscription save callout pill adjacent to price</li>
+      <li>Inline macro summary in collapsed nutrition accordion state</li>
+      <li>Trust badges moved to below-CTA position</li>
+      <li>Review score linked to reviews section anchor</li>
+      <li>Flavour-matched imagery (dependent on asset availability)</li>
+      <li>Dynamic page title per variant (SEO value compounds over time)</li>
+    </ol>
+  </section>
+
+</ReportLayout>
+
+<style is:global>
+  .finding-card code {
+    font-family: Menlo, Monaco, 'Courier New', monospace;
+    font-size: 12px;
+    background: var(--color-bg-muted);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--color-text-heading);
+  }
+</style>
+
+<style>
+  .report-intro {
+    margin-bottom: 40px;
+  }
+
+  .report-h1 {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--color-text-heading);
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+
+  .report-meta {
+    font-size: 13px;
+    color: var(--color-text-body);
+    opacity: 0.65;
+    margin-bottom: 14px;
+  }
+
+  .report-summary {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-text-body);
+    max-width: 680px;
+  }
+
+  .findings-section {
+    margin-bottom: 48px;
+  }
+
+  .section-heading {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(0, 57, 66, 0.1);
+  }
+
+  .prose-section {
+    margin-bottom: 36px;
+  }
+
+  .prose-section p {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-text-body);
+  }
+
+  .prose-section code {
+    font-family: Menlo, Monaco, 'Courier New', monospace;
+    font-size: 12px;
+    background: var(--color-bg-muted);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--color-text-heading);
+  }
+
+  .recommendations {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .recommendations li {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-text-body);
+  }
+</style>

@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap');
+
+:root {
+  /* Brand colours */
+  --color-primary: #003942;
+  --color-mint: #94E5B5;
+
+  /* Surface colours */
+  --color-bg-page: #FAF9F6;
+  --color-bg-card: #FFFFFF;
+  --color-bg-muted: #F3F4F6;
+
+  /* Priority colours */
+  --color-priority-high: rgb(217, 66, 15);
+  --color-priority-medium: rgb(221, 89, 43);
+  --color-priority-low: rgb(0, 120, 49);
+
+  /* Text colours */
+  --color-text-body: #4B5563;
+  --color-text-heading: #003942;
+
+  /* Typography */
+  --font-body: 'Figtree', sans-serif;
+
+  /* Border radius tokens */
+  --radius-chip: 8px;
+  --radius-card: 12px;
+  --radius-pill: 32px;
+
+  /* Card tokens */
+  --card-border: 1px solid rgba(0, 57, 66, 0.12);
+  --card-shadow: 0 2px 8px rgba(0, 57, 66, 0.06);
+}

@@ -1,0 +1,126 @@
+---
+interface Props {
+  title: string;
+  viewport: 'Desktop' | 'Mobile' | 'Both';
+  priority: 'high' | 'medium' | 'low';
+}
+
+const { title, viewport, priority } = Astro.props;
+
+const priorityLabel = { high: 'High', medium: 'Medium', low: 'Low' }[priority];
+---
+
+<article class={`finding-card finding-card--${priority}`}>
+  <header class="finding-header">
+    <h2 class="finding-title">{title}</h2>
+    <div class="finding-meta">
+      <span class={`priority-chip priority-chip--${priority}`}>{priorityLabel}</span>
+      <span class="viewport-chip">{viewport}</span>
+    </div>
+  </header>
+  <dl class="finding-body">
+    <div class="finding-row">
+      <dt>What</dt>
+      <dd><slot name="what" /></dd>
+    </div>
+    <div class="finding-row">
+      <dt>Why</dt>
+      <dd><slot name="why" /></dd>
+    </div>
+    <div class="finding-row">
+      <dt>Fix</dt>
+      <dd><slot name="fix" /></dd>
+    </div>
+  </dl>
+</article>
+
+<style>
+  .finding-card {
+    background: var(--color-bg-card);
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--card-shadow);
+    border-left-width: 4px;
+    border-left-style: solid;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+
+  .finding-card--high  { border-left-color: var(--color-priority-high); }
+  .finding-card--medium { border-left-color: var(--color-priority-medium); }
+  .finding-card--low   { border-left-color: var(--color-priority-low); }
+
+  .finding-header {
+    padding: 16px 20px 12px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(0, 57, 66, 0.08);
+  }
+
+  .finding-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  .finding-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .priority-chip,
+  .viewport-chip {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: var(--radius-pill);
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .priority-chip--high   { background: rgba(217, 66, 15, 0.12); color: var(--color-priority-high); }
+  .priority-chip--medium { background: rgba(221, 89, 43, 0.12); color: var(--color-priority-medium); }
+  .priority-chip--low    { background: rgba(0, 120, 49, 0.12);  color: var(--color-priority-low); }
+
+  .viewport-chip {
+    background: var(--color-bg-muted);
+    color: var(--color-text-body);
+  }
+
+  .finding-body {
+    padding: 16px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .finding-row {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    gap: 0 12px;
+    align-items: baseline;
+  }
+
+  dt {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-heading);
+    padding-top: 2px;
+  }
+
+  dd {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-text-body);
+  }
+</style>

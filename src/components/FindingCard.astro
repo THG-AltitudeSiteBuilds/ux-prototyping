@@ -127,17 +127,28 @@ After creating the item, return ONLY the item ID as a plain number — nothing e
 
       container.innerHTML = `
         <div class="ticket-copied ticket-copied--${ticketType}">
-          <span class="ticket-copied-label">
-            ${ticketType === 'engineering' ? '⚙️' : '🎨'} Prompt copied — paste into Claude.ai
-          </span>
-          <a
-            class="ticket-copied-link"
-            href="https://claude.ai"
-            target="_blank"
-            rel="noopener"
-          >
-            Open Claude.ai →
-          </a>
+          <div class="ticket-copied-top">
+            <span class="ticket-copied-label">
+              ${ticketType === 'engineering' ? '⚙️' : '🎨'} Prompt copied — paste into Claude.ai
+            </span>
+            <a class="ticket-copied-link" href="https://claude.ai" target="_blank" rel="noopener">
+              Open Claude.ai →
+            </a>
+          </div>
+          <div class="ticket-id-row">
+            <input
+              class="ticket-id-input"
+              type="text"
+              placeholder="Paste ticket ID once raised…"
+              id="ticket-id-input-${findingId}"
+            />
+            <button
+              class="ticket-id-save ticket-id-save--${ticketType}"
+              onclick="saveTicketId('${findingId}', '${ticketType}', '${boardId}')"
+            >
+              Save
+            </button>
+          </div>
         </div>`;
 
     } catch (err: any) {
@@ -150,8 +161,29 @@ After creating the item, return ONLY the item ID as a plain number — nothing e
     }
   }
 
+  function saveTicketId(findingId: string, ticketType: string, boardId: string) {
+    const input = document.getElementById(`ticket-id-input-${findingId}`) as HTMLInputElement;
+    const itemId = input?.value.trim();
+    if (!itemId) return;
+
+    const container = document.getElementById(`ticket-${findingId}`);
+    if (!container) return;
+
+    const icon = ticketType === 'engineering' ? '⚙️' : '🎨';
+    const url = `https://thg.monday.com/boards/${boardId}/pulses/${itemId}`;
+
+    container.innerHTML = `
+      <div class="ticket-raised ticket-raised--${ticketType}">
+        <span class="ticket-raised-label">${icon} Ticket raised</span>
+        <a class="ticket-raised-link" href="${url}" target="_blank" rel="noopener">
+          #${itemId} → View in Monday.com
+        </a>
+      </div>`;
+  }
+
   // Expose globally for inline onclick handlers
   (window as any).raiseTicket = raiseTicket;
+  (window as any).saveTicketId = saveTicketId;
 </script>
 
 <style>
@@ -292,6 +324,12 @@ After creating the item, return ONLY the item ID as a plain number — nothing e
 
   .ticket-copied {
     display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ticket-copied-top {
+    display: flex;
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
@@ -318,6 +356,73 @@ After creating the item, return ONLY the item ID as a plain number — nothing e
     color: #6c5ce7;
   }
   .ticket-copied--design .ticket-copied-link {
+    background: rgba(232, 67, 147, 0.1);
+    color: #e84393;
+  }
+
+  .ticket-id-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ticket-id-input {
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid rgba(0, 57, 66, 0.2);
+    background: var(--color-bg-page);
+    color: var(--color-text-heading);
+    width: 200px;
+    outline: none;
+  }
+
+  .ticket-id-input:focus {
+    border-color: rgba(0, 57, 66, 0.5);
+  }
+
+  .ticket-id-save {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: var(--radius-pill);
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .ticket-id-save--engineering { background: rgba(108, 92, 231, 0.15); color: #6c5ce7; }
+  .ticket-id-save--design      { background: rgba(232, 67, 147, 0.15); color: #e84393; }
+  .ticket-id-save:hover { opacity: 0.8; }
+
+  .ticket-raised {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .ticket-raised-label {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .ticket-raised--engineering .ticket-raised-label { color: #6c5ce7; }
+  .ticket-raised--design      .ticket-raised-label { color: #e84393; }
+
+  .ticket-raised-link {
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+  }
+
+  .ticket-raised--engineering .ticket-raised-link {
+    background: rgba(108, 92, 231, 0.1);
+    color: #6c5ce7;
+  }
+  .ticket-raised--design .ticket-raised-link {
     background: rgba(232, 67, 147, 0.1);
     color: #e84393;
   }

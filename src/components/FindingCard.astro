@@ -3,21 +3,41 @@ interface Props {
   title: string;
   viewport: 'Desktop' | 'Mobile' | 'Both';
   priority: 'high' | 'medium' | 'low';
+  ticketType?: 'engineering' | 'design';
+  ticketable?: boolean;
+  findingId?: string;
 }
 
-const { title, viewport, priority } = Astro.props;
+const {
+  title,
+  viewport,
+  priority,
+  ticketType,
+  ticketable = false,
+  findingId = Math.random().toString(36).slice(2, 9),
+} = Astro.props;
 
 const priorityLabel = { high: 'High', medium: 'Medium', low: 'Low' }[priority];
+
+// Board IDs — update DESIGN_BOARD_ID once confirmed
+const ENGINEERING_BOARD_ID = '5089014754';
+const DESIGN_BOARD_ID = 'TBC';
 ---
 
-<article class={`finding-card finding-card--${priority}`}>
+<article class={`finding-card finding-card--${priority}`} id={`finding-${findingId}`}>
   <header class="finding-header">
     <h2 class="finding-title">{title}</h2>
     <div class="finding-meta">
       <span class={`priority-chip priority-chip--${priority}`}>{priorityLabel}</span>
       <span class="viewport-chip">{viewport}</span>
+      {ticketType && (
+        <span class={`type-chip type-chip--${ticketType}`}>
+          {ticketType === 'engineering' ? '⚙️ Engineering' : '🎨 Design'}
+        </span>
+      )}
     </div>
   </header>
+
   <dl class="finding-body">
     <div class="finding-row">
       <dt>What</dt>
@@ -32,7 +52,131 @@ const priorityLabel = { high: 'High', medium: 'Medium', low: 'Low' }[priority];
       <dd><slot name="fix" /></dd>
     </div>
   </dl>
+
+  {ticketable && ticketType && (
+    <footer class="finding-footer">
+      <div class="ticket-action" id={`ticket-${findingId}`}>
+        <button
+          class={`raise-ticket-btn raise-ticket-btn--${ticketType}`}
+          onclick={`raiseTicket('${findingId}', '${ticketType}', '${ticketType === 'engineering' ? ENGINEERING_BOARD_ID : DESIGN_BOARD_ID}')`}
+        >
+          {ticketType === 'engineering' ? '⚙️' : '🎨'} Raise {ticketType === 'engineering' ? 'Engineering' : 'Design'} Ticket
+        </button>
+      </div>
+    </footer>
+  )}
 </article>
+
+<script>
+  // Collect finding content from the DOM for a given finding ID
+  function getFindingContent(findingId: string) {
+    const card = document.getElementById(`finding-${findingId}`);
+    if (!card) return null;
+    const title = card.querySelector('.finding-title')?.textContent?.trim() ?? '';
+    const what  = card.querySelector('[slot="what"], dd:nth-of-type(1)')?.textContent?.trim() ?? '';
+    const why   = card.querySelector('[slot="why"],  dd:nth-of-type(2)')?.textContent?.trim() ?? '';
+    const fix   = card.querySelector('[slot="fix"],  dd:nth-of-type(3)')?.textContent?.trim() ?? '';
+    const priority = (card.className.match(/finding-card--(\w+)/) ?? [])[1] ?? '';
+    const viewport = card.querySelector('.viewport-chip')?.textContent?.trim() ?? '';
+    return { title, what, why, fix, priority, viewport };
+  }
+
+  async function raiseTicket(findingId: string, ticketType: string, boardId: string) {
+    const btn = document.querySelector(`#ticket-${findingId} .raise-ticket-btn`) as HTMLButtonElement;
+    const container = document.getElementById(`ticket-${findingId}`);
+    if (!btn || !container) return;
+
+    // Guard: already raised
+    if (btn.disabled) return;
+
+    const finding = getFindingContent(findingId);
+    if (!finding) return;
+
+    // Update UI to loading state
+    btn.disabled = true;
+    btn.textContent = '⏳ Raising ticket…';
+
+    const reportUrl = window.location.href;
+    const auditDate = document.querySelector('.report-meta')?.textContent?.trim() ?? '';
+
+    const prompt = `You are raising a Monday.com ${ticketType} ticket from a UX audit report.
+
+Use the monday.com MCP tool to create an item on board ID ${boardId} with the following details:
+
+Item name: [UX ${ticketType === 'engineering' ? 'Bug' : 'Design'}] ${finding.title}
+
+Description:
+Source: UX Audit — ${document.title} (${auditDate})
+Priority: ${finding.priority} | Viewport: ${finding.viewport} | Type: ${ticketType}
+
+WHAT'S HAPPENING
+${finding.what}
+
+WHY IT MATTERS
+${finding.why}
+
+RECOMMENDED FIX
+${finding.fix}
+
+Audit report: ${reportUrl}
+
+After creating the item, return ONLY the item ID as a plain number — nothing else.`;
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 500,
+          messages: [{ role: 'user', content: prompt }],
+          mcp_servers: [{ type: 'url', url: 'https://mcp.monday.com/mcp', name: 'monday' }],
+        }),
+      });
+
+      if (!response.ok) throw new Error(`API error ${response.status}`);
+
+      const data = await response.json();
+      const text = data.content
+        .filter((b: any) => b.type === 'text')
+        .map((b: any) => b.text)
+        .join('');
+
+      const idMatch = text.match(/\b(\d{8,})\b/);
+      const itemId = idMatch ? idMatch[1] : null;
+
+      // Replace button with success state
+      container.innerHTML = itemId
+        ? `<div class="ticket-raised ticket-raised--${ticketType}">
+            <span class="ticket-raised-label">
+              ${ticketType === 'engineering' ? '⚙️' : '🎨'} Ticket raised
+            </span>
+            <a
+              class="ticket-raised-link"
+              href="https://thg.monday.com/boards/${boardId}/pulses/${itemId}"
+              target="_blank"
+              rel="noopener"
+            >
+              #${itemId} → View in Monday.com
+            </a>
+          </div>`
+        : `<div class="ticket-raised ticket-raised--${ticketType}">
+            <span class="ticket-raised-label">✅ Ticket raised — <a href="https://monday.com" target="_blank" rel="noopener">Open Monday.com</a></span>
+          </div>`;
+
+    } catch (err: any) {
+      btn.disabled = false;
+      btn.textContent = `${ticketType === 'engineering' ? '⚙️' : '🎨'} Raise ${ticketType === 'engineering' ? 'Engineering' : 'Design'} Ticket`;
+      container.insertAdjacentHTML(
+        'beforeend',
+        `<p class="ticket-error">❌ Failed to raise ticket — ${err.message}</p>`
+      );
+    }
+  }
+
+  // Expose globally for inline onclick handlers
+  (window as any).raiseTicket = raiseTicket;
+</script>
 
 <style>
   .finding-card {
@@ -46,9 +190,9 @@ const priorityLabel = { high: 'High', medium: 'Medium', low: 'Low' }[priority];
     margin-bottom: 20px;
   }
 
-  .finding-card--high  { border-left-color: var(--color-priority-high); }
+  .finding-card--high   { border-left-color: var(--color-priority-high); }
   .finding-card--medium { border-left-color: var(--color-priority-medium); }
-  .finding-card--low   { border-left-color: var(--color-priority-low); }
+  .finding-card--low    { border-left-color: var(--color-priority-low); }
 
   .finding-header {
     padding: 16px 20px 12px;
@@ -73,10 +217,12 @@ const priorityLabel = { high: 'High', medium: 'Medium', low: 'Low' }[priority];
     align-items: center;
     gap: 8px;
     flex-shrink: 0;
+    flex-wrap: wrap;
   }
 
   .priority-chip,
-  .viewport-chip {
+  .viewport-chip,
+  .type-chip {
     font-size: 11px;
     font-weight: 600;
     padding: 3px 10px;
@@ -86,14 +232,14 @@ const priorityLabel = { high: 'High', medium: 'Medium', low: 'Low' }[priority];
     letter-spacing: 0.04em;
   }
 
-  .priority-chip--high   { background: rgba(217, 66, 15, 0.12); color: var(--color-priority-high); }
-  .priority-chip--medium { background: rgba(221, 89, 43, 0.12); color: var(--color-priority-medium); }
-  .priority-chip--low    { background: rgba(0, 120, 49, 0.12);  color: var(--color-priority-low); }
+  .priority-chip--high   { background: rgba(217, 66, 15, 0.12);  color: var(--color-priority-high); }
+  .priority-chip--medium { background: rgba(221, 89, 43, 0.12);  color: var(--color-priority-medium); }
+  .priority-chip--low    { background: rgba(0, 120, 49, 0.12);   color: var(--color-priority-low); }
 
-  .viewport-chip {
-    background: var(--color-bg-muted);
-    color: var(--color-text-body);
-  }
+  .viewport-chip { background: var(--color-bg-muted); color: var(--color-text-body); }
+
+  .type-chip--engineering { background: rgba(108, 92, 231, 0.1); color: #6c5ce7; }
+  .type-chip--design      { background: rgba(232, 67, 147, 0.1); color: #e84393; }
 
   .finding-body {
     padding: 16px 20px 20px;
@@ -122,5 +268,87 @@ const priorityLabel = { high: 'High', medium: 'Medium', low: 'Low' }[priority];
     font-size: 14px;
     line-height: 1.6;
     color: var(--color-text-body);
+  }
+
+  /* ── Ticket footer ── */
+
+  .finding-footer {
+    padding: 12px 20px 14px;
+    border-top: 1px solid rgba(0, 57, 66, 0.06);
+    background: rgba(0, 57, 66, 0.02);
+  }
+
+  .raise-ticket-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 7px 14px;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid currentColor;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.15s, opacity 0.15s;
+    letter-spacing: 0.02em;
+  }
+
+  .raise-ticket-btn--engineering {
+    color: #6c5ce7;
+    border-color: rgba(108, 92, 231, 0.4);
+  }
+  .raise-ticket-btn--engineering:hover:not(:disabled) {
+    background: rgba(108, 92, 231, 0.08);
+  }
+
+  .raise-ticket-btn--design {
+    color: #e84393;
+    border-color: rgba(232, 67, 147, 0.4);
+  }
+  .raise-ticket-btn--design:hover:not(:disabled) {
+    background: rgba(232, 67, 147, 0.08);
+  }
+
+  .raise-ticket-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .ticket-raised {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .ticket-raised-label {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .ticket-raised--engineering .ticket-raised-label { color: #6c5ce7; }
+  .ticket-raised--design      .ticket-raised-label { color: #e84393; }
+
+  .ticket-raised-link {
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+  }
+
+  .ticket-raised--engineering .ticket-raised-link {
+    background: rgba(108, 92, 231, 0.1);
+    color: #6c5ce7;
+  }
+  .ticket-raised--design .ticket-raised-link {
+    background: rgba(232, 67, 147, 0.1);
+    color: #e84393;
+  }
+
+  .ticket-error {
+    font-size: 12px;
+    color: #c0144c;
+    margin-top: 6px;
   }
 </style>

@@ -123,53 +123,29 @@ Audit report: ${reportUrl}
 After creating the item, return ONLY the item ID as a plain number — nothing else.`;
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 500,
-          messages: [{ role: 'user', content: prompt }],
-          mcp_servers: [{ type: 'url', url: 'https://mcp.monday.com/mcp', name: 'monday' }],
-        }),
-      });
+      await navigator.clipboard.writeText(prompt);
 
-      if (!response.ok) throw new Error(`API error ${response.status}`);
-
-      const data = await response.json();
-      const text = data.content
-        .filter((b: any) => b.type === 'text')
-        .map((b: any) => b.text)
-        .join('');
-
-      const idMatch = text.match(/\b(\d{8,})\b/);
-      const itemId = idMatch ? idMatch[1] : null;
-
-      // Replace button with success state
-      container.innerHTML = itemId
-        ? `<div class="ticket-raised ticket-raised--${ticketType}">
-            <span class="ticket-raised-label">
-              ${ticketType === 'engineering' ? '⚙️' : '🎨'} Ticket raised
-            </span>
-            <a
-              class="ticket-raised-link"
-              href="https://thg.monday.com/boards/${boardId}/pulses/${itemId}"
-              target="_blank"
-              rel="noopener"
-            >
-              #${itemId} → View in Monday.com
-            </a>
-          </div>`
-        : `<div class="ticket-raised ticket-raised--${ticketType}">
-            <span class="ticket-raised-label">✅ Ticket raised — <a href="https://monday.com" target="_blank" rel="noopener">Open Monday.com</a></span>
-          </div>`;
+      container.innerHTML = `
+        <div class="ticket-copied ticket-copied--${ticketType}">
+          <span class="ticket-copied-label">
+            ${ticketType === 'engineering' ? '⚙️' : '🎨'} Prompt copied — paste into Claude.ai
+          </span>
+          <a
+            class="ticket-copied-link"
+            href="https://claude.ai"
+            target="_blank"
+            rel="noopener"
+          >
+            Open Claude.ai →
+          </a>
+        </div>`;
 
     } catch (err: any) {
       btn.disabled = false;
       btn.textContent = `${ticketType === 'engineering' ? '⚙️' : '🎨'} Raise ${ticketType === 'engineering' ? 'Engineering' : 'Design'} Ticket`;
       container.insertAdjacentHTML(
         'beforeend',
-        `<p class="ticket-error">❌ Failed to raise ticket — ${err.message}</p>`
+        `<p class="ticket-error">❌ Failed to copy prompt — ${err.message}</p>`
       );
     }
   }
@@ -314,22 +290,22 @@ After creating the item, return ONLY the item ID as a plain number — nothing e
     cursor: not-allowed;
   }
 
-  .ticket-raised {
+  .ticket-copied {
     display: flex;
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
   }
 
-  .ticket-raised-label {
+  .ticket-copied-label {
     font-size: 12px;
     font-weight: 600;
   }
 
-  .ticket-raised--engineering .ticket-raised-label { color: #6c5ce7; }
-  .ticket-raised--design      .ticket-raised-label { color: #e84393; }
+  .ticket-copied--engineering .ticket-copied-label { color: #6c5ce7; }
+  .ticket-copied--design      .ticket-copied-label { color: #e84393; }
 
-  .ticket-raised-link {
+  .ticket-copied-link {
     font-size: 12px;
     font-weight: 700;
     text-decoration: none;
@@ -337,11 +313,11 @@ After creating the item, return ONLY the item ID as a plain number — nothing e
     border-radius: var(--radius-pill);
   }
 
-  .ticket-raised--engineering .ticket-raised-link {
+  .ticket-copied--engineering .ticket-copied-link {
     background: rgba(108, 92, 231, 0.1);
     color: #6c5ce7;
   }
-  .ticket-raised--design .ticket-raised-link {
+  .ticket-copied--design .ticket-copied-link {
     background: rgba(232, 67, 147, 0.1);
     color: #e84393;
   }

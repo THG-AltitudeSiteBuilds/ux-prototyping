@@ -1,0 +1,390 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+import FindingCard from '@/components/FindingCard.astro';
+---
+
+<ReportLayout title="Homepage — Myprotein Homepage">
+
+  <section class="report-intro">
+    <h1 class="report-h1">UX Audit: Myprotein Homepage</h1>
+    <p class="report-meta">Myprotein UK Homepage &mdash; Audited 2 June 2026</p>
+    <p class="report-summary">
+      Full-page audit of myprotein.com at desktop (1440px) and mobile (390px) viewports during an active
+      "Impact Week Sale" promotional period. The page carries a very high promotional load: a hero banner,
+      a countdown urgency bar, a Deal of the Day mid-banner, six category quick-links, a "What's New" editorial
+      carousel, a Best Sellers product grid, an app download section, and a clothing product grid. Core findings
+      centre on promo bar legibility, the absence of a true homepage H1, inconsistent product card treatment,
+      and a Quick Buy CTA that deviates from the brand's mint-ring primary button signature.
+    </p>
+  </section>
+
+  <section class="findings-section">
+    <h2 class="section-heading">Findings</h2>
+
+    <!-- HIGH PRIORITY -->
+
+    <FindingCard
+      title="Countdown urgency bar text is truncated on desktop — deal conditions hidden"
+      viewport="Desktop"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="countdown-truncation"
+    >
+      <p slot="what">
+        The orange countdown/urgency bar reads: "UP TO 80% OFF + EXTRA 15% OFF ALL CREATINE SUPPLEMENTS |
+        APPLIES AT BASKET | ENDS IN…" — the sentence is cut mid-word at the available width. At 1440px this
+        is entirely avoidable. The key qualifying conditions ("applies at basket") are the most legally and
+        commercially important part of this message and are partially hidden.
+      </p>
+      <p slot="why">
+        Users who miss "APPLIES AT BASKET" may add to cart expecting a discounted price and be surprised at
+        checkout, increasing abandonment at the most critical conversion step. This also carries a potential
+        ASA/CAP compliance risk around hidden conditions.
+      </p>
+      <p slot="fix">
+        Reduce font size from the current ~12px to 11px, or shorten the copy to "UP TO 80% OFF + EXTRA 15%
+        OFF CREATINE — applied at basket. Ends in:" so the full message fits in one line at 1440px.
+        Alternatively, break into two lines within the bar. Do not rely on ellipsis for a legally significant message.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="No page H1 — homepage has no semantic heading"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="missing-h1"
+    >
+      <p slot="what">
+        DOM inspection confirms no H1 element exists on the homepage. The hero banner heading ("UP TO 80% OFF
+        ALMOST EVERYTHING") is rendered inside an image, not as a text element. There is no programmatic
+        page title for screen readers or search engines.
+      </p>
+      <p slot="why">
+        Missing H1 harms SEO (Google uses H1 as a primary relevance signal for homepages) and fails WCAG 2.1
+        SC 1.3.1 (Info and Relationships) for screen reader users who rely on heading structure to navigate.
+        It also makes the page harder to parse for assistive technology users.
+      </p>
+      <p slot="fix">
+        Add a visually hidden H1 such as "Myprotein — No.1 Online Sports Nutrition Brand" immediately after
+        the header using a CSS class like <code>.sr-only</code>. Alternatively, extract the hero headline
+        from the image and render it as a styled H1 overlay on the banner.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Primary hero CTA 'Shop Now' uses ghost/outline style — low visual weight for a sale hero"
+      viewport="Both"
+      priority="high"
+      ticketType="design"
+      ticketable={true}
+      findingId="hero-cta-weight"
+    >
+      <p slot="what">
+        The hero banner "SHOP NOW" button is a ghost/outline style (transparent background, white border) on
+        a dark, image-heavy background. Computed styles show <code>background: rgba(0,0,0,0)</code> with a
+        white border. At desktop the button is relatively small (approximately 160px wide) against a
+        full-bleed 1440px-wide banner.
+      </p>
+      <p slot="why">
+        Ghost CTAs on photographic backgrounds are consistently lower-performing than solid-fill buttons.
+        During a high-stakes sale period ("Impact Week"), the primary conversion action needs maximum
+        contrast and visual weight. This is the first clickable element a user reaches after the hero,
+        and its low contrast reduces click-through.
+      </p>
+      <p slot="fix">
+        Switch the hero CTA to a solid-fill button. Given the dark hero background, use the brand's teal
+        (<code>#003942</code>) or white (<code>#FFFFFF</code>) fill with the mint ring signature
+        (<code>#94E5B5</code> outer ring) that the Quick Buy button uses. Size up to at least 200px
+        wide and 48px tall.
+      </p>
+    </FindingCard>
+
+    <!-- MEDIUM PRIORITY -->
+
+    <FindingCard
+      title="Quick Buy button missing the mint outer ring — brand CTA signature not applied"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="quick-buy-mint-ring"
+    >
+      <p slot="what">
+        The Quick Buy button on product cards uses <code>border-radius: 32px</code> and the correct teal
+        background (<code>oklch(0.3162 0.055061 211.831)</code> ≈ <code>#003942</code>), but DevTools shows
+        <code>box-shadow: none</code> — the mint outer ring (<code>#94E5B5</code>) that is the brand's
+        primary CTA signature is absent. The border is set as a 2px solid teal stroke, not a ring.
+      </p>
+      <p slot="why">
+        The mint ring is a brand-differentiating detail that signals premium quality and brand confidence.
+        Its absence means the most frequently seen CTA on the page (Quick Buy appears on every product card)
+        doesn't carry the full brand signature, diluting the design system's intended impact.
+      </p>
+      <p slot="fix">
+        Add <code>box-shadow: 0 0 0 3px #94E5B5</code> (or the correct token value) to the
+        <code>.quick-buy-btn</code> class (or equivalent). Remove the current solid border or keep it
+        inside the ring as a separator.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Trust/benefits bar content is too dense and icons are small at desktop"
+      viewport="Desktop"
+      priority="medium"
+      ticketType="design"
+      ticketable={false}
+      findingId="trust-bar-density"
+    >
+      <p slot="what">
+        The trust bar beneath the header shows four items inline: "Free standard delivery on £50 spend",
+        "Extra 10% off via App", "Earn £15 Credit?", and "Over 210k reviews & 4.4 rated". At 1440px the
+        items have generous breathing room, but the icons are very small (~16px) and the text is
+        approximately 13px — below the recommended 14px minimum body size.
+      </p>
+      <p slot="why">
+        Trust signals are a key conversion lever on the homepage. If users can't quickly scan and absorb
+        them, the signals fail to do their job. Small text also marginally fails WCAG AA at the contrast
+        ratios possible with the current colour on light background.
+      </p>
+      <p slot="fix">
+        Increase trust bar text to 14px minimum. Scale icons to 20px. Consider bold-weighting the key
+        fact in each item (e.g. "£50", "10%", "£15", "210k") to aid quick scanning. The designer should
+        spec this before engineering implements.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Product cards have 0px border radius — inconsistent with design system (should be 12px)"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="card-border-radius"
+    >
+      <p slot="what">
+        Computed style on product card wrappers (<code>[class*="ProductItem"]</code>) returns
+        <code>border-radius: 0px</code>. Per the design system, cards should use 12px border radius.
+        Images within cards also have square corners, making the grid look flat and dated compared
+        to the rest of the design language.
+      </p>
+      <p slot="why">
+        Inconsistent radius creates a visual hierarchy mismatch — category tiles correctly use 8px radius,
+        the Quick Buy button uses 32px, but cards are square. This inconsistency undermines the perception
+        of a premium, polished brand.
+      </p>
+      <p slot="fix">
+        Apply <code>border-radius: 12px</code> and <code>overflow: hidden</code> to the card wrapper
+        element so images inherit the rounding. Verify this is consistent across Best Sellers and
+        Trending This Week tabs.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Mobile hero CTA 'Shop Now' is very small — poor tap target"
+      viewport="Mobile"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="mobile-hero-tap-target"
+    >
+      <p slot="what">
+        On mobile (390px viewport), the hero "SHOP NOW" button sits low in the fold as the hero image
+        crops significantly. The button's visual size appears to be approximately 140px wide and under
+        40px tall — below the WCAG recommended 44px minimum tap target height.
+      </p>
+      <p slot="why">
+        Undersized tap targets on the primary conversion action increase misclick rate, particularly on
+        smaller phones. This is a direct friction point on the most critical CTA on the page.
+      </p>
+      <p slot="fix">
+        Set a minimum <code>height: 48px</code> and <code>min-width: 160px</code> on the hero CTA at
+        mobile breakpoints. Ensure adequate padding so the tap area exceeds 44x44px regardless of
+        text length.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="'What's New' editorial cards have text overlaid on dark images with marginal contrast"
+      viewport="Both"
+      priority="medium"
+      ticketType="design"
+      ticketable={false}
+      findingId="editorial-overlay-contrast"
+    >
+      <p slot="what">
+        The "What's New" carousel shows product/editorial cards where small label text (e.g. "FORM",
+        "FUNCTION", "FLATTERING FITS") is overlaid directly on photographic backgrounds. These labels
+        appear to be approximately 12–14px, positioned in the lower third of dark images.
+      </p>
+      <p slot="why">
+        Without a guaranteed dark scrim or text shadow behind them, these overlaid labels risk failing
+        WCAG AA contrast (4.5:1 for small text) depending on the specific image shown. Photography
+        backgrounds vary — what passes on one image may fail on another. This is an ongoing risk
+        rather than a single fixable instance.
+      </p>
+      <p slot="fix">
+        Add a CSS gradient scrim to the lower portion of all editorial card images:
+        <code>background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 60%)</code>.
+        This ensures consistent contrast regardless of image content. Design to spec before engineering implements.
+      </p>
+    </FindingCard>
+
+    <!-- LOW PRIORITY -->
+
+    <FindingCard
+      title="App download section CTA copy says 'Shop Now' — doesn't match the action"
+      viewport="Both"
+      priority="low"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="app-cta-mismatch"
+    >
+      <p slot="what">
+        The "Download the App" section uses "SHOP NOW" as its CTA label. Clicking it should prompt an
+        app store download or redirect to a deep link/app landing page — "Shop Now" describes the wrong
+        action and sets incorrect expectations.
+      </p>
+      <p slot="why">
+        Mismatched CTA copy reduces click confidence. Users who want to download the app may overlook
+        this CTA entirely if they're scanning for an "install" or "download" affordance.
+      </p>
+      <p slot="fix">
+        Change CTA label to "Download the App" or "Get the App" with separate Apple App Store and
+        Google Play buttons where feasible. At minimum, rename to "Download Now".
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Mobile navigation collapsed to 3 top-level items — 'Brands' tab is low priority above the fold"
+      viewport="Mobile"
+      priority="low"
+      ticketType="design"
+      ticketable={false}
+      findingId="mobile-nav-priority"
+    >
+      <p slot="what">
+        On mobile, the sticky nav bar shows three tabs: Nutrition, Clothing, Brands. "Brands" occupies
+        a top-level position equal to the primary product categories, but is a lower-intent destination
+        for most visitors. The most-used entry points (Protein, Supplements, Vitamins) are one tap deeper.
+      </p>
+      <p slot="why">
+        Top-level navigation real estate on mobile is extremely limited. Giving "Brands" equal billing
+        with the core nutrition and clothing journeys may slow users down who are looking for specific
+        product categories.
+      </p>
+      <p slot="fix">
+        This requires a navigation architecture decision. Consider whether "Brands" should remain at
+        top level or move into the Nutrition/Clothing mega-menus. Needs user research or click data
+        to validate before changing.
+      </p>
+    </FindingCard>
+
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Design Consistency</h2>
+    <p>
+      The page uses Figtree correctly as the font family across all inspected elements, and body copy
+      is set at 16px which meets minimum legibility standards. The primary colour system is broadly
+      coherent: the header background is white, the teal (<code>oklch(0.3162 0.055061 211.831)</code>,
+      approximately <code>#003942</code>) is used correctly for Quick Buy buttons and interactive
+      controls, and the orange-red (<code>rgb(217, 66, 14)</code>) is appropriately restricted to
+      promotional/urgency contexts (countdown bar, category tiles).
+    </p>
+    <p>
+      Key deviations from the design system: (1) Product card border radius is 0px against the specified
+      12px. (2) The Quick Buy button lacks the mint outer ring (<code>#94E5B5</code> box-shadow)
+      that is the brand's primary CTA signature — <code>box-shadow: none</code> is computed.
+      (3) The hero CTA "Shop Now" button uses a ghost style (transparent background) which is not
+      the primary button pattern for high-conversion contexts. (4) Category tiles use <code>border-radius: 8px</code>
+      which is consistent with the chip/selector token. The countdown bar background
+      (<code>rgb(217, 66, 15)</code>) is a 1-unit RGB variant from the tile colour
+      (<code>rgb(217, 66, 14)</code>) — this is likely a rounding artefact rather than an intentional
+      deviation, but worth locking to a single token value. The Was/Save price badges on product cards
+      use coral at 40% opacity (<code>rgba(255, 164, 163, 0.4)</code>) for "Was" and mint at 40% opacity
+      (<code>rgba(190, 246, 213, 0.4)</code>) for "Save" — confirmed as intentional design system usage
+      of the brand accent colours, applied consistently across all four Best Sellers cards. No issue here.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Accessibility Notes</h2>
+    <p>
+      The most significant accessibility issue is the absent H1, which fails WCAG 2.1 SC 1.3.1 (Info
+      and Relationships) and prevents screen reader users from understanding the page structure via
+      heading navigation. The hero banner headline is embedded in an image with no accessible text
+      equivalent visible in the DOM, compounding this issue.
+    </p>
+    <p>
+      Trust bar text at approximately 13px is below the recommended 14px minimum and may present
+      marginal contrast issues depending on the computed colour against the light background. The
+      overlay text on editorial image cards in "What's New" carries ongoing contrast risk without
+      a guaranteed scrim. The countdown bar text at 12px is small and uses white on an orange-red
+      background (<code>rgb(217, 66, 15)</code>) — while this palette typically passes AA for large
+      text, the 12px size means it should be verified with a contrast checker at the exact computed
+      values. Mobile tap targets on the hero CTA appear to fall short of the 44x44px WCAG minimum.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Conversion Summary</h2>
+    <p>
+      The homepage is in "sale mode" and does a reasonable job of communicating the promotional moment
+      — the hero is high-impact and the product grid loads with clear pricing including was/save indicators.
+      However, the conversion path has several friction points. The hero CTA is a low-weight ghost button
+      that undersells the sale urgency. The countdown bar truncates the most important qualifying
+      information. Product cards lack border radius, making the grid feel unpolished relative to
+      the brand's aspirational positioning. The Quick Buy button — the most direct route from
+      browse to basket on the homepage — is missing its mint ring signature, making it feel less
+      premium and slightly inconsistent with the rest of the interaction vocabulary.
+    </p>
+    <p>
+      On mobile, the experience is broadly functional: the navigation collapses cleanly to three
+      primary tabs, category tiles are well-sized for touch, and the product grid reflows sensibly.
+      The main mobile-specific concern is the small hero CTA tap target and the loss of the trust
+      bar (only one benefit — "Extra 10% off via App" — is visible in the mobile header, with the
+      others de-prioritised).
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Recommended Implementation Order</h2>
+    <ol class="recommendations">
+      <li>Add a visually hidden H1 to the homepage to fix the semantic heading gap — quick engineering fix, high SEO and accessibility impact.</li>
+      <li>Fix countdown urgency bar truncation — shorten copy or reduce font size so the full message, including "APPLIES AT BASKET", is always visible at desktop.</li>
+      <li>Apply <code>box-shadow: 0 0 0 3px #94E5B5</code> to Quick Buy buttons to reinstate the brand mint ring CTA signature.</li>
+      <li>Apply <code>border-radius: 12px; overflow: hidden</code> to product card wrappers across Best Sellers and Trending grids.</li>
+      <li>Increase hero CTA minimum height to 48px on mobile and switch from ghost to solid-fill button style — requires design spec first.</li>
+      <li>Rename the App Download section CTA from "Shop Now" to "Download Now" or "Get the App".</li>
+      <li>Review editorial card image overlays and add gradient scrims to ensure contrast compliance across variable photography.</li>
+    </ol>
+  </section>
+
+</ReportLayout>
+
+<style is:global>
+  .finding-card code {
+    font-family: Menlo, Monaco, 'Courier New', monospace;
+    font-size: 12px;
+    background: var(--color-bg-muted);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--color-text-heading);
+  }
+</style>
+
+<style>
+  .report-intro { margin-bottom: 40px; }
+  .report-h1 { font-size: 26px; font-weight: 800; color: var(--color-text-heading); line-height: 1.25; margin-bottom: 6px; }
+  .report-meta { font-size: 13px; color: var(--color-text-body); opacity: 0.65; margin-bottom: 14px; }
+  .report-summary { font-size: 15px; line-height: 1.7; color: var(--color-text-body); max-width: 680px; }
+  .findings-section { margin-bottom: 48px; }
+  .section-heading { font-size: 18px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(0, 57, 66, 0.1); }
+  .prose-section { margin-bottom: 36px; }
+  .prose-section p { font-size: 15px; line-height: 1.7; color: var(--color-text-body); }
+  .recommendations { padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .recommendations li { font-size: 14px; line-height: 1.6; color: var(--color-text-body); }
+</style>

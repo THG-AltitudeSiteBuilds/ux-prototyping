@@ -1,0 +1,353 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+import FindingCard from '@/components/FindingCard.astro';
+---
+
+<ReportLayout title="Clothing Hub — Myprotein Category Landing Page">
+
+  <section class="report-intro">
+    <h1 class="report-h1">UX Audit: Clothing Category Hub</h1>
+    <p class="report-meta">Myprotein &mdash; Category Landing Page &mdash; Audited 2 June 2026</p>
+    <p class="report-summary">
+      This audit covers the Myprotein Clothing hub page at myprotein.com/c/clothing/ — a curated category
+      landing page (not a filtered PLP) that funnels users into gendered sub-categories, editorial ranges, and
+      product-type tiles. The page structure is sound: clear sub-navigation, strong sale messaging, and
+      well-composed lifestyle imagery. However, a modal intercept at entry, a generic non-brand hero CTA,
+      contradictory delivery messaging, and absent product-level trust signals represent meaningful conversion
+      friction that should be addressed. Design system adherence is mostly good, with two token deviations
+      on product cards.
+    </p>
+  </section>
+
+  <section class="findings-section">
+    <h2 class="section-heading">Findings</h2>
+
+    <!-- HIGH PRIORITY -->
+
+    <FindingCard
+      title="Email capture modal fires immediately on landing"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="entry-modal-intercept"
+    >
+      <p slot="what">
+        A full-screen email capture overlay (Mars Hi-Protein collab, &ldquo;Fuel your ambition — Get 15% off your
+        first order&rdquo;) fires as soon as the page loads, blocking the hero banner entirely. The modal contains
+        a product image, email field, and CTA. It can be dismissed via an X button or &ldquo;No, thanks&rdquo; link.
+      </p>
+      <p slot="why">
+        Intercepting users at the very first moment of a browse session — before they have expressed any
+        intent — is a well-documented conversion anti-pattern. It creates immediate friction, signals
+        desperation rather than confidence, and is particularly harmful on a sale period hub page where the
+        hero itself (80% off all clothing) is the strongest conversion driver. Users who dismiss and scroll
+        back may have already lost their orientation on the page.
+      </p>
+      <p slot="fix">
+        Delay the modal trigger to either: (a) exit-intent only, (b) after the user has scrolled 60% of
+        the page, or (c) on their second page view in session. Alternatively, consider a less disruptive
+        sticky email bar at the bottom of the viewport rather than a full overlay.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Hero CTA uses off-brand button style"
+      viewport="Both"
+      priority="high"
+      ticketType="design"
+      ticketable={true}
+      findingId="hero-cta-off-brand"
+    >
+      <p slot="what">
+        The primary hero CTA reads &ldquo;SHOP NOW&rdquo; and renders as a plain white rectangle with black uppercase
+        text, surrounded by a decorative hand-drawn rust-coloured oval. It is not using the brand button
+        design system. Computed styles: <code>background: rgb(255,255,255)</code>, <code>color: rgb(0,0,0)</code>,
+        no border-radius value matching the 32px primary CTA spec. This is the most prominent interactive
+        element above the fold.
+      </p>
+      <p slot="why">
+        The primary CTA is the single most important conversion element on the hero. An inconsistent
+        button style reduces recognisability as a clickable action. Users conditioned to the teal/dark
+        primary button elsewhere on the site may not immediately register this as a CTA, especially
+        against the dark hero background. The decorative oval obscures rather than emphasises the button.
+      </p>
+      <p slot="fix">
+        Replace with the standard primary button: dark teal background (<code>#003942</code> approx),
+        white text, Figtree 14px Bold, 32px border-radius, full-width on mobile. Remove the decorative
+        oval or repurpose it as a background motif that does not wrap the button directly. Ideally split
+        the CTA into &ldquo;Shop Women&rsquo;s&rdquo; and &ldquo;Shop Men&rsquo;s&rdquo; to reduce clicks-to-product.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Contradictory free delivery thresholds shown simultaneously"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="delivery-threshold-conflict"
+    >
+      <p slot="what">
+        Two conflicting delivery messages are visible at the same time:
+        (1) Trust bar: &ldquo;Free standard delivery on £50 spend&rdquo;
+        (2) Under every product card Quick Buy button: &ldquo;FREE DELIVERY ON ALL NEW-IN WHEN YOU SPEND £30 | AUTO APPLIES AT CHECKOUT&rdquo;
+        Both messages are visible without scrolling once the product rail loads.
+      </p>
+      <p slot="why">
+        Contradictory threshold messaging is a significant trust-and-conversion issue. A user who has
+        added £35 of new-in clothing to their basket may abandon checkout when they see the £50 bar in
+        the header and believe they haven&rsquo;t qualified. Confusion around shipping costs is a top-3 reason
+        for cart abandonment across ecommerce. The rule needs to be clearly stated in one place, or
+        both messages need to reflect the same condition.
+      </p>
+      <p slot="fix">
+        Align the two messages. If the £30 new-in threshold is correct, update the trust bar copy.
+        If £50 is the correct site-wide figure, remove the £30 card-level message or qualify it clearly
+        (&ldquo;on new-in items only&rdquo;). Consider surfacing this as a dynamic spend-to-qualify nudge in the
+        basket instead of on product cards.
+      </p>
+    </FindingCard>
+
+    <!-- MEDIUM PRIORITY -->
+
+    <FindingCard
+      title="&lsquo;Explore New In&rsquo; rail mixes genders without labelling"
+      viewport="Both"
+      priority="medium"
+      ticketType="design"
+      ticketable={true}
+      findingId="new-in-gender-mixing"
+    >
+      <p slot="what">
+        The first product rail (&ldquo;Explore New In&rdquo;) displays women&rsquo;s sports bras and shorts directly
+        alongside men&rsquo;s t-shirts and shorts in a single undifferentiated horizontal scroll. No gender
+        label, icon, or divider is present to indicate the switch between product types.
+      </p>
+      <p slot="why">
+        A user shopping specifically for women&rsquo;s or men&rsquo;s clothing has to read every product title to
+        identify relevance. On a hub page with 4 visible cards, half the rail may be irrelevant to them.
+        This is a browse friction issue that increases time-to-relevant-product and may drive premature
+        use of the sub-nav instead of engaging with the curated rail.
+      </p>
+      <p slot="fix">
+        Either (a) split the rail into separate &ldquo;New In — Women&rsquo;s&rdquo; and &ldquo;New In — Men&rsquo;s&rdquo; sections,
+        (b) add a gender filter chip row above the carousel to let users self-select, or (c) sequence
+        the products so all women&rsquo;s items come first and add a subtle divider before men&rsquo;s items.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="No star ratings on product cards"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="no-product-card-ratings"
+    >
+      <p slot="what">
+        Product cards in the &ldquo;Explore New In&rdquo; rail show image, colour swatches, title, sale price, and
+        a Quick Buy button — but no review stars or rating count. The trust bar references &ldquo;Over 210k
+        reviews &amp; 4.4 rated&rdquo; (Trustpilot), but this is a site-level claim. No product-level social
+        proof is visible at the card level.
+      </p>
+      <p slot="why">
+        Star ratings on product cards are a proven conversion driver on clothing category pages.
+        They reduce perceived risk at the moment of first impression, when a shopper is deciding
+        whether to click into a PDP. Displaying ratings costs no extra space if placed between the
+        title and price, and the site already holds review data for these products.
+      </p>
+      <p slot="fix">
+        Add a star rating row (average stars + review count) between the product title and the
+        price on each card. Suppress the row for products with fewer than 5 reviews to maintain
+        credibility. This is standard for Myprotein PDPs — surface it earlier in the funnel.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Product titles include colour variant name"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="title-includes-colour"
+    >
+      <p slot="what">
+        Every product title on the card appends the selected colour variant:
+        &ldquo;MP Women&rsquo;s Tempo Triangle Sports Bra - Cornflower Blue&rdquo;. The colour is already
+        communicated visually by the colour swatch row immediately above the title.
+      </p>
+      <p slot="why">
+        The duplicate colour information makes titles unnecessarily long, causing them to wrap
+        to two lines on most cards. This reduces the density of information visible per card
+        and makes the product name itself harder to scan. On a hub/browse page, the colour
+        is the least important attribute — the product name should be dominant.
+      </p>
+      <p slot="fix">
+        Trim the colour suffix from card titles (keep it for PDP breadcrumbs and SEO slugs).
+        Display only the core product name: &ldquo;MP Women&rsquo;s Tempo Triangle Sports Bra&rdquo;.
+        The swatch row already communicates available colours.
+      </p>
+    </FindingCard>
+
+    <!-- LOW PRIORITY -->
+
+    <FindingCard
+      title="Product card border-radius is 16px (design system specifies 12px)"
+      viewport="Both"
+      priority="low"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="card-border-radius"
+    >
+      <p slot="what">
+        Computed border-radius on <code>.product-card</code>: <code>16px</code>.
+        The Myprotein design system specifies <code>12px</code> for product cards.
+        This is a hardcoded override outside the token scale.
+      </p>
+      <p slot="why">
+        A minor visual inconsistency. At scale, incorrect border-radius values across card types
+        create a subtly incoherent feel and make it harder for engineers to rely on a single token
+        definition. The deviation is not user-facing enough to affect conversion directly.
+      </p>
+      <p slot="fix">
+        Update the <code>.product-card</code> component to use the <code>rounded-card</code> token
+        (<code>border-radius: 12px</code>) rather than the hardcoded <code>16px</code> value.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Quick Buy button font size is 16px (spec is 14px)"
+      viewport="Both"
+      priority="low"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="quickbuy-font-size"
+    >
+      <p slot="what">
+        Computed styles on <code>.quick-buy.btn.btn-primary</code>: <code>font-size: 16px</code>,
+        <code>font-weight: 700</code>, <code>font-family: Figtree</code>.
+        The design system specifies <code>14px Bold</code> for button labels.
+      </p>
+      <p slot="why">
+        The font is correct and the button reads clearly at 16px — this is a minor token deviation
+        rather than a usability issue. However it means the Quick Buy button is slightly larger
+        than other primary buttons on the site, creating minor visual hierarchy inconsistency.
+      </p>
+      <p slot="fix">
+        Set <code>font-size: 14px</code> on the <code>.quick-buy</code> component or ensure it
+        inherits from the <code>btn-primary</code> token rather than overriding it.
+      </p>
+    </FindingCard>
+
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Design Consistency</h2>
+    <p>
+      Typography: Figtree is loading correctly as the computed font family across all inspected elements
+      — no system-font fallback detected. The heading on &ldquo;Explore New In&rdquo; is 28px Bold (close to
+      the 32px scale value but off-token). Quick Buy uses Figtree 700 at 16px (spec: 14px).
+      The primary navigation and sub-navigation are consistent in size and weight.
+    </p>
+    <p>
+      Buttons: Quick Buy button border-radius is correctly 32px. Background colour is a dark teal
+      (<code>oklch(0.3162 0.055061 211.831)</code> — approximately <code>#003942</code>), consistent with
+      the primary button definition. The hero &ldquo;SHOP NOW&rdquo; button is the sole design system deviation
+      on buttons: white background, black text, no radius — clearly a custom campaign style rather than
+      a design system component.
+    </p>
+    <p>
+      Cards: Product card border-radius is 16px (should be 12px per token spec). Card background is a
+      warm off-white (<code>oklch(0.9654 0.006 75.41)</code>) consistent across all cards — this appears
+      intentional and on-brand. No mint (<code>#94E5B5</code>) ring observed on any element other than
+      the expected Add to Basket context — correct.
+    </p>
+    <p>
+      Spacing: Padding and margin values on inspected elements appear to follow the 4px grid. No
+      obviously out-of-scale values detected.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Accessibility Notes</h2>
+    <p>
+      Colour contrast on primary CTA (Quick Buy): white text on dark teal background — passes WCAG AA
+      comfortably (estimated ratio &gt;7:1). Hero banner text (orange and white on black) — both pass
+      large-text AA thresholds.
+    </p>
+    <p>
+      The hero &ldquo;SHOP NOW&rdquo; CTA is a concern: black text on white background passes contrast, but the
+      surrounding decorative oval could be misread as the button boundary by users relying on visual
+      affordance cues, and may confuse screen reader context if the oval is not marked decorative.
+    </p>
+    <p>
+      The email modal has a visible close button (X) and a &ldquo;No, thanks&rdquo; dismiss link. Both appear
+      keyboard-accessible. However, showing a modal on page load is a WCAG 2.1 AA risk for users
+      with cognitive disabilities — screen readers will jump focus into the dialog immediately,
+      disorienting users who landed on the clothing hub with a specific browsing intent.
+    </p>
+    <p>
+      Product images appear to show model shots — alt text should describe the garment, not just the
+      model pose. This could not be fully verified from the live page without deeper inspection.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Conversion Summary</h2>
+    <p>
+      This is a hub/category landing page rather than a filter-and-browse PLP — its job is to funnel
+      users into the right sub-category or product rail efficiently. The structure does this reasonably
+      well: the sub-navigation (Trending / Women&rsquo;s / Men&rsquo;s / Accessories / Footwear / Sale / Shop by
+      Training Type) is clear, and the mid-page gender tiles (Men&rsquo;s / Women&rsquo;s / Accessories with Shop Now)
+      provide a strong visual fallback for users who scroll past the sub-nav. The sale messaging
+      (Impact Week, up to 80% off) is prominent and credible.
+    </p>
+    <p>
+      The three highest-impact conversion blockers are the modal intercept (interrupts intent before
+      browsing begins), the delivery threshold conflict (plants doubt at the moment of commitment),
+      and the absence of product ratings (removes social proof at first product impression). Fixing
+      these three in sequence is likely to produce measurable uplift on click-through from the hub
+      to PDPs and on add-to-basket rate for Quick Buy items.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Recommended Implementation Order</h2>
+    <ol class="recommendations">
+      <li>Resolve the delivery threshold conflict (£30 new-in vs £50 site-wide) — copy change, no design work needed, immediate trust uplift.</li>
+      <li>Delay the email capture modal — trigger on exit-intent or scroll-depth rather than page load. Engineering change, low risk.</li>
+      <li>Add star ratings to product cards — surface existing review data at card level between title and price.</li>
+      <li>Split the hero CTA into &ldquo;Shop Women&rsquo;s&rdquo; / &ldquo;Shop Men&rsquo;s&rdquo; and apply brand button styles — requires design spec and engineering implementation.</li>
+      <li>Remove colour suffix from product card titles — CMS/template change, reduces title wrapping and improves scannability.</li>
+      <li>Gender-label or split the &ldquo;Explore New In&rdquo; rail — design decision required before engineering acts.</li>
+      <li>Fix product card border-radius token (16px → 12px) — low effort, design system hygiene.</li>
+      <li>Fix Quick Buy font-size (16px → 14px) — minor CSS token correction.</li>
+    </ol>
+  </section>
+
+</ReportLayout>
+
+<style is:global>
+  .finding-card code {
+    font-family: Menlo, Monaco, 'Courier New', monospace;
+    font-size: 12px;
+    background: var(--color-bg-muted);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--color-text-heading);
+  }
+</style>
+
+<style>
+  .report-intro { margin-bottom: 40px; }
+  .report-h1 { font-size: 26px; font-weight: 800; color: var(--color-text-heading); line-height: 1.25; margin-bottom: 6px; }
+  .report-meta { font-size: 13px; color: var(--color-text-body); opacity: 0.65; margin-bottom: 14px; }
+  .report-summary { font-size: 15px; line-height: 1.7; color: var(--color-text-body); max-width: 680px; }
+  .findings-section { margin-bottom: 48px; }
+  .section-heading { font-size: 18px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(0, 57, 66, 0.1); }
+  .prose-section { margin-bottom: 36px; }
+  .prose-section p { font-size: 15px; line-height: 1.7; color: var(--color-text-body); margin-bottom: 12px; }
+  .recommendations { padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .recommendations li { font-size: 14px; line-height: 1.6; color: var(--color-text-body); }
+</style>

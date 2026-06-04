@@ -118,6 +118,40 @@ import FindingCard from '@/components/FindingCard.astro';
     </FindingCard>
 
 
+    <FindingCard
+      title="Pagination offers no way to return to page 1 or jump between pages"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="pagination-no-back"
+    >
+      <p slot="what">
+        The product grid uses a next-arrow paginator at the bottom of the page. Once a user has
+        advanced to page 2 or beyond, there is no visible control to return to page 1, go back
+        a page, or jump to a specific page number. The only navigation option is forward. A user
+        who overshoots a product they saw on an earlier page has no way to recover their position
+        without using the browser back button and reloading the page from scratch.
+        <img src="/assets/reports/myprotein-best-sellers-2026-06-04/product-grid-desktop.png" alt="Product grid with pagination arrow at bottom" class="finding-img" />
+      </p>
+      <p slot="why">
+        Browsing a 133-product cross-category list is inherently non-linear — users will scan,
+        scroll back, and revisit. A pagination system with no backward navigation removes the
+        ability to recover from a missed product, and with no page number indicators users have
+        no sense of how far through the catalogue they are. This increases cognitive load and is
+        likely to cause abandonment on pages 2+, concentrating all engagement on the initial
+        product set and giving later-ranked items effectively zero visibility.
+      </p>
+      <p slot="fix">
+        Replace the single next-arrow with a standard pagination control: previous/next arrows
+        plus visible page number indicators (e.g. 1 · 2 · 3 · … · 7). This gives users
+        positional awareness and the ability to navigate freely. If forward-only pagination is
+        a technical constraint, at minimum add a "Back" arrow once the user is past page 1.
+        Consider also whether infinite scroll would serve this page better — it removes the
+        back-navigation problem entirely while keeping the browse flow continuous.
+      </p>
+    </FindingCard>
+
     <!-- MEDIUM PRIORITY -->
 
     <FindingCard
@@ -402,6 +436,7 @@ import FindingCard from '@/components/FindingCard.astro';
   <section class="prose-section">
     <h2 class="section-heading">Recommended Implementation Order</h2>
     <ol class="recommendations">
+      <li>Add previous/back navigation and page number indicators to the paginator — users currently have no way to return to earlier pages.</li>
       <li>Add star ratings and review count to product cards — surface the community social proof the page promises.</li>
       <li>Add mint ring to QUICK BUY button — one-line CSS fix, restores brand CTA signature.</li>
       <li>Add "Best Seller" badge to card image overlay — design spec needed, then engineering implementation.</li>

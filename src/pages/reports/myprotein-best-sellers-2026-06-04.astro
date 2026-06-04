@@ -238,12 +238,11 @@ import FindingCard from '@/components/FindingCard.astro';
         screen reader users get the wrong affordance and no <code>aria-expanded</code> state.
       </p>
       <p slot="fix">
-        If the expanded copy is genuinely thin, consider removing the toggle entirely and showing
-        the full text inline — or removing the category description from above the filter bar
-        altogether and placing it below the grid where it is standard practice and does not impede
-        the browse journey. If the toggle must remain, replace the <code>&lt;a&gt;</code> with a
-        <code>&lt;button&gt;</code> and add <code>aria-expanded="false/true"</code> to communicate
-        state to assistive technology.
+        Remove the "Read More" toggle entirely. The amount of additional copy it reveals is too
+        small to justify the interaction — show the full text inline or remove the category
+        description from this position altogether. If any SEO copy is required above the fold,
+        keep it to a single short sentence with no toggle. The filter bar and product grid should
+        follow directly below the H1.
       </p>
     </FindingCard>
 
@@ -409,7 +408,7 @@ import FindingCard from '@/components/FindingCard.astro';
       <li>Fix QUICK BUY token violations — font size (16→14px), remove uppercase, border-radius (32→9999px).</li>
       <li>Fix filter label truncation — use "Category" instead of "Product Category" or allow buttons to expand.</li>
       <li>Remove duplicate promo banner DOM render and clarify offer eligibility.</li>
-      <li>Move category description copy below the product grid (or remove the Read More toggle) to clear above-fold space.</li>
+      <li>Remove the Read More toggle — the additional copy is too thin to justify the interaction; show inline or remove entirely.</li>
       <li>Introduce category section grouping or a department tab strip above the grid.</li>
       <li>Surface active sort value in the Sort button label.</li>
       <li>Fix filter chip border-radius to 8px token value.</li>

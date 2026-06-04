@@ -1,0 +1,429 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+import FindingCard from '@/components/FindingCard.astro';
+---
+
+<ReportLayout title="Men's Clothing PLP — Myprotein">
+
+  <section class="report-intro">
+    <h1 class="report-h1">UX Audit: Men's Clothing PLP</h1>
+    <p class="report-meta">Myprotein Category Listing Page &mdash; Audited 4 June 2026</p>
+    <p class="report-summary">
+      This audit covers the All Men's Gym Clothes listing page at
+      <code>/c/clothing/mens/view-the-whole-range/</code>, which surfaces 480 products across an
+      infinite-scroll grid. The page has solid structural bones — a sticky filter bar, a scrollable
+      subcategory pill row, and a prominent Quick Buy CTA on every card — but is let down by two
+      high-severity content errors that will confuse shoppers and erode trust, plus a filter bar whose
+      labels are systematically truncated, making filtering difficult to discover. Mobile tap targets
+      on colour swatches are critically undersized. Design token drift on button size and card radius
+      is minor but adds up across the range.
+    </p>
+  </section>
+
+  <section class="findings-section">
+    <h2 class="section-heading">Findings</h2>
+
+    <!-- HIGH PRIORITY -->
+
+    <FindingCard
+      title="Wrong promo banner copy on product cards — nutrition brand tagline"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="wrong-promo-banner-nutrition"
+    >
+      <p slot="what">
+        Several product cards in the men's clothing grid display the banner:
+        <strong>"UP TO 50% OFF | UK &amp; EUROPE'S NO. 1 SPORTS NUTRITION BRAND"</strong>.
+        This is Myprotein's nutrition brand credential — it has no relevance on a clothing PLP and is
+        actively misleading. The copy appears to be pulled from a global promotional template that
+        hasn't been scoped to page type. Nutrition-branded messaging sitting beneath a gym hoodie
+        card undermines both propositions.
+      </p>
+      <p slot="why">
+        A shopper browsing clothing who reads "Sports Nutrition Brand" as the core value proposition
+        may question whether they're on the right page. It signals a content error, not an offer, and
+        is likely to reduce confidence in the page. This also contradicts the delivery copy on
+        adjacent cards, creating two competing messages in the same viewport.
+      </p>
+      <p slot="fix">
+        Scope the promo banner template so that the "Sports Nutrition Brand" credential is suppressed
+        on all clothing category pages (<code>/c/clothing/</code>). Replace with a clothing-specific
+        offer if one exists (e.g. "UP TO 50% OFF CLOTHING | SHOP THE SALE"), or remove the banner
+        entirely on clothing PLPs. This is a CMS/template config change — no design work required.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Filter labels truncated — users cannot identify filter type"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="filter-labels-truncated"
+    >
+      <p slot="what">
+        The sticky filter bar shows five filter dropdowns but truncates three of them at desktop
+        (1440px): <strong>"Sport Clot..."</strong>, <strong>"Shop By S..."</strong>, and
+        <strong>"Colour Ran..."</strong> are cut off mid-word. Only "Sort" and "Clothing Size" are
+        fully visible. The filter bar uses a fixed layout at <code>1440px</code> without enough
+        allocated width per filter to render full labels.
+      </p>
+      <p slot="why">
+        Truncated labels force users to click a filter to find out what it does — adding a redundant
+        step and burying filtering capability behind interaction. This is a direct conversion
+        friction: a user wanting to filter by colour must guess that "Colour Ran..." means Colour
+        Range. With 480 results, effective filtering is critical to reaching an add-to-bag moment.
+        On narrower screens the truncation will be even worse.
+      </p>
+      <p slot="fix">
+        Shorten the filter labels to fit the available width without truncation. Suggested labels:
+        "Sport" / "Activity", "Size", "Colour", rather than "Sport Clothing Type", "Shop By Size",
+        "Colour Range". Alternatively, increase the available width per filter or reduce the number
+        of visible filters at this breakpoint with overflow into a "More Filters" panel. Abbreviation
+        or iconography (e.g. a colour wheel for colour) is also valid.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="'Free Delivery on New-In' banner shown on sale items"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="new-in-banner-on-sale-items"
+    >
+      <p slot="what">
+        The product card promo strip "FREE DELIVERY ON ALL NEW-IN WHEN YOU SPEND £30 | AUTO APPLIES
+        AT CHECKOUT" appears on items that are clearly on sale — showing "Was £38.00 | Save £10.01"
+        or similar — and are not new arrivals. The banner is being applied to all cards rather than
+        only those tagged as new-in stock. Affected examples include sale-priced Rest Day Hoodies and
+        Oversized Joggers at the top of the grid.
+      </p>
+      <p slot="why">
+        Contradictory messaging — "New In" banner + sale pricing — signals a content error to
+        informed shoppers. It makes the delivery offer feel unreliable (which offer actually applies?)
+        and could lead to cart abandonment if the delivery incentive is removed at checkout. It also
+        dilutes the "new arrival" signal, which is one of the strongest impulse drivers in clothing
+        retail.
+      </p>
+      <p slot="fix">
+        Gate the "Free Delivery on New-In" banner on the <code>isNewIn</code> product attribute (or
+        equivalent tag in the product data). Sale items should show a sale-specific message or no
+        promo strip. This is a card template / product data conditional — it should not require a
+        design change.
+      </p>
+    </FindingCard>
+
+    <!-- MEDIUM PRIORITY -->
+
+    <FindingCard
+      title="Colour swatches 24×24px — critically undersized tap target on mobile"
+      viewport="Mobile"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="swatch-tap-target"
+    >
+      <p slot="what">
+        Individual colour swatch dots on product cards measure <strong>24×24px</strong>
+        (confirmed via <code>getBoundingClientRect()</code>). WCAG 2.5.5 (Level AAA) recommends
+        44×44px and Apple HIG requires 44pt minimum. At 24px, the interactive area is 55% smaller
+        than the minimum recommended target.
+      </p>
+      <p slot="why">
+        Clothing shoppers heavily rely on colour selection as a pre-navigation filter — tapping a
+        swatch to see the product in a different colour is a core interaction on mobile. A 24px target
+        on a 390px screen requires excessive precision and will generate mis-taps, leading to
+        accidental navigation or frustration. This disproportionately affects users on smaller phones
+        and those with motor impairments.
+      </p>
+      <p slot="fix">
+        Increase the swatch tap target to a minimum of 44×44px by adding padding or increasing the
+        visual swatch size. If the visual size needs to stay at 24px for aesthetic reasons, wrap each
+        swatch in a 44px-tall touch target container with transparent padding (e.g.
+        <code>min-width: 44px; min-height: 44px; display: flex; align-items: center; justify-content: center;</code>).
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Quick Buy CTA missing brand-signature mint outer ring"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="quick-buy-missing-mint-ring"
+    >
+      <p slot="what">
+        The Quick Buy button has <code>box-shadow: none</code> — the mint (<code>#94E5B5</code>)
+        outer ring that defines the Myprotein primary CTA signature is absent. The button renders
+        with the correct dark teal background and 32px border-radius but without the ring that
+        distinguishes the primary action visually.
+      </p>
+      <p slot="why">
+        The mint ring is a brand-level design decision that signals "this is the primary action" at a
+        glance and makes the CTA visually distinctive against the product card backgrounds. Its
+        absence on the most-used CTA across 480 product cards is a consistency gap that weakens the
+        visual hierarchy, and it means the PLP CTA does not match the PDP Add to Basket button style.
+      </p>
+      <p slot="fix">
+        Add the mint outer ring as a box-shadow to the <code>.quick-buy-btn</code> (or equivalent
+        class):
+        <code>box-shadow: 0 0 0 3px #94E5B5;</code>. Verify this is applied consistently across
+        all product card CTAs, not just the first in the DOM.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Wishlist button 40×40px — marginally below tap target minimum"
+      viewport="Mobile"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="wishlist-tap-target"
+    >
+      <p slot="what">
+        The wishlist heart icon button on each product card measures <strong>40×40px</strong>. This
+        is 4px short of the 44×44px minimum. The button uses class
+        <code>plp-wishlist-btn ... p-2</code> — padding of 8px accounts for most of the tap area
+        but falls just short.
+      </p>
+      <p slot="why">
+        The wishlist action is used frequently on mobile for shortlisting. At 40px the risk of
+        mis-tapping is low but measurable, particularly in the corner position (top-right of each
+        card) where thumb reach varies. WCAG 2.5.5 sets 44px as the benchmark.
+      </p>
+      <p slot="fix">
+        Increase padding from <code>p-2</code> (8px) to <code>p-[10px]</code> or equivalent to
+        bring the touch target to 44×44px. Alternatively use <code>min-w-[44px] min-h-[44px]</code>
+        utility classes.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Product card border-radius 16px vs design token 12px"
+      viewport="Both"
+      priority="medium"
+      ticketType="design"
+      ticketable={false}
+      findingId="card-border-radius-drift"
+    >
+      <p slot="what">
+        Product cards use <code>border-radius: 16px</code> (computed). The design system token
+        <code>--radius-card</code> is defined as <strong>12px</strong>. The card uses Tailwind class
+        <code>rounded-t-2xl</code> at <code>lg:</code> breakpoint (16px) rather than
+        <code>rounded-t-xl</code> (12px equivalent).
+      </p>
+      <p slot="why">
+        4px of radius drift is subtle but accumulates across a high-density grid of 28+ cards.
+        Where the PLP card style is referenced alongside PDP or basket cards, the inconsistency
+        becomes visible. More importantly, if the design system token is updated, this component
+        won't inherit the change automatically.
+      </p>
+      <p slot="fix">
+        Align the card to use the design token value (12px / <code>rounded-xl</code>) or update the
+        design token to reflect the intended 16px value and apply it consistently. This needs a
+        design decision before engineering can act.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Quick Buy font size 16px vs spec 14px Bold"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="button-font-size-drift"
+    >
+      <p slot="what">
+        The Quick Buy button renders at <code>font-size: 16px; font-weight: 700</code>. The design
+        system specifies button text as <strong>14px Bold</strong>. The button also has
+        <code>padding: 10px 16px</code> which is within the valid spacing scale.
+      </p>
+      <p slot="why">
+        At 16px the button label is proportionally large relative to the card, making the product
+        title and price feel secondary. 14px Bold would keep the CTA prominent while restoring
+        visual hierarchy within the card. Consistent button sizing also ensures the button renders
+        at the same height across all page templates.
+      </p>
+      <p slot="fix">
+        Update the Quick Buy button CSS to <code>font-size: 14px</code>. Verify across all
+        breakpoints — the current 16px may be intentional for mobile legibility, in which case the
+        design token should be updated to reflect this.
+      </p>
+    </FindingCard>
+
+    <!-- LOW PRIORITY -->
+
+    <FindingCard
+      title="SEO intro paragraph delays first product below the fold"
+      viewport="Both"
+      priority="low"
+      ticketType="design"
+      ticketable={false}
+      findingId="seo-text-above-fold"
+    >
+      <p slot="what">
+        The page renders a two-sentence SEO description block ("Investing in the right
+        activewear...") plus a "Read More" link above the subcategory pills and filter bar. At
+        1440px this consumes ~130px of vertical space. The first product card is not visible until
+        users scroll past the H1, SEO text, subcategory pills, and filter bar — approximately 700px
+        from the top on desktop, and further on mobile.
+      </p>
+      <p slot="why">
+        On a high-intent browsing page, the primary job is to show products. The SEO text serves
+        crawlers, not shoppers. Users arriving from ads or search expecting to see clothing will
+        encounter two lines of brand copy before any product. On mobile the problem is amplified —
+        the full viewport may be consumed by header, breadcrumb, H1, SEO text, and pill row before
+        any product card appears.
+      </p>
+      <p slot="fix">
+        Collapse the SEO block to zero height by default and expose it via "Read More" only.
+        Alternatively move it below the product grid (common pattern: SEO copy in a collapsed
+        accordion at the bottom of the page). The H1 can remain visible for SEO purposes without
+        the description needing to be above the fold.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Product title repeats colour name already shown in swatches"
+      viewport="Both"
+      priority="low"
+      ticketType="design"
+      ticketable={false}
+      findingId="title-colour-redundancy"
+    >
+      <p slot="what">
+        All product titles follow the pattern: "MP Men's [Product Name] - [Colour]" (e.g.
+        "MP Men's Rest Day Oversized Hoodie - Cornflower Blue"). The active colour is also
+        shown visually via the colour swatch row directly above the title. The colour is conveyed
+        twice — once in the swatch, once in the title — creating visual noise.
+      </p>
+      <p slot="why">
+        The colour suffix makes titles longer, causes wrapping to two lines on some cards, and
+        creates vertical height inconsistency across the grid. Shorter titles would allow for a more
+        compact, scannable card layout and reduce the visual weight of the text block beneath each
+        image. This is low priority because it doesn't block purchase, but it degrades scannability
+        across 480 products.
+      </p>
+      <p slot="fix">
+        Display the active colour name as a smaller secondary label below the product title (or as
+        a tooltip/label on the active swatch) and remove it from the title string itself. Requires
+        a design decision on how to surface the active colour, and a CMS/template change to strip
+        the suffix from the card title render.
+      </p>
+    </FindingCard>
+
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Design Consistency</h2>
+    <p>
+      The page uses Figtree throughout (confirmed via computed styles) and the core colour palette
+      is consistent with the design system — dark teal (<code>oklch(0.3162 0.055061 211.831)</code>,
+      approximately <code>#003942</code>) on the Quick Buy button and price text, warm neutral card
+      backgrounds. However, three token deviations were found: (1) card border-radius is 16px versus
+      the <code>--radius-card</code> token of 12px; (2) the Quick Buy button renders at 16px font
+      size versus the 14px Bold spec; and (3) the mint <code>#94E5B5</code> outer ring is absent
+      from the primary CTA. The subcategory pill row uses 32px border-radius with a warm neutral
+      fill — this is consistent with the pill token. No hardcoded colour values outside the token
+      palette were detected on inspected elements. The H1 at 48px/700 is technically on the type
+      scale but feels heavy for a category listing context compared with the 36px used on
+      comparable PLPs.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Accessibility Notes</h2>
+    <p>
+      The most significant accessibility issue is the colour swatch tap target at 24×24px —
+      this fails WCAG 2.5.5 (Target Size, Level AAA) and falls below Apple and Android HIG minimums.
+      The wishlist button at 40×40px is marginally below WCAG 2.5.5. Body text and price text appear
+      to meet 4.5:1 contrast on the warm neutral card background based on visual inspection of the
+      dark teal on cream. The promo banners use all-caps text — this is readable but can be difficult
+      for users with dyslexia; this is noted rather than flagged as a blocker. No obvious keyboard
+      focus or screen reader issues were detected during the audit, but a full keyboard traversal
+      was not completed. The product image alt text pattern and ARIA labelling on swatches were not
+      inspected in depth and would benefit from a dedicated accessibility audit.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Conversion Summary</h2>
+    <p>
+      The path to Quick Buy is short and clear — the CTA is prominent on every card, the sticky
+      filter bar allows refinement without losing scroll position, and the subcategory pills let
+      users jump to sub-ranges efficiently. These are genuine strengths. The conversion risks are
+      concentrated in trust and clarity: the wrong promo banner copy ("Sports Nutrition Brand" on
+      clothing cards) is the most damaging finding as it signals a content error and can cause
+      shoppers to question whether they are in the right place. The "New-In delivery offer" appearing
+      on sale items creates a second trust gap. Truncated filter labels mean the full filtering
+      capability of the page is hidden behind a click — with 480 products, users who can't find
+      their size or colour quickly will bounce rather than scroll. Fix the two content errors first;
+      they require no design work and would have an immediate impact.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Recommended Implementation Order</h2>
+    <ol class="recommendations">
+      <li>
+        <strong>Suppress nutrition brand tagline on clothing PLPs</strong> — CMS/template config
+        change, no design needed. Highest trust impact for lowest effort.
+      </li>
+      <li>
+        <strong>Gate "New-In delivery banner" on new-in product tag only</strong> — conditional
+        template change. Removes contradictory messaging on sale items immediately.
+      </li>
+      <li>
+        <strong>Fix truncated filter labels</strong> — shorten label strings or widen filter
+        dropdown widths. Directly improves discoverability for 480-product catalogue browsing.
+      </li>
+      <li>
+        <strong>Increase colour swatch tap target to 44px</strong> — CSS padding change.
+        Significantly improves mobile usability for colour-led shopping.
+      </li>
+      <li>
+        <strong>Add mint outer ring to Quick Buy button</strong> — single CSS
+        <code>box-shadow</code> addition. Restores brand signature CTA consistency.
+      </li>
+      <li>
+        <strong>Increase wishlist button to 44×44px</strong> — padding tweak.
+      </li>
+      <li>
+        <strong>Collapse SEO intro text by default</strong> — move product grid closer to the fold.
+        Design decision required first.
+      </li>
+      <li>
+        <strong>Resolve card border-radius and button font-size token drift</strong> — design
+        decision on intended values, then a single CSS update.
+      </li>
+    </ol>
+  </section>
+
+</ReportLayout>
+
+<style is:global>
+  .finding-card code {
+    font-family: Menlo, Monaco, 'Courier New', monospace;
+    font-size: 12px;
+    background: var(--color-bg-muted);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--color-text-heading);
+  }
+</style>
+
+<style>
+  .report-intro { margin-bottom: 40px; }
+  .report-h1 { font-size: 26px; font-weight: 800; color: var(--color-text-heading); line-height: 1.25; margin-bottom: 6px; }
+  .report-meta { font-size: 13px; color: var(--color-text-body); opacity: 0.65; margin-bottom: 14px; }
+  .report-summary { font-size: 15px; line-height: 1.7; color: var(--color-text-body); max-width: 680px; }
+  .findings-section { margin-bottom: 48px; }
+  .section-heading { font-size: 18px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(0, 57, 66, 0.1); }
+  .prose-section { margin-bottom: 36px; }
+  .prose-section p { font-size: 15px; line-height: 1.7; color: var(--color-text-body); }
+  .recommendations { padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .recommendations li { font-size: 14px; line-height: 1.6; color: var(--color-text-body); }
+</style>

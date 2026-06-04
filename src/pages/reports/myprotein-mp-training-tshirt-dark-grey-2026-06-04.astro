@@ -1,0 +1,373 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+import FindingCard from '@/components/FindingCard.astro';
+---
+
+<ReportLayout title="MP Men's Training Short Sleeve T-Shirt (Dark Grey) — Myprotein PDP">
+
+  <section class="report-intro">
+    <h1 class="report-h1">UX Audit: MP Men's Training Short Sleeve T-Shirt</h1>
+    <p class="report-meta">Myprotein Product Detail Page &mdash; Audited 4 June 2026</p>
+    <p class="report-summary">
+      Audit of the Dark Grey colourway PDP at myprotein.com/p/sports-clothing/mp-men-s-training-short-sleeve-t-shirt-dark-grey/17479465/,
+      reviewed at desktop viewport (1440px). The page has a clean two-column layout with a strong hero image gallery,
+      but the product panel is critically underpowered: price, colour swatches, and star ratings are all absent from
+      the main content area — DOM inspection reveals empty containers where these elements should render, suggesting
+      a CMS or API data issue rather than a design decision. Combined with a near-empty product description and
+      conflicting delivery messaging, the page creates meaningful friction at the point of evaluation.
+    </p>
+  </section>
+
+  <section class="findings-section">
+    <h2 class="section-heading">Findings</h2>
+
+    <!-- HIGH PRIORITY -->
+
+    <FindingCard
+      title="Price absent from the product panel"
+      viewport="Desktop"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="price-missing-panel"
+    >
+      <p slot="what">
+        The product price (£20.00) does not appear in the main right-hand product panel — it is only visible
+        in the sticky bottom bar alongside the Add to Basket button. The panel layout has a large blank gap
+        between the product title and the Size Guide row where price would conventionally sit.
+        DOM inspection confirms two empty containers (<code>flex flex-col gap-4</code> and <code>flex flex-col gap-3</code>)
+        in this position, consistent with content that failed to render.
+        <img src="/assets/reports/myprotein-mp-training-tshirt-dark-grey-2026-06-04/price-missing-panel-desktop.png" alt="Right-hand product panel showing large blank gap between product title and size selector, with price only visible in the sticky bottom bar" class="finding-img" />
+      </p>
+      <p slot="why">
+        Price is one of the most critical signals a user needs before committing to add a product to their basket.
+        Hiding it below the fold in the sticky bar means users evaluating the product cannot see what they'll pay
+        without scrolling past all options. This breaks the standard mental model for PDP layouts and is likely to
+        increase hesitation and reduce add-to-basket rate.
+      </p>
+      <p slot="fix">
+        Investigate why the price component is not rendering in the panel content area. The empty container divs
+        suggest a data-binding failure — check that the product pricing data is correctly passed to the panel
+        template and that the price component mounts successfully. Price should appear directly below the product
+        title, above the size selector, consistent with standard ecommerce PDP patterns.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Colour swatches missing from product panel"
+      viewport="Desktop"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="colour-swatches-missing"
+    >
+      <p slot="what">
+        No colour variant swatches are visible in the product panel. The DOM contains a colour-selector element
+        and a "Black" colour button, confirming at least one other colourway exists, but these are not rendering
+        in the panel. The breadcrumb correctly shows "Dark Grey" as the current variant but there is no visual
+        indicator in the panel, and no way for users to discover or switch to other colour options.
+        <img src="/assets/reports/myprotein-mp-training-tshirt-dark-grey-2026-06-04/colour-swatches-missing-desktop.png" alt="Product panel showing no colour swatches between the product title and size guide" class="finding-img" />
+      </p>
+      <p slot="why">
+        Colour selection is a primary decision point for clothing. If a user lands on a colourway that is out of
+        stock or not their preference, they have no visible path to alternatives — increasing the chance of
+        abandonment rather than a variant switch. This also suppresses cross-sell between colourways.
+      </p>
+      <p slot="fix">
+        Same root cause as the missing price — the colour selector component is failing to mount in the panel.
+        Ensure the variant data (all available colours and their stock status) is correctly passed to the panel
+        template. Colour swatches should render directly beneath the price, using circular or rounded-square
+        swatches with the selected colour clearly indicated.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="No product star rating or review count on the PDP"
+      viewport="Desktop"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="reviews-missing"
+    >
+      <p slot="what">
+        There are no star ratings or review counts anywhere on the product page. The site-level trust bar in the
+        header references "Over 210k reviews &amp; 4.4 rated" globally, but no per-product rating is shown.
+        This is particularly noticeable given the large blank gap in the panel where reviews are typically displayed.
+      </p>
+      <p slot="why">
+        Star ratings are among the highest-impact trust signals on a PDP and directly influence add-to-basket
+        conversion. Their absence — particularly on a basic training garment where users may be price-comparing
+        with competitors — leaves a gap that social proof would fill. If the product has reviews, not showing
+        them is leaving conversion on the table.
+      </p>
+      <p slot="fix">
+        If this product has reviews, surface a star rating and review count directly below the product title (or
+        below the colour swatches). Link it to a review section lower on the page. If the review widget is failing
+        to load, investigate the data source. If the product genuinely has no reviews, consider a "Be the first to
+        review" prompt rather than silence.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Product description contains only 'Range: Clothing'"
+      viewport="Desktop"
+      priority="high"
+      ticketType="engineering"
+      ticketable={false}
+      findingId="thin-product-description"
+    >
+      <p slot="what">
+        The "Product Details" accordion expands to reveal only a single line: <strong>Range: Clothing</strong>.
+        There is no fabric content, fit description, care instructions, or feature callouts. The accordion itself
+        requires a click to reveal even this minimal content.
+        <img src="/assets/reports/myprotein-mp-training-tshirt-dark-grey-2026-06-04/product-details-accordion-desktop.png" alt="Product Details accordion open showing only 'Range: Clothing' as its entire content" class="finding-img" />
+      </p>
+      <p slot="why">
+        For a training t-shirt, fabric composition (e.g. polyester percentage, moisture-wicking properties) and
+        fit type (regular, slim, relaxed) are active purchase decision criteria. Their absence creates uncertainty
+        that can block the add-to-basket decision — particularly for first-time buyers who need confidence before
+        committing. This also harms SEO.
+      </p>
+      <p slot="fix">
+        This is likely a content/CMS issue rather than a code issue — the product data is incomplete. Ensure the
+        product entry includes at minimum: fabric composition, key features (e.g. quick-dry, flatlock seams),
+        fit type, and care instructions. Ticketable once the correct content is confirmed.
+      </p>
+    </FindingCard>
+
+    <!-- MEDIUM PRIORITY -->
+
+    <FindingCard
+      title="Conflicting free delivery thresholds"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="delivery-threshold-conflict"
+    >
+      <p slot="what">
+        Two different free delivery thresholds are visible simultaneously on the page. The site-wide trust bar in
+        the header states "Free standard delivery on £55 spend." The product panel shows a promotional banner:
+        "FREE DELIVERY ON ALL NEW-IN WHEN YOU SPEND £30 | AUTO APPLIES AT CHECKOUT." A user reading both cannot
+        know which applies to this product or whether both are live concurrently.
+      </p>
+      <p slot="why">
+        Delivery cost uncertainty is a well-documented cause of checkout abandonment. Showing two different
+        thresholds without clarification creates confusion and erodes trust in the pricing displayed. Users
+        expecting £55 threshold may calculate incorrectly before checkout, leading to a surprise at the basket.
+      </p>
+      <p slot="fix">
+        If the £30 new-in delivery promotion is active site-wide during a campaign period, update the trust bar
+        to reflect the current threshold. If it is product-specific, add clear qualifying copy ("on new-in items").
+        The two messages should never show different thresholds without explicit context.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="FBT module pre-selects both add-ons, showing £62 total"
+      viewport="Desktop"
+      priority="medium"
+      ticketType="design"
+      ticketable={true}
+      findingId="fbt-preselected"
+    >
+      <p slot="what">
+        The "Frequently bought with" section pre-checks both recommended items by default — a Black colourway
+        T-Shirt (£20) and Training Shorts (£22) — presenting a combined total of £62 alongside a primary
+        "Add these to your routine" CTA. The user has not yet added the primary item to their basket.
+        <img src="/assets/reports/myprotein-mp-training-tshirt-dark-grey-2026-06-04/fbt-preselected-desktop.png" alt="Frequently Bought With module showing two pre-selected add-ons with a combined total of £62" class="finding-img" />
+      </p>
+      <p slot="why">
+        Pre-selecting multiple items and surfacing a total 3× higher than the primary product price can create
+        sticker shock, particularly for users who were assessing a £20 purchase. It can also read as a dark
+        pattern, potentially causing users to abandon rather than de-select items. The "Add these to your routine"
+        label uses Myprotein's nutrition stack language, which feels out-of-place for clothing.
+      </p>
+      <p slot="fix">
+        Default to zero items pre-selected in the FBT module, or pre-select only one complementary item with
+        clear opt-in affordance. Update the CTA copy to use clothing-appropriate language (e.g. "Complete the look"
+        or "Add all to basket"). Consider showing the total only when items are selected.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Add to Basket button font size is 16px — spec says 14px"
+      viewport="Desktop"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="atb-font-size"
+    >
+      <p slot="what">
+        Computed style on the "Add to basket" button: <code>font-size: 16px; font-weight: 700</code>.
+        The design token specification for button text is 14px Bold. Other design token values are correctly
+        applied: Figtree font family ✓, 32px border-radius ✓, mint border ring (#94E5B5) ✓.
+      </p>
+      <p slot="why">
+        A token deviation here means the button type doesn't match the design system specification, which can
+        cause visual inconsistency if/when other button instances on the site render at 14px.
+      </p>
+      <p slot="fix">
+        Update the Add to Basket button's font-size to <code>14px</code> to match the design token specification.
+        Confirm the correct Tailwind class or CSS custom property is being applied.
+      </p>
+    </FindingCard>
+
+    <!-- LOW PRIORITY -->
+
+    <FindingCard
+      title="Product title does not include selected colour name"
+      viewport="Both"
+      priority="low"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="title-no-colour"
+    >
+      <p slot="what">
+        The H1 reads "MP Men's Training Short Sleeve T-Shirt" — no colour is stated. The colour "Dark Grey"
+        appears only in the breadcrumb trail, which is small and easy to miss. Without colour swatches visible
+        in the panel (see <strong>colour-swatches-missing</strong>), there is no clear reinforcement of which
+        variant the user is viewing.
+      </p>
+      <p slot="why">
+        Users who arrive via direct links or search may not immediately register which colourway they're looking
+        at, and may hesitate or add the wrong variant. On clothing PDPs, the selected colour should be clearly
+        stated in or near the product title.
+      </p>
+      <p slot="fix">
+        Append the current colour name to the H1 or display it as a sub-label directly below it:
+        e.g. "MP Men's Training Short Sleeve T-Shirt" with "Colour: Dark Grey" below in smaller text.
+        This is most impactful once colour swatches are restored.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="CTA label casing is inconsistent across the page"
+      viewport="Both"
+      priority="low"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="cta-casing"
+    >
+      <p slot="what">
+        The Add to Basket button in the FBT section renders as "Add to basket" (sentence case), while the
+        sticky bottom bar renders "ADD TO BASKET" (all-caps). The same action is labelled differently
+        depending on context.
+      </p>
+      <p slot="why">
+        Inconsistent labelling can create a minor sense of inconsistency or uncertainty. It also suggests a
+        discrepancy between how the CTA is implemented in the two components — worth resolving to avoid
+        future divergence.
+      </p>
+      <p slot="fix">
+        Standardise on a single casing. The design system uses sentence case for primary CTAs ("Add to basket")
+        — update the sticky bar to match.
+      </p>
+    </FindingCard>
+
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Design Consistency</h2>
+    <p>
+      The Add to Basket button broadly adheres to design token values: Figtree font family is loaded and
+      rendering correctly, the 32px border-radius is applied, and the mint outer ring
+      (<code>border: 2px solid rgb(148, 229, 181)</code> = <code>#94E5B5</code>) is present — the brand
+      signature CTA pattern is intact. The product title (H1) correctly uses 24px Medium Figtree as
+      specified. The size selector chips render at 44px tall, meeting minimum touch-target requirements.
+      The one clear deviation is the Add to Basket button's font-size at 16px rather than the specified
+      14px Bold. The size chip border-radius computes to 0px on the button element itself, though visual
+      inspection shows rounding — this appears to come from a wrapper container rather than the button,
+      which is a structural inconsistency worth noting but does not create a visible issue currently.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Accessibility Notes</h2>
+    <p>
+      Size selector chips are 44×60px — meeting the WCAG 2.5.5 minimum target size of 44×44px.
+      The Add to Basket button has sufficient contrast: white text on a dark teal background
+      (<code>oklch(0.3162 0.055061 211.831)</code>, approximately #003942) exceeds the 4.5:1 AA
+      requirement for normal text. The product image gallery appears to have zoom controls (visible
+      magnifier icon) but it is not confirmed whether keyboard users can access the zoom interaction.
+      The primary accessibility concern is the empty product panel: screen reader users will encounter
+      a near-empty product form — no price, no colour, no rating — before reaching the size selector,
+      which significantly degrades the experience for assistive technology users and may constitute a
+      WCAG 1.3.1 (Info and Relationships) failure if the price is conveyed only via the sticky bar
+      without appropriate ARIA association.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Conversion Summary</h2>
+    <p>
+      The add-to-basket journey on this page is impaired primarily by what is missing rather than what
+      is broken. A user arriving at this PDP cannot see the price, cannot see other colour options, and
+      has no social proof — three of the most influential conversion signals on a clothing PDP — without
+      those elements rendering in the panel. The sticky Add to Basket bar is well-implemented (correct
+      design token signature, always visible) but it is doing too much heavy lifting by being the only
+      place the price appears. The "Product Details" accordion offering only "Range: Clothing" also means
+      users who want to verify fabric or fit before purchasing will leave disappointed. The FBT module,
+      while a sensible upsell concept, risks alarming users with a £62 pre-selected total on what they
+      expected to be a £20 product page. Taken together, these issues are likely to suppress add-to-basket
+      rate measurably below the clothing PDP benchmark.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Recommended Implementation Order</h2>
+    <ol class="recommendations">
+      <li>
+        <strong>Investigate and fix the panel rendering failures</strong> — restore price, colour swatches,
+        and star rating to the product panel. These are likely a single root cause (data not reaching the
+        panel template) and fixing them resolves three high-priority findings at once.
+      </li>
+      <li>
+        <strong>Add proper product copy to the CMS entry</strong> — fabric composition, fit type, key
+        features, and care instructions as a minimum. Coordinate between content and engineering on the
+        correct fields to populate.
+      </li>
+      <li>
+        <strong>Fix the FBT module default state</strong> — remove pre-selection of add-on items and
+        update the CTA copy to use clothing-appropriate language.
+      </li>
+      <li>
+        <strong>Resolve the conflicting delivery threshold messaging</strong> — align the trust bar and
+        product panel banner to show the same threshold, with campaign-specific messaging clearly scoped.
+      </li>
+      <li>
+        <strong>Correct the Add to Basket button font-size</strong> to 14px to match the design token spec,
+        and standardise CTA label casing to sentence case across both button instances.
+      </li>
+      <li>
+        <strong>Add colour label below the product title</strong> once colour swatches are restored, to
+        clearly indicate the selected variant.
+      </li>
+    </ol>
+  </section>
+
+</ReportLayout>
+
+<style is:global>
+  .finding-card code {
+    font-family: Menlo, Monaco, 'Courier New', monospace;
+    font-size: 12px;
+    background: var(--color-bg-muted);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--color-text-heading);
+  }
+</style>
+
+<style>
+  .report-intro { margin-bottom: 40px; }
+  .report-h1 { font-size: 26px; font-weight: 800; color: var(--color-text-heading); line-height: 1.25; margin-bottom: 6px; }
+  .report-meta { font-size: 13px; color: var(--color-text-body); opacity: 0.65; margin-bottom: 14px; }
+  .report-summary { font-size: 15px; line-height: 1.7; color: var(--color-text-body); max-width: 680px; }
+  .findings-section { margin-bottom: 48px; }
+  .section-heading { font-size: 18px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(0, 57, 66, 0.1); }
+  .prose-section { margin-bottom: 36px; }
+  .prose-section p { font-size: 15px; line-height: 1.7; color: var(--color-text-body); }
+  .recommendations { padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .recommendations li { font-size: 14px; line-height: 1.6; color: var(--color-text-body); }
+</style>

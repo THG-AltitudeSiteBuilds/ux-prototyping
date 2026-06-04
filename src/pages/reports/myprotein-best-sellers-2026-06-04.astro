@@ -118,31 +118,32 @@ import FindingCard from '@/components/FindingCard.astro';
     </FindingCard>
 
     <FindingCard
-      title="No pagination or load-more — 75 products unreachable"
+      title="Pagination scrolls user back to top of page on load"
       viewport="Both"
       priority="high"
       ticketType="engineering"
       ticketable={true}
-      findingId="no-pagination"
+      findingId="pagination-scroll-to-top"
     >
       <p slot="what">
-        The page declares 133 results but only ~58 products are rendered in the DOM on initial load.
-        No "Load More" button was found, and no traditional pagination controls are visible or present
-        in the DOM. Scrolling to the bottom of the page does not trigger an additional load in the
-        audited state. This means at least 75 products — over half the catalogue — are not accessible
-        to users without a trigger mechanism.
+        A pagination arrow exists at the bottom of the product grid and successfully loads the next
+        set of products — however, clicking it scrolls the user back to the top of the page. A user
+        who has scrolled through the initial 58 products to reach the paginator is teleported back to
+        the H1, forcing them to scroll the entire grid again to reach the newly loaded items.
       </p>
       <p slot="why">
-        Any product beyond the initial render is effectively invisible. For a bestsellers page this
-        is particularly damaging: items ranked 59–133 receive zero impression opportunity. If infinite
-        scroll is implemented but broken (a JS load error or threshold mis-set), it could be silently
-        suppressing a majority of the range.
+        This is a significant usability failure at the exact moment a user has demonstrated high
+        engagement (scrolling to the bottom). It breaks the browsing flow, increases the effort
+        required to see new products, and is likely to cause abandonment rather than continued
+        browsing. Users may not even realise new products have loaded after the scroll-to-top
+        fires, causing them to think the action had no effect.
       </p>
       <p slot="fix">
-        Verify whether infinite scroll is implemented and check for JS errors on scroll. If infinite
-        scroll is the intended mechanism, confirm the intersection observer threshold fires correctly
-        at the end of the initial page render. If not yet implemented, add a "Load More" button as a
-        reliable fallback. Also check whether the result count (133) reflects the true catalogue size.
+        On pagination trigger, load the next page of results and maintain the user's scroll position
+        — or scroll them smoothly to the first newly loaded product card. The page should never
+        jump to the top as a side-effect of loading more content. If pagination replaces the full
+        page (rather than appending), use a URL hash or <code>scrollRestoration</code> strategy to
+        return the user to the right position.
       </p>
     </FindingCard>
 
@@ -389,15 +390,16 @@ import FindingCard from '@/components/FindingCard.astro';
       breadth is a strength only if users can navigate it, which requires category grouping or
       filtering guidance that is currently absent. The most urgent fix is restoring social proof
       (ratings + bestseller badges) to the card level — this alone could materially lift
-      click-through and add-to-bag rates from the grid. The pagination gap also needs resolving
-      before over half the catalogue becomes accessible.
+      click-through and add-to-bag rates from the grid. Pagination mechanics also need attention:
+      products beyond the initial load are accessible, but the scroll-to-top behaviour on pagination
+      is likely causing high abandonment at the exact moment users are most engaged.
     </p>
   </section>
 
   <section class="prose-section">
     <h2 class="section-heading">Recommended Implementation Order</h2>
     <ol class="recommendations">
-      <li>Fix pagination / infinite scroll so all 133 products are reachable — verify JS scroll trigger and add a Load More fallback.</li>
+      <li>Fix pagination scroll-to-top — maintain user position or scroll to first new product when next page loads.</li>
       <li>Add star ratings and review count to product cards — surface the community social proof the page promises.</li>
       <li>Add mint ring to QUICK BUY button — one-line CSS fix, restores brand CTA signature.</li>
       <li>Add "Best Seller" badge to card image overlay — design spec needed, then engineering implementation.</li>

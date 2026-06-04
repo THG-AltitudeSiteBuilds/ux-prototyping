@@ -1,6 +1,11 @@
 ---
 import ReportLayout from '@/components/ReportLayout.astro';
 import FindingCard from '@/components/FindingCard.astro';
+import imgAboveFold from '@/assets/reports/myprotein-protein-plp-2026-06-04/above-fold-desktop.png';
+import imgFilterTruncation from '@/assets/reports/myprotein-protein-plp-2026-06-04/filter-label-truncation-desktop.png';
+import imgSaleRepetition from '@/assets/reports/myprotein-protein-plp-2026-06-04/sale-text-repetition-desktop.png';
+import imgProductCards from '@/assets/reports/myprotein-protein-plp-2026-06-04/product-cards-desktop.png';
+import imgCategoryChips from '@/assets/reports/myprotein-protein-plp-2026-06-04/category-chips-desktop.png';
 ---
 
 <ReportLayout title="Protein Powder & Protein Shakes — Myprotein PLP">
@@ -38,7 +43,7 @@ import FindingCard from '@/components/FindingCard.astro';
         &ldquo;Product Ca&hellip;&rdquo; at 1440px desktop viewport. The container is too
         narrow for the full label. All other filter labels (Sort, Protein, Flavour, Diet)
         display in full.
-        <img src="/assets/reports/myprotein-protein-plp-2026-06-04/filter-label-truncation-desktop.png" alt="Filter bar showing 'Product Ca...' truncated label" class="finding-img" />
+        <img src={imgFilterTruncation.src} alt="Filter bar showing 'Product Ca...' truncated label" class="finding-img" />
       </p>
       <p slot="why">
         Users cannot tell what this filter controls without clicking it, adding an extra
@@ -65,7 +70,7 @@ import FindingCard from '@/components/FindingCard.astro';
         the Quick Buy button on every product card. A DOM query confirmed
         <code>impactWeekSaleRepetitions: 30</code> on a single page load with the first
         viewport of results visible.
-        <img src="/assets/reports/myprotein-protein-plp-2026-06-04/sale-text-repetition-desktop.png" alt="Product cards showing repeated IMPACT WEEK SALE strapline under every Quick Buy button" class="finding-img" />
+        <img src={imgSaleRepetition.src} alt="Product cards showing repeated IMPACT WEEK SALE strapline under every Quick Buy button" class="finding-img" />
       </p>
       <p slot="why">
         Repetition kills urgency. The sale is already communicated by the top banner and
@@ -119,7 +124,7 @@ import FindingCard from '@/components/FindingCard.astro';
         ENDS IN&hellip;&rdquo; &mdash; the message is cut with an ellipsis before completing.
         The countdown timer sits immediately to the right but the copy that introduces it is
         never finished.
-        <img src="/assets/reports/myprotein-protein-plp-2026-06-04/above-fold-desktop.png" alt="Above-the-fold view showing countdown banner with truncated text" class="finding-img" />
+        <img src={imgAboveFold.src} alt="Above-the-fold view showing countdown banner with truncated text" class="finding-img" />
       </p>
       <p slot="why">
         An incomplete sentence undermines trust and leaves users uncertain about the deal
@@ -240,7 +245,7 @@ import FindingCard from '@/components/FindingCard.astro';
         The sub-category chips (Whey Protein, Protein Isolate, Protein Blends, Collagen,
         Vegan Protein) are visually identical regardless of which page the user is on.
         No chip appears highlighted or selected on the parent protein category page.
-        <img src="/assets/reports/myprotein-protein-plp-2026-06-04/category-chips-desktop.png" alt="Sub-category chips with no active state shown" class="finding-img" />
+        <img src={imgCategoryChips.src} alt="Sub-category chips with no active state shown" class="finding-img" />
       </p>
       <p slot="why">
         Users lose navigation context on a page with 52 products across multiple sub-types.

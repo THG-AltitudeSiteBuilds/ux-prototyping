@@ -1,0 +1,437 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+import FindingCard from '@/components/FindingCard.astro';
+---
+
+<ReportLayout title="Best Sellers — Myprotein Brand Hub PLP">
+
+  <section class="report-intro">
+    <h1 class="report-h1">UX Audit: Best Sellers</h1>
+    <p class="report-meta">Myprotein Brand Hub Listing Page &mdash; Audited 4 June 2026</p>
+    <p class="report-summary">
+      This audit covers the Brand Hub Best Sellers page at <code>/c/brandhub/best-sellers/</code>,
+      which surfaces 133 products across a 4-column grid. The page's core proposition — community-validated
+      picks — is almost entirely absent from the product cards themselves. There are no ratings, no rank
+      indicators, and no social proof on individual items to justify why each product belongs here.
+      Combined with a category mix spanning running shoes (£165), supplement bars (£19.99), and knee
+      sleeves (£74.99) with no structural separation, users land on a page that looks and behaves like
+      a generic PLP rather than a curated bestseller destination. The QUICK BUY CTA is also missing the
+      brand signature mint ring, and with no visible load-more or pagination for the remaining 75 products,
+      a large portion of the catalogue is effectively unreachable.
+    </p>
+  </section>
+
+  <section class="findings-section">
+    <h2 class="section-heading">Findings</h2>
+
+    <!-- HIGH PRIORITY -->
+
+    <FindingCard
+      title="No ratings or social proof on product cards"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="no-ratings-on-cards"
+    >
+      <p slot="what">
+        Product cards on the Best Sellers grid display no star ratings, review counts, or any social
+        proof indicator. DOM inspection confirms no <code>[class*="rating"]</code> or
+        <code>[class*="star"]</code> elements exist within the card structure. The page headline
+        copy reads: <em>"Put your trust in the community. These picks are all bestsellers for nutrition,
+        accessories, and apparel made to move with you"</em> — yet the cards provide no evidence of that
+        community validation.
+        <img src="/assets/reports/myprotein-best-sellers-2026-06-04/product-grid-desktop.png" alt="Product grid showing cards with no ratings" class="finding-img" />
+      </p>
+      <p slot="why">
+        On a page whose value proposition is community-driven popularity, the absence of ratings is a
+        direct contradiction. Users expect bestseller lists to be backed by visible social proof —
+        without it, the curation feels arbitrary. Ratings are one of the most well-evidenced CRO
+        levers in ecommerce; their absence on the card most likely reduces click-through and add-to-bag
+        rates versus pages where they are shown.
+      </p>
+      <p slot="fix">
+        Render the average star rating and review count on each product card, matching the pattern
+        used on standard PLPs if available. At minimum, surface the average score (e.g. ★ 4.6 · 2,847
+        reviews) beneath the product name. If the underlying data is already available in the product
+        feed, this is a card template config change.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="No bestseller rank or 'why this?' signal on cards"
+      viewport="Both"
+      priority="high"
+      ticketType="design"
+      ticketable={true}
+      findingId="no-bestseller-badge"
+    >
+      <p slot="what">
+        Cards carry no visual indicator that distinguishes this page from any standard PLP. There are
+        no rank badges (#1, #2…), no "Best Seller" labels, no "trending" or "popular" chips — nothing
+        on the card face to reinforce that these are the community's top picks. The page brand-hub slug
+        and H1 are the only signals that this is a curated selection.
+        <img src="/assets/reports/myprotein-best-sellers-2026-06-04/product-card-desktop.png" alt="Product card with no bestseller indicator" class="finding-img" />
+      </p>
+      <p slot="why">
+        Users who land via search or social won't see the page heading before the grid. Even those who
+        do read the H1 get no per-product signal that individual items are especially well-regarded.
+        The strongest conversion cue on a bestseller page — "this specific product is #1" — is completely
+        missing. This is particularly damaging for cross-category products (e.g. running shoes alongside
+        protein bars) where users need a reason to trust an unfamiliar product.
+      </p>
+      <p slot="fix">
+        Add a "Best Seller" badge to the card image overlay, using the existing badge component if
+        available. Consider positional rank for the top 10 results (e.g. "#1 Best Seller") to drive
+        urgency on the highest-converting cards. Design spec required before engineering can implement.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="QUICK BUY missing brand signature mint ring"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="quick-buy-no-mint-ring"
+    >
+      <p slot="what">
+        The QUICK BUY button on product cards uses the primary dark-teal fill
+        (<code>oklch(0.3162…)</code> / approx <code>#003942</code>) and a 32px border radius — the
+        primary CTA treatment — but has no mint (<code>#94E5B5</code>) outer ring. Computed styles
+        confirm: <code>box-shadow: none; outline: none</code>. The mint ring is the brand's defined
+        signature for the add-to-basket action and is specified in the design system.
+      </p>
+      <p slot="why">
+        The mint ring is a deliberate brand differentiator that visually flags the add-to-bag action
+        across all Myprotein touchpoints. Its absence on the listing-page CTA creates inconsistency
+        with the PDP experience and may reduce the visual salience of the button — particularly on
+        the dark-background card hover state where contrast between the button and its surroundings
+        is reduced.
+      </p>
+      <p slot="fix">
+        Add the mint ring to the QUICK BUY button via the standard box-shadow pattern used on the
+        primary add-to-basket button:
+        <code>box-shadow: 0 0 0 3px #94E5B5</code> (or the equivalent design token). This is a
+        one-line CSS change scoped to the <code>.quick-buy</code> or equivalent selector.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="No pagination or load-more — 75 products unreachable"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="no-pagination"
+    >
+      <p slot="what">
+        The page declares 133 results but only ~58 products are rendered in the DOM on initial load.
+        No "Load More" button was found, and no traditional pagination controls are visible or present
+        in the DOM. Scrolling to the bottom of the page does not trigger an additional load in the
+        audited state. This means at least 75 products — over half the catalogue — are not accessible
+        to users without a trigger mechanism.
+      </p>
+      <p slot="why">
+        Any product beyond the initial render is effectively invisible. For a bestsellers page this
+        is particularly damaging: items ranked 59–133 receive zero impression opportunity. If infinite
+        scroll is implemented but broken (a JS load error or threshold mis-set), it could be silently
+        suppressing a majority of the range.
+      </p>
+      <p slot="fix">
+        Verify whether infinite scroll is implemented and check for JS errors on scroll. If infinite
+        scroll is the intended mechanism, confirm the intersection observer threshold fires correctly
+        at the end of the initial page render. If not yet implemented, add a "Load More" button as a
+        reliable fallback. Also check whether the result count (133) reflects the true catalogue size.
+      </p>
+    </FindingCard>
+
+    <!-- MEDIUM PRIORITY -->
+
+    <FindingCard
+      title="Mixed category content with no structural separation"
+      viewport="Both"
+      priority="medium"
+      ticketType="design"
+      ticketable={false}
+      findingId="mixed-category-no-grouping"
+    >
+      <p slot="what">
+        The grid intermixes fundamentally different product categories — M&amp;M's chocolate protein
+        bars (£19.99), SBD knee sleeves (£74.99), Brooks running shoes (£165), and Saucony trainers
+        (£140) — in a single undifferentiated scroll, with no category section headers, no visual
+        grouping, and no filtering pre-applied. The page copy acknowledges this ("nutrition,
+        accessories, and apparel") but provides no navigational scaffolding to help users orient.
+        <img src="/assets/reports/myprotein-best-sellers-2026-06-04/above-fold-desktop.png" alt="Above fold showing mixed category products" class="finding-img" />
+      </p>
+      <p slot="why">
+        A user landing with nutrition intent will scroll past footwear with no map of what's coming.
+        The cognitive load of comparing £19.99 bars against £165 trainers in the same row is high,
+        and the absence of section grouping makes it harder to filter mentally. This dilutes the page's
+        authority — a "Best Sellers" list that jumps randomly between categories feels like an algorithm
+        output, not a curated destination.
+      </p>
+      <p slot="fix">
+        Either: (a) add sub-section headings within the grid (e.g. "Top Selling Nutrition",
+        "Top Selling Equipment", "Top Selling Footwear") to break the mix into scannable sections; or
+        (b) default the Product Category filter to a sensible starting state and prompt users to filter
+        by department via a tab row above the grid. Requires design spec before engineering work.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Filter label truncated — 'Product Ca...' on desktop"
+      viewport="Desktop"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="filter-label-truncated"
+    >
+      <p slot="what">
+        The Product Category filter label is visibly truncated to "Product Ca..." in the filter bar at
+        1440px viewport width. This is the same systematic issue observed on the Men's Clothing PLP
+        (finding <code>filter-labels-truncated</code>). The filter button has insufficient width to
+        accommodate the full label, and no ellipsis or tooltip exposes the hidden text.
+        <img src="/assets/reports/myprotein-best-sellers-2026-06-04/filters-desktop.png" alt="Filter bar showing truncated Product Ca... label" class="finding-img" />
+      </p>
+      <p slot="why">
+        Users cannot identify what the third filter controls without clicking it. On a cross-category
+        page like Best Sellers, the Product Category filter is one of the most important controls —
+        it's how users narrow to their relevant department. Truncating its label reduces discoverability
+        and use, which means more users scroll a mixed-category grid rather than filtering to their
+        actual intent.
+      </p>
+      <p slot="fix">
+        Allow filter buttons to grow to fit their label text (min-width approach), or use abbreviated
+        but intelligible labels: "Category" instead of "Product Category". This is the same fix needed
+        across all PLPs where this pattern is used.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="QUICK BUY button design token violations"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="quick-buy-token-violations"
+    >
+      <p slot="what">
+        The QUICK BUY button has three computed style deviations from the design system:
+        (1) <code>font-size: 16px</code> — buttons should be <code>14px Bold</code> per spec;
+        (2) <code>text-transform: uppercase</code> — the design system does not use all-caps on
+        buttons; text should be sentence or title case;
+        (3) <code>border-radius: 32px</code> — 32px is the primary CTA radius. A card-level
+        quick-add action is a secondary button and should use <code>9999px</code> per the
+        secondary button spec.
+      </p>
+      <p slot="why">
+        Uppercase button labels test poorly for legibility at small sizes, and applying the primary
+        CTA radius to a secondary action creates visual ambiguity in the button hierarchy. The
+        combined effect makes QUICK BUY appear to be the same weight as a primary "Add to Basket"
+        button, which dilutes the distinction between browsing and committing actions.
+      </p>
+      <p slot="fix">
+        Update the quick-buy button component: set <code>font-size: 14px</code>, remove
+        <code>text-transform: uppercase</code> (use "Quick Buy" in title case), and set
+        <code>border-radius: 9999px</code>. These are CSS-only changes in the shared quick-buy
+        component.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Promo banner duplicated in DOM and potentially off-context"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="promo-banner-duplicate"
+    >
+      <p slot="what">
+        The promotional message "FREE MODE SPORT BATH SALTS | WHEN YOU SPEND £20+ ON BRANDHUB"
+        appears twice in the DOM — two separate elements rendering identical text. Additionally,
+        this offer may not apply to all 133 products on the page (e.g. high-value Brooks running
+        shoes at £165 are from a third-party brand and may be excluded from the BrandHub promotion).
+        No qualifying conditions are surfaced.
+      </p>
+      <p slot="why">
+        Duplicate DOM renders waste bandwidth and may cause screen reader double-reads. More
+        critically, if the promotional threshold or eligibility rules are not met, a user who adds
+        a non-qualifying product will be confused or disappointed — a trust-breaking experience
+        close to the add-to-bag moment.
+      </p>
+      <p slot="fix">
+        Remove the duplicate render (one element should be set to <code>display: none</code> or
+        removed from markup). Clarify the offer terms with a "T&amp;Cs apply" link or an asterisk,
+        and confirm whether the promotion applies to all brands on the page or only Myprotein own-brand.
+      </p>
+    </FindingCard>
+
+    <!-- LOW PRIORITY -->
+
+    <FindingCard
+      title="Sort button doesn't surface current sort order"
+      viewport="Both"
+      priority="low"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="sort-no-current-value"
+    >
+      <p slot="what">
+        The Sort dropdown button displays the static label "Sort" with no indication of the currently
+        applied sort order. On a Best Sellers page the implied default is "Best Selling" — but this is
+        not confirmed to the user. If they have previously applied a different sort (e.g. Price: Low
+        to High), the label still reads "Sort" with no way to tell.
+      </p>
+      <p slot="why">
+        Users cannot tell whether results are sorted by bestselling rank, popularity, recency, or
+        something else. This is a minor friction point but on a page where the ranking order is the
+        entire proposition, it is worth surfacing. It also means users who've changed the sort have
+        no feedback that their selection persists.
+      </p>
+      <p slot="fix">
+        Update the Sort button to display the active sort value: e.g. "Sort: Best Selling" or
+        "Sort: Price ↑". Default to "Best Selling" for this page. This is a JS state-binding
+        change in the sort component.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Filter chip border-radius is off-token (5px)"
+      viewport="Both"
+      priority="low"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="filter-chip-border-radius"
+    >
+      <p slot="what">
+        Filter dropdown buttons have a computed <code>border-radius: 5px</code>. The design system
+        specifies valid border-radius values of 4, 8, 12, 16, 24, 32, 56, or 9999px. 5px is not a
+        valid token and indicates a hardcoded or miscalculated value. Chips and selector elements
+        should use <code>8px</code>.
+      </p>
+      <p slot="why">
+        Minor visual inconsistency with the rest of the design system. Low conversion impact but adds
+        to token drift across the codebase.
+      </p>
+      <p slot="fix">
+        Set the filter button <code>border-radius</code> to the <code>--radius-sm</code> token (8px).
+        One-line CSS change.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="'Brand Hub' breadcrumb uses internal taxonomy unfamiliar to users"
+      viewport="Both"
+      priority="low"
+      ticketType="design"
+      ticketable={false}
+      findingId="brand-hub-breadcrumb"
+    >
+      <p slot="what">
+        The breadcrumb reads: Home &gt; Brand Hub &gt; Best Sellers. "Brand Hub" is an internal
+        navigation construct that does not correspond to a meaningful category for shoppers. Users
+        arriving from external search or ads will have no frame of reference for what "Brand Hub"
+        means or what it contains.
+      </p>
+      <p slot="why">
+        Breadcrumbs serve two purposes: wayfinding and SEO. An opaque intermediate node ("Brand Hub")
+        weakens both. Users cannot infer what they'd find if they clicked back to "Brand Hub", and
+        the term is unlikely to match user mental models or search queries.
+      </p>
+      <p slot="fix">
+        Consider whether "Brand Hub" as a navigation concept needs a user-facing label review. If the
+        parent section genuinely covers "partner brands", a label like "All Brands" or "Partner Brands"
+        would be more descriptive. Requires content/IA decision before implementation.
+      </p>
+    </FindingCard>
+
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Design Consistency</h2>
+    <p>
+      Typography is consistent — Figtree is the computed font family throughout and the H1 uses
+      correct weight (700). However the H1 at 48px is notably large for a listing page and dominates
+      the above-fold area, compressing the product grid. Filter buttons carry a non-token
+      <code>border-radius: 5px</code> (should be 8px). The QUICK BUY button has three design token
+      violations: <code>font-size: 16px</code> (spec: 14px), <code>text-transform: uppercase</code>
+      (spec: title case), and <code>border-radius: 32px</code> (secondary buttons spec: 9999px).
+      Most critically, the QUICK BUY button is missing the brand signature mint ring
+      (<code>#94E5B5</code> box-shadow) that all add-to-basket CTAs are required to carry.
+      No incorrect accent colour usage was observed elsewhere on the page.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Accessibility Notes</h2>
+    <p>
+      Product card images have descriptive alt text (e.g. "M&amp;M's Chocolate HiProtein Bar | 12 x 51g")
+      — no empty or missing alt attributes were found on product images. The wishlist heart buttons
+      on cards appear to be SVG-icon-only with no visible text — these should carry an
+      <code>aria-label</code> (e.g. "Add to wishlist") to be operable by screen reader users; this
+      was not confirmed in inspection and should be verified. The "Read More" toggle below the H1
+      should be implemented as a <code>&lt;button&gt;</code> with <code>aria-expanded</code> state
+      to communicate the expanded/collapsed condition to assistive technology. Colour contrast on the
+      QUICK BUY button (white text on dark teal) comfortably meets WCAG AA at its computed size.
+      The filter bar is marked with an <code>h2</code> ("Filters") which aids screen reader navigation.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Conversion Summary</h2>
+    <p>
+      The Best Sellers page has the right ingredients for a high-converting destination — a clear
+      community-trust angle, a Quick Buy CTA on every card, and a broad cross-category range —
+      but each of these advantages is undermined. The community-trust angle is asserted in copy
+      but not demonstrated on the cards (no ratings, no badges). The Quick Buy CTA lacks the brand
+      mint ring and has token violations that reduce its visual authority. And the cross-category
+      breadth is a strength only if users can navigate it, which requires category grouping or
+      filtering guidance that is currently absent. The most urgent fix is restoring social proof
+      (ratings + bestseller badges) to the card level — this alone could materially lift
+      click-through and add-to-bag rates from the grid. The pagination gap also needs resolving
+      before over half the catalogue becomes accessible.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Recommended Implementation Order</h2>
+    <ol class="recommendations">
+      <li>Fix pagination / infinite scroll so all 133 products are reachable — verify JS scroll trigger and add a Load More fallback.</li>
+      <li>Add star ratings and review count to product cards — surface the community social proof the page promises.</li>
+      <li>Add mint ring to QUICK BUY button — one-line CSS fix, restores brand CTA signature.</li>
+      <li>Add "Best Seller" badge to card image overlay — design spec needed, then engineering implementation.</li>
+      <li>Fix QUICK BUY token violations — font size (16→14px), remove uppercase, border-radius (32→9999px).</li>
+      <li>Fix filter label truncation — use "Category" instead of "Product Category" or allow buttons to expand.</li>
+      <li>Remove duplicate promo banner DOM render and clarify offer eligibility.</li>
+      <li>Introduce category section grouping or a department tab strip above the grid.</li>
+      <li>Surface active sort value in the Sort button label.</li>
+      <li>Fix filter chip border-radius to 8px token value.</li>
+    </ol>
+  </section>
+
+</ReportLayout>
+
+<style is:global>
+  .finding-card code {
+    font-family: Menlo, Monaco, 'Courier New', monospace;
+    font-size: 12px;
+    background: var(--color-bg-muted);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--color-text-heading);
+  }
+</style>
+
+<style>
+  .report-intro { margin-bottom: 40px; }
+  .report-h1 { font-size: 26px; font-weight: 800; color: var(--color-text-heading); line-height: 1.25; margin-bottom: 6px; }
+  .report-meta { font-size: 13px; color: var(--color-text-body); opacity: 0.65; margin-bottom: 14px; }
+  .report-summary { font-size: 15px; line-height: 1.7; color: var(--color-text-body); max-width: 680px; }
+  .findings-section { margin-bottom: 48px; }
+  .section-heading { font-size: 18px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(0, 57, 66, 0.1); }
+  .prose-section { margin-bottom: 36px; }
+  .prose-section p { font-size: 15px; line-height: 1.7; color: var(--color-text-body); }
+  .recommendations { padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .recommendations li { font-size: 14px; line-height: 1.6; color: var(--color-text-body); }
+</style>

@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "wrangler dev",
     "astro": "astro",
-    "wrangler:dev": "astro build && wrangler dev"
+    "wrangler:dev": "astro build && wrangler dev",
+    "screenshot": "node scripts/screenshot.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "12.6.12",

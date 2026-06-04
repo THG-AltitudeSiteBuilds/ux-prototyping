@@ -1,0 +1,40 @@
+{
+  "loadWait": 5000,
+  "shots": [
+    {
+      "name": "above-fold-desktop",
+      "scrollY": 0
+    },
+    {
+      "name": "product-panel-desktop",
+      "scrollY": 0,
+      "clipSelector": "aside, [class*='product-form'], [class*='pdp-panel']",
+      "maxHeight": 700
+    },
+    {
+      "name": "product-details-accordion-desktop",
+      "before": "const btn = [...document.querySelectorAll('button')].find(b => b.textContent.trim() === 'Product Details'); if (btn) btn.click();",
+      "beforeWait": 500,
+      "scrollTo": "button[aria-expanded='true'], .accordion-open",
+      "clipSelector": ".accordion-open, [class*='product-details']",
+      "maxHeight": 300
+    },
+    {
+      "name": "fbt-desktop",
+      "scrollTo": "h2, h3",
+      "before": "const h = [...document.querySelectorAll('h2,h3')].find(el => el.textContent.includes('Frequently bought')); if (h) h.scrollIntoView({ block: 'center' });",
+      "beforeWait": 400,
+      "maxHeight": 500
+    },
+    {
+      "name": "reviews-desktop",
+      "before": "const h = [...document.querySelectorAll('h2,h3,h4')].find(el => el.textContent.toLowerCase().includes('review')); if (h) h.scrollIntoView({ block: 'center' });",
+      "beforeWait": 400
+    },
+    {
+      "name": "add-to-basket-desktop",
+      "scrollY": 0,
+      "clip": { "x": 1000, "y": 580, "width": 540, "height": 120 }
+    }
+  ]
+}

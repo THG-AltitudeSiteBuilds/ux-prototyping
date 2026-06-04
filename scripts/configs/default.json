@@ -1,0 +1,8 @@
+{
+  "loadWait": 4000,
+  "shots": [
+    { "name": "above-fold-desktop", "scrollY": 0 },
+    { "name": "mid-page-desktop", "scrollY": 900 },
+    { "name": "lower-page-desktop", "scrollY": 1800 }
+  ]
+}

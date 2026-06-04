@@ -1,0 +1,23 @@
+{
+  "loadWait": 5000,
+  "shots": [
+    {
+      "name": "above-fold-desktop",
+      "scrollY": 0
+    },
+    {
+      "name": "filters-desktop",
+      "scrollY": 0,
+      "clip": { "x": 0, "y": 200, "width": 300, "height": 600 }
+    },
+    {
+      "name": "product-grid-desktop",
+      "scrollY": 200
+    },
+    {
+      "name": "product-card-desktop",
+      "scrollY": 200,
+      "clip": { "x": 0, "y": 200, "width": 500, "height": 500 }
+    }
+  ]
+}

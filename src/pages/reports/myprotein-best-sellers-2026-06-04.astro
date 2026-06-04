@@ -212,6 +212,42 @@ import FindingCard from '@/components/FindingCard.astro';
     </FindingCard>
 
     <FindingCard
+      title="'Read More' expander shows negligible additional copy — SEO pattern harming UX"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="read-more-seo-copy"
+    >
+      <p slot="what">
+        Directly below the H1, a short paragraph of intro copy is followed by a "Read More"
+        hyperlink. Clicking it reveals only a sentence or two of additional text — the expanded
+        state adds very little meaningful content. This pattern is a common SEO technique for
+        placing keyword-rich copy on a category page without visually cluttering the grid, but
+        the implementation here creates a jarring interaction: users click expecting a useful
+        expansion and receive almost nothing in return. Additionally, the trigger is marked up as
+        an <code>&lt;a&gt;</code> tag rather than a <code>&lt;button&gt;</code>, which is
+        semantically incorrect for a toggle action that does not navigate.
+      </p>
+      <p slot="why">
+        The "Read More" interaction sets an expectation it doesn't fulfil — users who click it lose
+        trust in the page's responsiveness. The pattern also consumes prime above-fold real estate
+        (between the H1 and the filter bar) with low-conversion copy. On mobile this gap is even more
+        costly as it pushes the product grid further below the fold. The incorrect use of
+        <code>&lt;a&gt;</code> instead of <code>&lt;button&gt;</code> also means keyboard and
+        screen reader users get the wrong affordance and no <code>aria-expanded</code> state.
+      </p>
+      <p slot="fix">
+        If the expanded copy is genuinely thin, consider removing the toggle entirely and showing
+        the full text inline — or removing the category description from above the filter bar
+        altogether and placing it below the grid where it is standard practice and does not impede
+        the browse journey. If the toggle must remain, replace the <code>&lt;a&gt;</code> with a
+        <code>&lt;button&gt;</code> and add <code>aria-expanded="false/true"</code> to communicate
+        state to assistive technology.
+      </p>
+    </FindingCard>
+
+    <FindingCard
       title="Promo banner duplicated in DOM and potentially off-context"
       viewport="Both"
       priority="medium"
@@ -342,9 +378,8 @@ import FindingCard from '@/components/FindingCard.astro';
       — no empty or missing alt attributes were found on product images. The wishlist heart buttons
       on cards appear to be SVG-icon-only with no visible text — these should carry an
       <code>aria-label</code> (e.g. "Add to wishlist") to be operable by screen reader users; this
-      was not confirmed in inspection and should be verified. The "Read More" toggle below the H1
-      should be implemented as a <code>&lt;button&gt;</code> with <code>aria-expanded</code> state
-      to communicate the expanded/collapsed condition to assistive technology. Colour contrast on the
+      was not confirmed in inspection and should be verified. The "Read More" toggle is covered
+      as a dedicated finding (<code>read-more-seo-copy</code>). Colour contrast on the
       QUICK BUY button (white text on dark teal) comfortably meets WCAG AA at its computed size.
       The filter bar is marked with an <code>h2</code> ("Filters") which aids screen reader navigation.
     </p>
@@ -374,6 +409,7 @@ import FindingCard from '@/components/FindingCard.astro';
       <li>Fix QUICK BUY token violations — font size (16→14px), remove uppercase, border-radius (32→9999px).</li>
       <li>Fix filter label truncation — use "Category" instead of "Product Category" or allow buttons to expand.</li>
       <li>Remove duplicate promo banner DOM render and clarify offer eligibility.</li>
+      <li>Move category description copy below the product grid (or remove the Read More toggle) to clear above-fold space.</li>
       <li>Introduce category section grouping or a department tab strip above the grid.</li>
       <li>Surface active sort value in the Sort button label.</li>
       <li>Fix filter chip border-radius to 8px token value.</li>

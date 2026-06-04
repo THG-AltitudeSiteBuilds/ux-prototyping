@@ -1,0 +1,404 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+import FindingCard from '@/components/FindingCard.astro';
+---
+
+<ReportLayout title="Protein Powder & Protein Shakes — Myprotein PLP">
+
+  <section class="report-intro">
+    <h1 class="report-h1">UX Audit: Protein Powder & Protein Shakes</h1>
+    <p class="report-meta">Myprotein Category Page (PLP) &mdash; Audited 4 June 2026</p>
+    <p class="report-summary">
+      The Protein category listing page has strong above-the-fold trust signals &mdash; Trustpilot
+      bar, delivery incentive, app discount, sale countdown &mdash; and well-structured product
+      cards with clear pricing hierarchy and correctly labelled Quick Buy buttons. The main
+      conversion risks are a filter label truncation that hides a key refinement tool on a
+      52-product page, and a sale strapline repeated ~30 times across all product cards that
+      produces visual noise and paradoxically undermines the urgency the countdown timer is
+      trying to create. Several design system deviations are also present, notably the missing
+      mint CTA outer ring.
+    </p>
+  </section>
+
+  <section class="findings-section">
+    <h2 class="section-heading">Findings</h2>
+
+    <!-- HIGH PRIORITY -->
+
+    <FindingCard
+      title="&ldquo;Product Ca&hellip;&rdquo; filter label truncated"
+      viewport="Desktop"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="filter-label-truncation"
+    >
+      <p slot="what">
+        The &ldquo;Product Category&rdquo; filter in the sticky filter bar is clipped to
+        &ldquo;Product Ca&hellip;&rdquo; at 1440px desktop viewport. The container is too
+        narrow for the full label. All other filter labels (Sort, Protein, Flavour, Diet)
+        display in full.
+        <img src="/assets/reports/myprotein-protein-plp-2026-06-04/filter-label-truncation-desktop.png" alt="Filter bar showing 'Product Ca...' truncated label" class="finding-img" />
+      </p>
+      <p slot="why">
+        Users cannot tell what this filter controls without clicking it, adding an extra
+        interaction step and reducing the likelihood they use category refinement at all.
+        On a page with 52 products, filtering is the primary discovery tool.
+      </p>
+      <p slot="fix">
+        Shorten the label to &ldquo;Category&rdquo; &mdash; this fits comfortably at the
+        current column width. Do not use CSS truncation without a tooltip fallback.
+        Alternatively, widen the column so the full label is visible.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Sale strapline repeated ~30 times across product cards"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="sale-text-repetition"
+    >
+      <p slot="what">
+        &ldquo;IMPACT WEEK SALE | UP TO 80% OFF ALMOST EVERYTHING&rdquo; is injected below
+        the Quick Buy button on every product card. A DOM query confirmed
+        <code>impactWeekSaleRepetitions: 30</code> on a single page load with the first
+        viewport of results visible.
+        <img src="/assets/reports/myprotein-protein-plp-2026-06-04/sale-text-repetition-desktop.png" alt="Product cards showing repeated IMPACT WEEK SALE strapline under every Quick Buy button" class="finding-img" />
+      </p>
+      <p slot="why">
+        Repetition kills urgency. The sale is already communicated by the top banner and
+        countdown timer. Repeating it per-card creates visual clutter, slows scanning of
+        product names and prices, and through familiarity makes users blind to it within
+        seconds &mdash; the opposite of the intended effect.
+      </p>
+      <p slot="fix">
+        Remove the per-card strapline entirely. The header banner and countdown timer are
+        the correct surfaces for this message. If a product-level indicator is needed,
+        use a small &ldquo;Sale&rdquo; badge overlay on the product image instead.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Mint outer ring missing from Quick Buy CTA"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="missing-mint-ring"
+    >
+      <p slot="what">
+        Computed styles on the Quick Buy button: <code>border: 2px solid oklch(0.3162 0.055061 211.831)</code>
+        (the same teal as the button background). The design system requires a mint
+        (<code>#94E5B5</code>) outer ring as the brand primary CTA signature. No mint
+        ring is present on any Quick Buy button on the page.
+      </p>
+      <p slot="why">
+        The mint ring is the primary visual differentiator between the main CTA and secondary
+        actions. Without it, Quick Buy reads as a generic dark pill and loses the brand
+        distinctiveness that makes the checkout entry point stand out in the product grid.
+      </p>
+      <p slot="fix">
+        Add <code>outline: 2px solid #94E5B5; outline-offset: 2px;</code> to the Quick Buy
+        button component. Confirm this only applies to the primary CTA, not secondary or
+        ghost buttons.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Countdown banner text truncated mid-sentence"
+      viewport="Desktop"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="countdown-text-truncation"
+    >
+      <p slot="what">
+        The sale announcement reads &ldquo;UP TO 80% OFF ALMOST EVERYTHING IMPACT WEEK SALE |
+        ENDS IN&hellip;&rdquo; &mdash; the message is cut with an ellipsis before completing.
+        The countdown timer sits immediately to the right but the copy that introduces it is
+        never finished.
+        <img src="/assets/reports/myprotein-protein-plp-2026-06-04/above-fold-desktop.png" alt="Above-the-fold view showing countdown banner with truncated text" class="finding-img" />
+      </p>
+      <p slot="why">
+        An incomplete sentence undermines trust and leaves users uncertain about the deal
+        scope. The countdown timer is anchored to nothing &mdash; users who read the banner
+        left-to-right see the message cut before they reach the timer.
+      </p>
+      <p slot="fix">
+        Shorten copy to fit: e.g. &ldquo;Up to 80% off &mdash; ends in&rdquo; then the timer.
+        Or reduce font-size from the current 12px and allow the full string to wrap to a second
+        line within the banner height.
+      </p>
+    </FindingCard>
+
+    <!-- MEDIUM PRIORITY -->
+
+    <FindingCard
+      title="H1 at 48px pushes products below the fold"
+      viewport="Desktop"
+      priority="medium"
+      ticketType="design"
+      ticketable={true}
+      findingId="h1-size-plp"
+    >
+      <p slot="what">
+        The H1 &ldquo;Protein Powder & Protein Shakes&rdquo; renders at
+        <code>font-size: 48px; font-weight: 700</code>. With a global nav (two rows),
+        trust bar, sale banner, breadcrumb, sub-nav chips, and sticky filter bar all above
+        it, the first product row is partially below the fold at a 900px viewport height.
+      </p>
+      <p slot="why">
+        Products are the conversion driver on a PLP. Every pixel of non-product chrome delays
+        the user reaching what they came to buy. A 48px heading is appropriate for editorial
+        landing pages, not a product grid.
+      </p>
+      <p slot="fix">
+        Reduce H1 to 32px on all PLP templates. The heading still anchors the page category
+        but gives the product grid significantly more above-the-fold presence.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Card border-radius is 16px, design token specifies 12px"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="card-border-radius"
+    >
+      <p slot="what">
+        Computed <code>border-radius: 16px</code> on product cards. The design token for
+        cards is <code>12px</code>. This is a hardcoded override, not a token reference.
+      </p>
+      <p slot="why">
+        Inconsistency with other card surfaces across the site that correctly use the 12px
+        token. At scale (52 cards per page) the deviation is visually noticeable.
+      </p>
+      <p slot="fix">
+        Update the product card component to use the <code>rounded-card</code> design token
+        (12px). Remove the hardcoded value.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Quick Buy font-size 16px, token specifies 14px for buttons"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="button-font-size"
+    >
+      <p slot="what">
+        Computed <code>font-size: 16px; font-weight: 700</code> on the Quick Buy button.
+        The design system specifies all buttons at <code>14px Bold</code>.
+      </p>
+      <p slot="why">
+        The oversized label makes the button feel slightly heavy relative to the card
+        content, and is inconsistent with other buttons across the site using the correct
+        14px token.
+      </p>
+      <p slot="fix">
+        Update the button component CSS to <code>font-size: 14px</code>.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Countdown timer has no aria-live attribute"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="countdown-aria-live"
+    >
+      <p slot="what">
+        The countdown timer element ticks every second but carries no <code>aria-live</code>
+        attribute. Confirmed via DevTools: <code>countdownAriaLive: null</code>.
+      </p>
+      <p slot="why">
+        WCAG 4.1.3 (Status Messages) requires time-sensitive status updates to be surfaced
+        to assistive technologies. Screen reader users receive no announcement of the sale
+        urgency signal.
+      </p>
+      <p slot="fix">
+        Add <code>aria-live="polite"</code> to the countdown wrapper. Use a throttled update
+        (e.g. announce once per minute: &ldquo;Sale ends in X minutes&rdquo;) rather than
+        announcing every second tick, to avoid spamming screen reader users.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Sub-category chips show no active or selected state"
+      viewport="Both"
+      priority="medium"
+      ticketType="design"
+      ticketable={false}
+      findingId="subcategory-chip-active-state"
+    >
+      <p slot="what">
+        The sub-category chips (Whey Protein, Protein Isolate, Protein Blends, Collagen,
+        Vegan Protein) are visually identical regardless of which page the user is on.
+        No chip appears highlighted or selected on the parent protein category page.
+        <img src="/assets/reports/myprotein-protein-plp-2026-06-04/category-chips-desktop.png" alt="Sub-category chips with no active state shown" class="finding-img" />
+      </p>
+      <p slot="why">
+        Users lose navigation context on a page with 52 products across multiple sub-types.
+        Without a clear selected state, users cannot tell where they are within the category
+        hierarchy and are more likely to use back/forward rather than the chip nav.
+      </p>
+      <p slot="fix">
+        Design an active chip state (e.g. filled teal background, white text, matching the
+        nav active pattern) and apply it to the chip corresponding to the current URL.
+        Needs a design spec before engineering can implement.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Page &lt;title&gt; and H1 are inconsistent"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="title-h1-mismatch"
+    >
+      <p slot="what">
+        <code>&lt;title&gt;</code>: &ldquo;Premium Protein Powders & Supplements | Myprotein UK&rdquo;<br />
+        <code>&lt;h1&gt;</code>: &ldquo;Protein Powder & Protein Shakes&rdquo;
+      </p>
+      <p slot="why">
+        Inconsistency between page title and H1 creates a mismatch for screen reader users
+        (who hear the page announced differently from what they read) and signals mixed
+        intent to search engines about the primary keyword.
+      </p>
+      <p slot="fix">
+        Align the page title to reflect the H1: &ldquo;Protein Powder & Protein Shakes |
+        Myprotein UK&rdquo;. Alternatively, if the current title performs better in search,
+        update the H1 to match it.
+      </p>
+    </FindingCard>
+
+    <!-- LOW PRIORITY -->
+
+    <FindingCard
+      title="Sort button border-radius is 5px (off token scale)"
+      viewport="Both"
+      priority="low"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="sort-border-radius"
+    >
+      <p slot="what">
+        Computed <code>border-radius: 5px</code> on the Sort filter dropdown trigger.
+        Valid token values are 4, 8, 12, 16, 24, 32, 56, 9999px. The value 5px is a
+        hardcoded override not on the scale.
+      </p>
+      <p slot="why">Minor inconsistency in the filter bar.</p>
+      <p slot="fix">
+        Update to the nearest token: <code>border-radius: 4px</code> or
+        <code>8px</code>, whichever matches the intended visual style.
+      </p>
+    </FindingCard>
+
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Design Consistency</h2>
+    <p>
+      Figtree is correctly applied as the computed font family across all inspected elements
+      (headings, body text, and buttons). The Quick Buy button correctly uses
+      <code>border-radius: 32px</code> and <code>font-weight: 700</code>, matching their
+      respective tokens. However, several deviations exist: product card
+      <code>border-radius: 16px</code> vs the 12px card token; button
+      <code>font-size: 16px</code> vs the 14px button token; the Sort trigger uses an
+      off-scale 5px radius; and critically the mint <code>#94E5B5</code> outer ring is
+      absent from all Quick Buy buttons. The sale banner background
+      (<code>rgb(217, 66, 15)</code>) is the brand coral used for promotional surfaces,
+      which is appropriate. The trust bar and card backgrounds share
+      <code>oklch(0.9654 0.006 75.41)</code> (warm near-white), consistent with the
+      site-wide surface token.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Accessibility Notes</h2>
+    <p>
+      Quick Buy buttons carry correctly formed <code>aria-label</code> values including
+      the product name (e.g. <code>aria-label="QUICK BUY Impact Whey Protein Milkshake"</code>),
+      which correctly disambiguates repeated CTAs for screen reader users. Wishlist buttons
+      similarly carry descriptive labels
+      (e.g. <code>aria-label="Add Impact Whey Protein Milkshake to wishlist"</code>).
+      Product images have alt text populated with flavour variant names
+      (e.g. &ldquo;Vimto&rdquo;, &ldquo;Snickers&rdquo;) &mdash; acceptable in context
+      but could be more descriptive (e.g. &ldquo;Clear Whey Protein &mdash; Vimto
+      flavour&rdquo;). The countdown timer lacks <code>aria-live</code>, a WCAG 4.1.3 gap.
+      The all-caps sale strapline under product cards renders at 12px, below the recommended
+      minimum body text size of 14px, posing a legibility challenge for low-vision users.
+      Primary CTA contrast (white on dark teal) visually passes WCAG AA.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Conversion Summary</h2>
+    <p>
+      The path to Quick Buy is short and well-structured: users land on a page with immediate
+      pricing context (current price, was price, saving amount), star ratings with review
+      counts, Best Seller badging, and a prominent CTA. The trust bar above the fold
+      (free delivery threshold, Trustpilot 4.4-star rating, app discount) reduces checkout
+      anxiety before a user has even seen a product. The two highest-impact friction points
+      are the filter label truncation &mdash; which hides the most useful refinement tool
+      on a 52-product page &mdash; and the repeated sale strapline that clutters the grid
+      and trains users to ignore all promotional messaging. Fixing these two issues, plus
+      adding the mint CTA ring, are the changes most likely to have an immediate positive
+      effect on add-to-bag rate.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Recommended Implementation Order</h2>
+    <ol class="recommendations">
+      <li>Remove the per-card &ldquo;IMPACT WEEK SALE&rdquo; strapline from all product cards &mdash; engineering, low effort, highest noise reduction</li>
+      <li>Fix &ldquo;Product Ca&hellip;&rdquo; filter truncation &mdash; rename label to &ldquo;Category&rdquo; in CMS/template</li>
+      <li>Add mint <code>#94E5B5</code> outer ring to Quick Buy button &mdash; one CSS rule change</li>
+      <li>Fix countdown banner copy truncation &mdash; shorten copy to fit container</li>
+      <li>Add <code>aria-live="polite"</code> with throttled announcement to countdown timer</li>
+      <li>Reduce H1 font-size from 48px to 32px on all PLP templates &mdash; design sign-off first</li>
+      <li>Design and implement active state for sub-category chips &mdash; design spec then engineering</li>
+      <li>Align page <code>&lt;title&gt;</code> with H1 &mdash; CMS/template update</li>
+      <li>Fix card border-radius (16px &rarr; 12px) and button font-size (16px &rarr; 14px) &mdash; token cleanup sprint</li>
+      <li>Fix sort button border-radius (5px &rarr; 4px or 8px) &mdash; token cleanup sprint</li>
+    </ol>
+  </section>
+
+</ReportLayout>
+
+<style is:global>
+  .finding-card code {
+    font-family: Menlo, Monaco, 'Courier New', monospace;
+    font-size: 12px;
+    background: var(--color-bg-muted);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--color-text-heading);
+  }
+  .finding-img {
+    display: block;
+    margin-top: 12px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid rgba(0,57,66,0.1);
+  }
+</style>
+
+<style>
+  .report-intro { margin-bottom: 40px; }
+  .report-h1 { font-size: 26px; font-weight: 800; color: var(--color-text-heading); line-height: 1.25; margin-bottom: 6px; }
+  .report-meta { font-size: 13px; color: var(--color-text-body); opacity: 0.65; margin-bottom: 14px; }
+  .report-summary { font-size: 15px; line-height: 1.7; color: var(--color-text-body); max-width: 680px; }
+  .findings-section { margin-bottom: 48px; }
+  .section-heading { font-size: 18px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(0, 57, 66, 0.1); }
+  .prose-section { margin-bottom: 36px; }
+  .prose-section p { font-size: 15px; line-height: 1.7; color: var(--color-text-body); }
+  .recommendations { padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .recommendations li { font-size: 14px; line-height: 1.6; color: var(--color-text-body); }
+</style>

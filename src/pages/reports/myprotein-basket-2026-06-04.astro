@@ -1,0 +1,319 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+import FindingCard from '@/components/FindingCard.astro';
+---
+
+<ReportLayout title="Basket — Myprotein">
+
+  <section class="report-intro">
+    <h1 class="report-h1">UX Audit: Shopping Basket</h1>
+    <p class="report-meta">Myprotein Basket &mdash; Audited 4 June 2026</p>
+    <p class="report-summary">
+      The basket page was audited at desktop (1440px) with a populated basket containing mixed nutrition and clothing items. The page has a clear two-column layout — basket items left, order summary right — and the checkout CTA is visible without scrolling. The primary conversion path is intact, but five stacked notification banners dominate above the item list, a promo code field is buried at the very bottom of the page, the primary CTA is missing the brand mint ring signature, and a sponsored promotional offer is styled identically to earned benefits. Several small-target issues affect the delete controls. Overall the page functions but carries enough friction and inconsistency to warrant targeted fixes.
+    </p>
+  </section>
+
+  <section class="findings-section">
+    <h2 class="section-heading">Findings</h2>
+
+    <!-- HIGH PRIORITY -->
+
+    <FindingCard
+      title="Five stacked notification banners push basket items below the fold"
+      viewport="Both"
+      priority="high"
+      ticketType="design"
+      ticketable={true}
+      findingId="notification-banner-overload"
+    >
+      <p slot="what">
+        The basket page opens with five consecutive notification banners before the user sees a single basket item. Four are earned-benefit confirmations (staff discount, free gifts, free vitamins, free delivery) and one is a sponsored promotional offer. On a standard 1440px desktop viewport the first actual basket item is barely visible; on mobile it is completely below the fold.
+        <img src="/assets/reports/myprotein-basket-2026-06-04/notification-banners-desktop.png" alt="Five stacked notification banners pushing basket items below the fold on desktop" class="finding-img" />
+      </p>
+      <p slot="why">
+        Users arrive at the basket to review items and proceed to checkout. Making them scroll through five messages before seeing what they are buying adds friction and increases the chance of abandonment. Cognitive load is high when every benefit requires equal visual weight.
+      </p>
+      <p slot="fix">
+        Collapse the earned-benefit confirmations into a single summary row or an inline badge strip (e.g. "Free delivery + 6 free gifts unlocked"). Reserve the full banner treatment for a single highest-priority message. Remove the sponsored offer from this area entirely — it belongs in the sidebar or as a separate upsell section.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Primary CTA missing brand mint ring signature"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="checkout-cta-no-mint-ring"
+    >
+      <p slot="what">
+        The "Checkout Now" button renders as a solid dark teal pill (<code>background: oklch(0.3162 0.055061 211.831)</code>, <code>border-radius: 32px</code>) with <code>box-shadow: none</code>. The mint <code>#94E5B5</code> outer ring that is the brand signature for primary CTAs is absent on both the desktop and mobile versions of the button.
+        <img src="/assets/reports/myprotein-basket-2026-06-04/checkout-cta-no-ring-desktop.png" alt="Checkout Now button without the mint outer ring on desktop" class="finding-img" />
+      </p>
+      <p slot="why">
+        The mint ring is the defining visual identifier of a primary action across the Myprotein design system. Its absence makes the checkout button indistinguishable from secondary actions (e.g. the SUPERSIZE upsell) and weakens brand consistency at the most critical conversion point.
+      </p>
+      <p slot="fix">
+        Add <code>box-shadow: 0 0 0 3px #94E5B5</code> (or the equivalent design token) to both <code>#desktop-checkout-start</code> and <code>#mobile-checkout-start</code>. Also correct the button font size from 16px to 14px Bold to match the button typography token.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Promo code field is buried at the bottom of the item list"
+      viewport="Both"
+      priority="high"
+      ticketType="design"
+      ticketable={true}
+      findingId="promo-code-buried"
+    >
+      <p slot="what">
+        The discount code input (<code>#promo-code-input</code>) sits below all basket items, approximately 1,950px down the page on a populated basket — far removed from the order summary and Checkout Now button. A user motivated to apply a code must scroll the full length of the item list to find it.
+        <img src="/assets/reports/myprotein-basket-2026-06-04/promo-code-buried-desktop.png" alt="Promo code field at the bottom of the basket, far below the checkout button" class="finding-img" />
+      </p>
+      <p slot="why">
+        Promo codes are a primary conversion driver. Users who cannot find the field quickly may assume there is no code entry option and either abandon or check out without applying their code — causing post-purchase frustration and support contacts.
+      </p>
+      <p slot="fix">
+        Move the promo code field into the order summary panel in the right-hand sidebar, directly above or below the subtotal line. This is the industry-standard placement (used by ASOS, Gymshark, Amazon) and keeps the code entry proximate to the checkout action.
+      </p>
+    </FindingCard>
+
+    <!-- MEDIUM PRIORITY -->
+
+    <FindingCard
+      title="SUPERSIZE upsell button is visually identical to the primary CTA"
+      viewport="Desktop"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="supersize-cta-conflict"
+    >
+      <p slot="what">
+        The SUPERSIZE button uses the same dark teal fill (<code>oklch(0.3162 0.055061 211.831)</code>) and 32px border radius as the Checkout Now button. The only difference is font size (14px vs 16px) and font weight (600 vs 700). Both read as primary actions.
+        <img src="/assets/reports/myprotein-basket-2026-06-04/supersize-vs-checkout-desktop.png" alt="SUPERSIZE button and Checkout Now button sharing identical colour and shape" class="finding-img" />
+      </p>
+      <p slot="why">
+        Competing primary-style buttons create visual ambiguity. Users scanning for the checkout action may momentarily pause on the SUPERSIZE button, adding cognitive friction on every basket item that carries it.
+      </p>
+      <p slot="fix">
+        Style SUPERSIZE as a secondary/outlined button — e.g. border-only with the teal colour, transparent background — or use a distinct accent colour from the non-primary token palette. Reserve the solid teal fill exclusively for the Checkout Now CTA.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Sponsored add-on offer styled identically to earned benefit banners"
+      viewport="Both"
+      priority="medium"
+      ticketType="design"
+      ticketable={true}
+      findingId="promo-ad-as-benefit"
+    >
+      <p slot="what">
+        "Month's Supply of Vimto Multivitamin Gummies only £5! – Add to basket" uses the same banner container as the genuine earned-benefit messages (staff discount, free delivery). The only difference is a grey info icon instead of a green tick icon. A casual user cannot distinguish an earned reward from a paid promotion.
+      </p>
+      <p slot="why">
+        Conflating advertising with earned benefits erodes trust. When users later realise they were shown a paid promotion framed alongside their rewards, it can damage brand credibility. It may also create issues under ASA guidelines on clearly identifying promotional content.
+      </p>
+      <p slot="fix">
+        Move sponsored or cross-sell offers to a clearly labelled section (e.g. "You might also like" or a distinct callout card with a different background colour). Do not render paid promotions inside the earned-benefits banner stack.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="No delivery cost shown in the order summary"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="missing-delivery-in-summary"
+    >
+      <p slot="what">
+        The order summary panel shows "Full Price Basket: £147.46", a discount line, and "Basket subtotal: £76.02". There is no delivery cost line or estimated delivery date. A separate notification banner confirms free delivery has been unlocked, but this is not reflected in the summary panel itself.
+      </p>
+      <p slot="why">
+        Users expect to see a total cost that matches what they will pay. Without a delivery line — even one showing £0.00 — users cannot be certain whether the £76.02 is the final amount. Uncertainty about total cost is a documented checkout abandonment driver.
+      </p>
+      <p slot="fix">
+        Add a delivery line to the order summary: "Delivery: FREE" (or the relevant cost). If delivery cannot be calculated until checkout, add a note such as "Delivery calculated at checkout" with an estimated range.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Discount line label in order summary is excessively verbose"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="verbose-discount-label"
+    >
+      <p slot="what">
+        The discount line in the sidebar reads: "Myprotein Staff Discount - 55% off full price products | Extra 25% off Sale products" — the full marketing copy — as a line item label. The same full string is also repeated under every individual basket item in the item list, creating significant visual repetition.
+      </p>
+      <p slot="why">
+        Long discount labels reduce the readability of the order summary, which should communicate price at a glance. The full campaign copy belongs on the banner confirmation, not repeated as a line item label on every row.
+      </p>
+      <p slot="fix">
+        Truncate the order summary discount label to "Staff Discount" or "Discount applied" with the amount. Item-level discount messaging can be shortened to just the saving amount, e.g. "Staff discount: −£6.00".
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="ALL CAPS text on one notification banner — inconsistent typography"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="allcaps-banner-text"
+    >
+      <p slot="what">
+        The third notification banner reads "FREE VITAMINS WHEN YOU SPEND £15 ON NEW IN CLOTHING" in all caps, while the adjacent banners use sentence case. This is a content inconsistency rather than a CSS text-transform, as it appears to be hardcoded uppercase text.
+      </p>
+      <p slot="why">
+        All-caps body copy is harder to read (especially for users with dyslexia) and inconsistent with the rest of the notification stack, creating an unpolished appearance.
+      </p>
+      <p slot="fix">
+        Update the content to sentence case: "+ Free vitamins when you spend £15 on New In Clothing". Audit the CMS entry or Astro component that renders this banner to ensure case is consistent across all benefit messages.
+      </p>
+    </FindingCard>
+
+    <!-- LOW PRIORITY -->
+
+    <FindingCard
+      title="Delete/trash button hit target is too small on mobile"
+      viewport="Mobile"
+      priority="low"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="delete-btn-tap-target"
+    >
+      <p slot="what">
+        The trash/delete button for the gift item (Coconut &amp; Collagen Capsules) renders at 20&times;20px. The other item delete buttons are 20&times;32px. Both are below the WCAG 2.5.5 recommended minimum of 44&times;44px for touch targets. The buttons do have descriptive <code>aria-label</code> attributes (e.g. "Remove Impact Whey Protein Milkshake from basket"), so they are accessible to screen readers.
+      </p>
+      <p slot="why">
+        Small tap targets cause mis-taps on mobile, which can lead to accidental item removal — a frustrating and trust-damaging experience, particularly for the gift item which cannot be re-added by the user.
+      </p>
+      <p slot="fix">
+        Set a minimum hit area of 44&times;44px on all delete buttons using padding or a wrapping element. The visual icon can remain small but the clickable area should meet minimum touch target guidance.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Quantity stepper buttons are slightly below minimum touch target"
+      viewport="Mobile"
+      priority="low"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="qty-stepper-tap-target"
+    >
+      <p slot="what">
+        The decrease-quantity and increase-quantity buttons render at 38&times;38px. The class <code>touch-manipulation</code> is present on decrease buttons (good) but not consistently. Both fall 6px short of the 44px minimum for comfortable touch interaction.
+      </p>
+      <p slot="why">
+        Users frequently adjust quantity in the basket. A target just under 44px means a meaningful rate of mis-taps on mobile, particularly for users with larger fingers or motor difficulties.
+      </p>
+      <p slot="fix">
+        Increase the stepper container height to 44px (<code>h-11</code> in Tailwind) and ensure the <code>touch-manipulation</code> class is present on both the increase and decrease buttons.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Percentage formatting inconsistency — space before % sign"
+      viewport="Both"
+      priority="low"
+      ticketType="engineering"
+      ticketable={false}
+      findingId="percent-formatting"
+    >
+      <p slot="what">
+        Save badges render as "Save £13.00 (42 %)" with a space between the number and the percent sign. This is likely a template output issue, not an intentional formatting choice.
+      </p>
+      <p slot="why">
+        Minor but creates a slightly unpolished appearance in a high-visibility element. UK typographic convention and design system standards use no space before the % sign.
+      </p>
+      <p slot="fix">
+        Trim the space in the component that renders the saving percentage. Check whether this is a Liquid/Astro template rendering issue or CMS data issue.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Was/Save price badge uses non-token border radius"
+      viewport="Both"
+      priority="low"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="price-badge-border-radius"
+    >
+      <p slot="what">
+        The "Was £xx.xx" price badge uses <code>border-radius: 2px</code> (via class <code>rounded-sm</code>). The smallest valid border radius token is 4px. The "Save £xx.xx (xx %)" badge uses <code>border-radius: 9999px</code> (pill), making the two sibling badges visually inconsistent — one is near-square cornered, the other is a full pill.
+      </p>
+      <p slot="why">
+        Using an off-token radius value creates a small but perceptible visual inconsistency. The two badges appear to come from different design decisions.
+      </p>
+      <p slot="fix">
+        Align both badges to the same border radius token. Given their pill-like nature, <code>border-radius: 4px</code> or <code>8px</code> for both would create a consistent, compact badge pair. Update the Tailwind class from <code>rounded-sm</code> to <code>rounded</code> (4px) or <code>rounded-md</code> (6px — check against token).
+      </p>
+    </FindingCard>
+
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Design Consistency</h2>
+    <p>
+      The basket page is broadly on-system: Figtree is correctly loaded as the computed font family, heading text uses the primary teal (<code>oklch(0.3162 0.055061 211.831)</code>), and the Checkout Now button correctly applies <code>border-radius: 32px</code>. However, two notable deviations stand out. First, the primary CTA is missing the mint <code>#94E5B5</code> outer ring that is the brand signature — <code>box-shadow</code> is <code>none</code> on both desktop (<code>#desktop-checkout-start</code>) and mobile (<code>#mobile-checkout-start</code>). Second, the SUPERSIZE upsell button shares the identical teal fill and 32px radius as Checkout Now, creating an unintentional visual tie between a primary action and a secondary upsell. The SUPERSIZE button also uses <code>font-weight: 600</code> rather than 700, a minor but off-token deviation. The "Was" price badge uses <code>border-radius: 2px</code> (below the minimum 4px token) while the "Save" badge uses a full pill — these two sibling elements should share the same radius. The Checkout Now button font size of 16px is off the button typography token (should be 14px Bold).
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Accessibility Notes</h2>
+    <p>
+      The delete buttons carry well-formed, product-specific <code>aria-label</code> attributes (e.g. "Remove Impact Whey Protein Milkshake from basket") and quantity steppers are labelled "Decrease quantity" / "Increase quantity" — both good practices. The primary concern is touch target size: the gift item delete button is 20&times;20px and standard item deletes are 20&times;32px, both well below the WCAG 2.5.5 recommended 44&times;44px minimum, creating a real barrier on mobile. Quantity steppers at 38&times;38px are just under the threshold. The <code>touch-manipulation</code> class is applied inconsistently (present on decrease buttons, absent on increase buttons). The all-caps notification banner text — while not a WCAG failure — reduces readability for users with dyslexia or cognitive load concerns and should be corrected to sentence case. No obvious focus-order or keyboard navigation issues were identified at the basket level, and the page structure (landmark regions, skip link) appears intact.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Conversion Summary</h2>
+    <p>
+      The basket page gets the fundamentals right: the Checkout Now button is visible above the fold, the order summary is sticky and updates dynamically, and payment method logos (PayPal, Klarna, Amazon Pay, Apple Pay, Fraser+) appear in the sidebar to build confidence. The mobile experience includes a sticky bottom bar with basket total and a checkout button, which is the right pattern. The critical gaps are: (1) the item list itself is invisible above the fold due to five notification banners, meaning users cannot confirm what they are buying without scrolling; (2) the promo code field is at page bottom, disconnected from the checkout action, increasing the risk that users either miss it or abandon to find a code elsewhere; and (3) the absence of a delivery line in the order summary means the subtotal does not feel like a final, trustworthy total. Fixing these three issues should have the highest positive impact on basket-to-checkout conversion rate.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Recommended Implementation Order</h2>
+    <ol class="recommendations">
+      <li>Move the promo code field into the order summary sidebar panel, above the subtotal — engineering ticket, low complexity, high conversion impact.</li>
+      <li>Add a delivery line to the order summary panel ("Delivery: FREE" or cost) — engineering ticket, low complexity.</li>
+      <li>Add the mint <code>#94E5B5</code> box-shadow ring to both the desktop and mobile Checkout Now buttons — engineering ticket, one-line CSS change.</li>
+      <li>Collapse the four earned-benefit banners into a single summary strip — design ticket to spec the new pattern, then engineering to build.</li>
+      <li>Move the Vimto Gummies sponsored offer out of the benefit banner stack into a clearly labelled upsell section — content/engineering ticket.</li>
+      <li>Restyle the SUPERSIZE button as a secondary/outlined action to remove the visual conflict with the primary CTA — engineering ticket.</li>
+      <li>Fix the all-caps banner text to sentence case — content/CMS fix.</li>
+      <li>Increase delete button and quantity stepper tap targets to 44&times;44px minimum — engineering ticket.</li>
+      <li>Align Was/Save badge border radii to matching token values — engineering ticket.</li>
+    </ol>
+  </section>
+
+</ReportLayout>
+
+<style is:global>
+  .finding-card code {
+    font-family: Menlo, Monaco, 'Courier New', monospace;
+    font-size: 12px;
+    background: var(--color-bg-muted);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--color-text-heading);
+  }
+</style>
+
+<style>
+  .report-intro { margin-bottom: 40px; }
+  .report-h1 { font-size: 26px; font-weight: 800; color: var(--color-text-heading); line-height: 1.25; margin-bottom: 6px; }
+  .report-meta { font-size: 13px; color: var(--color-text-body); opacity: 0.65; margin-bottom: 14px; }
+  .report-summary { font-size: 15px; line-height: 1.7; color: var(--color-text-body); max-width: 680px; }
+  .findings-section { margin-bottom: 48px; }
+  .section-heading { font-size: 18px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(0, 57, 66, 0.1); }
+  .prose-section { margin-bottom: 36px; }
+  .prose-section p { font-size: 15px; line-height: 1.7; color: var(--color-text-body); }
+  .recommendations { padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .recommendations li { font-size: 14px; line-height: 1.6; color: var(--color-text-body); }
+</style>

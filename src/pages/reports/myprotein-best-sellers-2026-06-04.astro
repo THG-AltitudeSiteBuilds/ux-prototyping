@@ -117,35 +117,6 @@ import FindingCard from '@/components/FindingCard.astro';
       </p>
     </FindingCard>
 
-    <FindingCard
-      title="Pagination scrolls user back to top of page on load"
-      viewport="Both"
-      priority="high"
-      ticketType="engineering"
-      ticketable={true}
-      findingId="pagination-scroll-to-top"
-    >
-      <p slot="what">
-        A pagination arrow exists at the bottom of the product grid and successfully loads the next
-        set of products — however, clicking it scrolls the user back to the top of the page. A user
-        who has scrolled through the initial 58 products to reach the paginator is teleported back to
-        the H1, forcing them to scroll the entire grid again to reach the newly loaded items.
-      </p>
-      <p slot="why">
-        This is a significant usability failure at the exact moment a user has demonstrated high
-        engagement (scrolling to the bottom). It breaks the browsing flow, increases the effort
-        required to see new products, and is likely to cause abandonment rather than continued
-        browsing. Users may not even realise new products have loaded after the scroll-to-top
-        fires, causing them to think the action had no effect.
-      </p>
-      <p slot="fix">
-        On pagination trigger, load the next page of results and maintain the user's scroll position
-        — or scroll them smoothly to the first newly loaded product card. The page should never
-        jump to the top as a side-effect of loading more content. If pagination replaces the full
-        page (rather than appending), use a URL hash or <code>scrollRestoration</code> strategy to
-        return the user to the right position.
-      </p>
-    </FindingCard>
 
     <!-- MEDIUM PRIORITY -->
 
@@ -390,16 +361,13 @@ import FindingCard from '@/components/FindingCard.astro';
       breadth is a strength only if users can navigate it, which requires category grouping or
       filtering guidance that is currently absent. The most urgent fix is restoring social proof
       (ratings + bestseller badges) to the card level — this alone could materially lift
-      click-through and add-to-bag rates from the grid. Pagination mechanics also need attention:
-      products beyond the initial load are accessible, but the scroll-to-top behaviour on pagination
-      is likely causing high abandonment at the exact moment users are most engaged.
+      click-through and add-to-bag rates from the grid.
     </p>
   </section>
 
   <section class="prose-section">
     <h2 class="section-heading">Recommended Implementation Order</h2>
     <ol class="recommendations">
-      <li>Fix pagination scroll-to-top — maintain user position or scroll to first new product when next page loads.</li>
       <li>Add star ratings and review count to product cards — surface the community social proof the page promises.</li>
       <li>Add mint ring to QUICK BUY button — one-line CSS fix, restores brand CTA signature.</li>
       <li>Add "Best Seller" badge to card image overlay — design spec needed, then engineering implementation.</li>

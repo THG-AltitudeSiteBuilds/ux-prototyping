@@ -184,7 +184,7 @@ import FindingCard from '@/components/FindingCard.astro';
       </p>
       <p slot="fix">
         Add a "View all results for '[query]'" link at the bottom of the typeahead panel, linking to
-        the search results page (<code>/search/?q={query}</code>). This is a low-effort engineering
+        the search results page (<code>/search/?q=[query]</code>). This is a low-effort engineering
         change with high usability value.
       </p>
     </FindingCard>
@@ -326,7 +326,7 @@ import FindingCard from '@/components/FindingCard.astro';
         keep the typed query in the search input and add a visible "Results for 'X'" heading. (Engineering, ~1 day)
       </li>
       <li>
-        <strong>Add 'View all results' link to typeahead</strong> — link to <code>/search/?q={query}</code>
+        <strong>Add 'View all results' link to typeahead</strong> — link to <code>/search/?q=[query]</code>
         at the bottom of the dropdown. (Engineering, ~half day)
       </li>
       <li>

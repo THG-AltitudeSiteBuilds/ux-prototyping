@@ -1,0 +1,456 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+import FindingCard from '@/components/FindingCard.astro';
+---
+
+<ReportLayout title="Quick Buy Modal — Myprotein Protein PLP">
+
+  <section class="report-intro">
+    <h1 class="report-h1">UX Audit: Quick Buy Modal</h1>
+    <p class="report-meta">Myprotein Protein PLP &mdash; Audited 5 June 2026</p>
+    <p class="report-summary">
+      This audit covers the Quick Buy modal triggered from product cards on the Protein Powder &amp;
+      Protein Shakes PLP at <code>/c/nutrition/protein/</code>. The modal allows users to select a
+      flavour and size variant and add to basket without leaving the listing page. The core mechanics
+      work — variant selection, quantity, and the add-to-basket action all function — but a critical
+      price display bug means the sticky CTA bar shows a stale price when users switch sizes, and
+      users have no way to navigate to the full PDP if they need more information before buying.
+      The modal also accumulates information (5 content accordions) that sits awkwardly within a
+      quick-buy context and points to an unresolved question about what this modal is for.
+    </p>
+  </section>
+
+  <section class="findings-section">
+    <h2 class="section-heading">Findings</h2>
+
+    <!-- HIGH PRIORITY -->
+
+    <FindingCard
+      title="Sticky CTA price doesn't update when size is changed"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="sticky-price-stale"
+    >
+      <p slot="what">
+        When a user selects a different size, the price in the upper section of the modal updates
+        correctly — but the price displayed immediately beside the ADD TO BASKET button in the
+        sticky footer bar does not. After selecting 435G, the top of the modal correctly shows
+        <strong>£14.49</strong> (Was £18.99, Save £4.50), but the sticky CTA bar still reads
+        <strong>£23.99</strong> (Was £30.99, Save £7.00) — the price for the previously selected
+        870G size. DOM inspection confirms both price elements are simultaneously visible, with
+        the <code>price-was</code> and <code>price-save</code> elements in the sticky bar bound
+        to stale state.
+        <img src="/assets/reports/myprotein-quick-buy-modal-2026-06-05/quick-buy-modal-price-mismatch.png" alt="Modal showing 435G selected in size picker but £23.99 (870G price) displayed in the sticky CTA bar" class="finding-img" />
+      </p>
+      <p slot="why">
+        The sticky price is the last thing a user reads before hitting ADD TO BASKET. If it shows
+        the wrong amount, users are making a purchase decision based on incorrect information.
+        At best this damages trust when they see a different amount in their basket; at worst it
+        results in an incorrect charge and a returns claim. This is the highest-severity issue
+        in the modal — it sits directly adjacent to the purchase action.
+      </p>
+      <p slot="fix">
+        Ensure the sticky footer price is bound to the same reactive state as the header price.
+        Both elements should update from the same data source when a size variant is selected.
+        Treat the sticky bar as a mirror of the header price block, not an independent element.
+        Add a regression test that verifies the sticky price matches the header price after every
+        size change.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="No link to the full product page"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="no-pdp-link"
+    >
+      <p slot="what">
+        The modal contains zero links to the full product detail page. DOM inspection confirms
+        <code>links: []</code> — there is no "View full product", "See more details", or product
+        name hyperlink anywhere in the modal. The product name heading is plain text, not a link.
+        Users who want to read reviews, see more product images, check full nutritional info, or
+        compare flavour options in detail have no way to get there without dismissing the modal
+        and navigating manually.
+        <img src="/assets/reports/myprotein-quick-buy-modal-2026-06-05/quick-buy-modal-open.png" alt="Quick Buy modal open showing product name as plain text with no link to PDP" class="finding-img" />
+      </p>
+      <p slot="why">
+        Quick Buy works for highly confident, repeat purchasers. But many users — especially on a
+        protein PLP where flavour and size decisions are considered purchases — will want to
+        validate their choice before committing. Without a PDP escape route, their only options
+        are to dismiss the modal and lose their place in the grid, or commit blindly. This friction
+        will increase modal abandonment and push users away from the quick-buy path entirely.
+      </p>
+      <p slot="fix">
+        Make the product name in the modal heading a hyperlink to the PDP. Alternatively, add a
+        discrete "View full product →" text link below the product name. The PDP URL is already
+        available in the product data (confirmed in DOM: <code>/p/sports-nutrition/impact-whey-protein-milkshake/17755…</code>).
+        This is a template change — no design work required.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Product title overwritten with raw variant data on size/flavour selection"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="title-variant-pollution"
+    >
+      <p slot="what">
+        When a user selects a size and flavour, the modal heading updates from
+        <em>"Impact Whey Protein Milkshake"</em> to
+        <em>"Impact Whey Protein Milkshake - 435G - 15servings - Salted Caramel"</em>.
+        This is a raw SKU string appended directly to the product name — lowercase "servings",
+        no formatting, no separator hierarchy. It reads as a data dump rather than a
+        user-facing confirmation of their selection.
+      </p>
+      <p slot="why">
+        The heading serves as a running confirmation of what's in the basket. A well-formatted
+        confirmation ("Impact Whey Protein Milkshake — Salted Caramel, 435g") builds confidence
+        at the moment of purchase. A raw SKU string ("Impact Whey Protein Milkshake - 435G -
+        15servings - Salted Caramel") signals a technical error and undermines trust. It also
+        creates an overly long heading that wraps across two lines, pushing the price and variant
+        controls further down.
+      </p>
+      <p slot="fix">
+        Keep the product name static in the heading. Display the selected variant as a separate,
+        clearly labelled confirmation element below the heading — e.g.
+        <code>&lt;p class="selected-variant"&gt;Salted Caramel · 435g · 15 servings&lt;/p&gt;</code>.
+        This separates the product identity from the variant selection and formats both legibly.
+        Fix the case inconsistency in the size labels (<code>15servings</code> → <code>15 Servings</code>).
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="No ratings or social proof at the point of purchase"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="modal-no-ratings"
+    >
+      <p slot="what">
+        The modal contains no star rating, review count, or any social proof element. This is
+        confirmed by DOM inspection — no <code>[class*="rating"]</code>, <code>[class*="star"]</code>,
+        or <code>[class*="review"]</code> elements exist anywhere in the modal. The PLP card that
+        triggers the modal shows no ratings either (covered in the separate PLP audit). The user
+        reaches the purchase decision point with zero peer validation.
+      </p>
+      <p slot="why">
+        The add-to-basket action is the highest-value micro-conversion on the site. Ratings are
+        one of the most consistently evidenced factors in purchase confidence — particularly for
+        nutrition products where efficacy claims require third-party validation. A product like
+        Impact Whey Protein with thousands of reviews has significant social proof to show; not
+        showing it in the modal is a missed conversion opportunity.
+      </p>
+      <p slot="fix">
+        Add the average star rating and review count to the modal, positioned directly below the
+        product name. A single line — e.g. ★ 4.7 · 14,203 reviews — is sufficient and takes
+        minimal space. Link the review count to the reviews section of the PDP.
+      </p>
+    </FindingCard>
+
+    <!-- MEDIUM PRIORITY -->
+
+    <FindingCard
+      title="Size selector shows no price per option — users can't compare value"
+      viewport="Both"
+      priority="medium"
+      ticketType="design"
+      ticketable={true}
+      findingId="size-no-price"
+    >
+      <p slot="what">
+        The four size buttons (435G, 870G, 2610G, 4350G) display weight and serving count only.
+        No price is shown for each option. To find out what each size costs, users must click each
+        button one at a time and read the updated price at the top — four interactions to make a
+        value comparison that should be instant.
+        <img src="/assets/reports/myprotein-quick-buy-modal-2026-06-05/quick-buy-modal-open.png" alt="Size selector buttons showing weight and servings but no price per option" class="finding-img" />
+      </p>
+      <p slot="why">
+        Size selection is a considered decision for protein products — price per serving is a
+        primary driver. Hiding prices behind individual clicks increases cognitive load at the
+        exact moment users are trying to commit. Customers who can't quickly assess value are
+        more likely to abandon the modal and go elsewhere or do nothing. The PDP shows a
+        per-serving price on size buttons; the modal should match this.
+      </p>
+      <p slot="fix">
+        Add the price (and ideally the per-serving cost) to each size button. A two-line format
+        works well: <strong>870G · 30 Servings</strong> / <em>£23.99 (80p/serving)</em>. This
+        is a design change — a spec is needed before engineering can implement, but the
+        underlying price data per SKU is already available in the modal.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Five content accordions in a quick-buy modal — scope creep"
+      viewport="Both"
+      priority="medium"
+      ticketType="design"
+      ticketable={false}
+      findingId="modal-accordion-overload"
+    >
+      <p slot="what">
+        Below the ADD TO BASKET button, the modal contains five collapsed accordions: Description,
+        Key Benefits, Ingredients, Nutritional Information, and Suggested Use. This is a near-
+        complete replica of the PDP information architecture inside a modal overlay.
+        <img src="/assets/reports/myprotein-quick-buy-modal-2026-06-05/quick-buy-modal-accordions.png" alt="Modal showing five content accordions below the CTA: Description, Key Benefits, Ingredients, Nutritional Information, Suggested Use" class="finding-img" />
+      </p>
+      <p slot="why">
+        Quick Buy's job is to reduce friction for users who already know what they want. The
+        presence of Ingredients, Nutritional Information, and Suggested Use signals that the modal
+        is also trying to serve users who are still researching — a different and conflicting
+        intent. A user who opens the Nutritional Information accordion inside a modal overlay is
+        having a worse experience than one who reads the same information on the PDP. It also
+        pushes the modal's scroll depth significantly, making it feel more like a mini-page than
+        a checkout shortcut.
+      </p>
+      <p slot="fix">
+        Remove Ingredients, Nutritional Information, and Suggested Use from the modal. These are
+        research-phase content that belongs on the PDP. Keep only a short Description and Key
+        Benefits (maximum two accordions), and replace the removed sections with a prominent
+        "View full product details →" link that directs undecided users to the PDP. Requires a
+        design and content decision before implementation.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Amount selector border-radius is off-token (0px)"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="size-btn-border-radius"
+    >
+      <p slot="what">
+        The four size/amount selector buttons have a computed <code>border-radius: 0px</code> —
+        completely sharp corners. The design system specifies valid values of 4, 8, 12, 16, 24,
+        32, 56, or 9999px; selector chips and option buttons should use <code>8px</code>.
+        The selected state is indicated by a full black border (<code>2px solid rgb(0, 0, 0)</code>),
+        while unselected buttons use a grey border (<code>2px solid rgb(229, 231, 235)</code>) —
+        no other visual differentiation between states.
+      </p>
+      <p slot="why">
+        Sharp corners are inconsistent with the rounded design language used throughout the
+        site and create a visually jarring selector within an otherwise rounded modal. The
+        selected-state treatment (full black border) is functional but low-contrast against the
+        white button background — a stronger selected state (filled background or coloured
+        border) would make the active selection more scannable.
+      </p>
+      <p slot="fix">
+        Set <code>border-radius: 8px</code> on size selector buttons. Consider strengthening the
+        selected state: a teal fill or mint border would be more legible than a plain black border.
+        Align with the variant selector pattern used on the PDP if one exists.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Accessible modal name is generic — 'Quick Buy Modal'"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="modal-accessible-name"
+    >
+      <p slot="what">
+        The modal's visually-hidden <code>&lt;h2&gt;</code> — which acts as its accessible name
+        for screen readers — reads <em>"Quick Buy Modal"</em>. DOM inspection confirms:
+        <code>fontSize: 16px, fontWeight: 400</code>, hidden from visual display. The modal has
+        no <code>aria-label</code> or <code>aria-labelledby</code> attribute pointing to the
+        product name. A screen reader user opening this modal hears "dialog, Quick Buy Modal"
+        with no product context.
+      </p>
+      <p slot="why">
+        WCAG 4.1.2 (Name, Role, Value) requires interactive components to have meaningful
+        accessible names. "Quick Buy Modal" is functionally equivalent to "Dialog" — it tells
+        the user nothing about which product they're purchasing. A screen reader user navigating
+        multiple modals across the page would have no way to distinguish them. This is a
+        meaningful barrier for visually impaired users completing a purchase.
+      </p>
+      <p slot="fix">
+        Update the visually-hidden heading to include the product name dynamically:
+        e.g. <code>"Quick Buy: Impact Whey Protein Milkshake"</code>. Alternatively, add
+        <code>aria-labelledby</code> to the modal element pointing to the visible product name
+        heading. Either approach satisfies WCAG 4.1.2 with a single-line template change.
+      </p>
+    </FindingCard>
+
+    <!-- LOW PRIORITY -->
+
+    <FindingCard
+      title="ADD TO BASKET font size is 16px — should be 14px Bold"
+      viewport="Both"
+      priority="low"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="atb-font-size"
+    >
+      <p slot="what">
+        The ADD TO BASKET button has <code>font-size: 16px</code>. The design system specifies
+        button text as <code>14px Bold</code>. The button label is also rendered in uppercase
+        (<code>text-transform: uppercase</code> via CSS, matching the PLP QUICK BUY button).
+        The design system does not use all-caps on buttons.
+      </p>
+      <p slot="why">
+        Minor token drift, same pattern as the QUICK BUY button on the PLP. Low conversion
+        impact but contributes to inconsistency across the site's primary CTAs.
+      </p>
+      <p slot="fix">
+        Set <code>font-size: 14px</code> on the ATB button. Remove <code>text-transform:
+        uppercase</code> — use "Add to Basket" in title case. These are CSS-only changes to the
+        shared button component.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Close button tap target is 32×32px — below 44px recommendation"
+      viewport="Mobile"
+      priority="low"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="close-btn-tap-target"
+    >
+      <p slot="what">
+        The ✕ close button is rendered at 32×32px (confirmed via <code>getBoundingClientRect()</code>).
+        WCAG 2.5.5 (Target Size) recommends a minimum of 44×44px for interactive touch targets.
+        At 32px, the button is dismissable but requires precise tapping on mobile — a meaningful
+        friction point for users who want to close the modal quickly.
+      </p>
+      <p slot="why">
+        A close button that's hard to tap on mobile will cause accidental mis-taps and frustration.
+        Given the modal is the primary quick-buy entry point on mobile, the close action must be
+        reliably accessible — especially for users who open the modal and then change their mind.
+      </p>
+      <p slot="fix">
+        Increase the close button's hit area to at least 44×44px using padding while keeping the
+        visual icon at its current size. For example:
+        <code>padding: 6px</code> around a 32px icon achieves a 44px target without changing
+        the visual design.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Installment options show logos only — no amounts"
+      viewport="Both"
+      priority="low"
+      ticketType="engineering"
+      ticketable={false}
+      findingId="installment-no-amounts"
+    >
+      <p slot="what">
+        The modal displays "Installment options available with [PayPal logo] &amp; [Frasers Plus logo]"
+        with no indication of what the instalment amounts would be. Users have no way to
+        evaluate whether financing makes sense for this product and price without clicking away
+        from the modal entirely.
+      </p>
+      <p slot="why">
+        Low impact at current price points (£14–£75), but potentially relevant for larger bundle
+        sizes. The instalment display appears to be a global template element rather than
+        dynamically calculated — whether showing amounts here is feasible depends on the
+        financing integration. At minimum the text should be updated if the amounts can't be
+        computed.
+      </p>
+      <p slot="fix">
+        If the instalment amount can be calculated client-side from the selected price, display
+        it inline: e.g. "3 payments of £4.83 available with PayPal". If not, consider removing
+        the instalment line from the modal — it raises expectations it can't fulfil in context.
+        Business decision required before engineering can act.
+      </p>
+    </FindingCard>
+
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Design Consistency</h2>
+    <p>
+      The ADD TO BASKET button correctly carries the brand signature mint ring, implemented as
+      <code>border: 2px solid rgb(148, 229, 181)</code> (#94E5B5) — consistent with the design
+      system specification. The button uses the correct primary fill (<code>#003942</code>) and
+      32px border radius. Font size deviates from spec at 16px (should be 14px) and
+      <code>text-transform: uppercase</code> is applied inconsistently with the brand's title-case
+      button convention. The size selector buttons have <code>border-radius: 0px</code> — not a
+      valid design token; 8px is the correct value for selection chips. The modal's white
+      background and shadow treatment appear consistent with other modal patterns on the site.
+      Figtree is the computed font family throughout — no fallback fonts detected.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Accessibility Notes</h2>
+    <p>
+      The modal uses <code>role="dialog"</code> and <code>aria-modal="true"</code> correctly.
+      However, its accessible name is a generic visually-hidden heading ("Quick Buy Modal")
+      with no product context — a WCAG 4.1.2 violation (covered as a dedicated finding above).
+      The close button is labelled only by its text content (✕) with no <code>aria-label</code>,
+      which is marginally acceptable but "Close" would be more descriptive. Focus management
+      was not fully tested but the modal appears to render focusable elements in a logical order
+      (close → size buttons → quantity → ATB). The quantity stepper uses plain +/− buttons —
+      these should carry <code>aria-label="Increase quantity"</code> / <code>"Decrease quantity"</code>
+      to be operable by screen readers. Colour contrast on the ADD TO BASKET button (white on
+      dark teal) comfortably exceeds WCAG AA. The "Was" price red background and "Save" green
+      background on price badges should be verified for contrast — the text size is small
+      (<code>font-size: xs</code>) and the colour combinations may not meet the 4.5:1 AA ratio
+      for normal text.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Conversion Summary</h2>
+    <p>
+      The Quick Buy modal has a working add-to-basket flow but is undermined by a critical price
+      accuracy bug that directly compromises trust at the moment of purchase. The stale sticky
+      price means users switching sizes are shown incorrect information beside the buy button —
+      this must be fixed before any other improvement. Beyond the bug, the modal's conversion
+      potential is limited by the absence of social proof (no ratings), the absence of a PDP
+      escape route for undecided users, and a size selector that forces users to click through
+      four options to compare prices. The five content accordions below the CTA are a structural
+      issue — the modal is trying to be both a quick-buy shortcut and a mini-PDP simultaneously,
+      and does neither well.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Recommended Implementation Order</h2>
+    <ol class="recommendations">
+      <li>Fix sticky CTA price — bind the footer price to the same reactive state as the header price so it updates on size change.</li>
+      <li>Add a "View full product →" link — make the product name a hyperlink to the PDP or add a discrete link below the name.</li>
+      <li>Add star ratings and review count below the product name.</li>
+      <li>Fix product heading — keep the name static; show selected variant as a separate formatted line.</li>
+      <li>Add per-option pricing to size selector buttons so users can compare value without clicking each one.</li>
+      <li>Remove Ingredients, Nutritional Information, and Suggested Use accordions — replace with "View full product details" link.</li>
+      <li>Fix size selector button border-radius to 8px token value.</li>
+      <li>Update modal's accessible heading to include product name (WCAG 4.1.2 fix).</li>
+      <li>Fix ATB button font-size to 14px and remove text-transform: uppercase.</li>
+      <li>Increase close button hit area to 44×44px minimum.</li>
+    </ol>
+  </section>
+
+</ReportLayout>
+
+<style is:global>
+  .finding-card code {
+    font-family: Menlo, Monaco, 'Courier New', monospace;
+    font-size: 12px;
+    background: var(--color-bg-muted);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--color-text-heading);
+  }
+</style>
+
+<style>
+  .report-intro { margin-bottom: 40px; }
+  .report-h1 { font-size: 26px; font-weight: 800; color: var(--color-text-heading); line-height: 1.25; margin-bottom: 6px; }
+  .report-meta { font-size: 13px; color: var(--color-text-body); opacity: 0.65; margin-bottom: 14px; }
+  .report-summary { font-size: 15px; line-height: 1.7; color: var(--color-text-body); max-width: 680px; }
+  .findings-section { margin-bottom: 48px; }
+  .section-heading { font-size: 18px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(0, 57, 66, 0.1); }
+  .prose-section { margin-bottom: 36px; }
+  .prose-section p { font-size: 15px; line-height: 1.7; color: var(--color-text-body); }
+  .recommendations { padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .recommendations li { font-size: 14px; line-height: 1.6; color: var(--color-text-body); }
+</style>

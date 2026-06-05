@@ -1,0 +1,377 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+import FindingCard from '@/components/FindingCard.astro';
+---
+
+<ReportLayout title="Search Experience — Myprotein (Whey Protein)">
+
+  <section class="report-intro">
+    <h1 class="report-h1">UX Audit: Search Experience — Whey Protein</h1>
+    <p class="report-meta">Myprotein Global Nav Search &mdash; Audited 5 June 2026</p>
+    <p class="report-summary">
+      This audit covers the end-to-end search journey for the query "Whey Protein" starting from the Best Sellers page
+      (<code>/c/brandhub/best-sellers/</code>). It evaluates the search trigger, typeahead/autocomplete behaviour, query
+      submission, and the destination page experience. The search contains several high-priority functional bugs and UX
+      gaps that create unnecessary friction on one of the most direct paths to conversion on the site.
+    </p>
+  </section>
+
+  <section class="findings-section">
+    <h2 class="section-heading">Findings</h2>
+
+    <!-- HIGH PRIORITY -->
+
+    <FindingCard
+      title="Clicking the search icon with no text submits an empty search"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="empty-search-submit"
+    >
+      <p slot="what">
+        Clicking the search icon (magnifying glass) in the global nav without entering any text immediately navigates
+        to <code>/search/?q=</code> — an empty query — and displays 1,982 unfiltered results with no message or
+        guidance. The user has no indication that nothing was searched; they are simply dropped into a wall of
+        unrelated products.
+        <img src="/assets/reports/myprotein-search-whey-protein-2026-06-05/above-fold-desktop.png" alt="Best Sellers page above fold showing search bar" class="finding-img" />
+      </p>
+      <p slot="why">
+        This is a direct conversion threat. Any accidental click on the search icon abandons the user's current
+        context (e.g. Best Sellers) with no recovery path. 1,982 undifferentiated results also have no chance of
+        converting — the user needs guidance, not a dump. This will be especially problematic on mobile where
+        fat-finger taps are common.
+      </p>
+      <p slot="fix">
+        Guard the search form submission: if the input value is empty or whitespace, prevent navigation and instead
+        focus the search input and show the typeahead panel (which could surface trending or popular searches).
+        The search icon click should only trigger navigation once at least one character has been entered.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Search query silently redirects to a category page — with no context given to the user"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="silent-category-redirect"
+    >
+      <p slot="what">
+        Searching "Whey Protein" and pressing Enter does not navigate to a search results page. Instead, the user
+        is silently redirected to the category page <code>/c/nutrition/protein/whey-protein/</code> titled
+        "Whey Protein Powders". The search input is cleared. The breadcrumb shows the category hierarchy
+        (Home &gt; Nutrition &gt; Protein Powder &amp; Protein Shakes &gt; Whey Protein Powders) — not search
+        context. There is no "Search results for 'Whey Protein'" heading, no result count tied to the query, and
+        no way for the user to understand what happened to their search.
+      </p>
+      <p slot="why">
+        Users who search expect search results — a list matching their query with relevance ranking. Silently
+        redirecting to a curated category page removes user agency and breaks trust: if a user searches "Whey
+        Protein Isolate" or "cheap whey protein" they may still be dropped into this generic category without
+        any matching or relevance signal. It also prevents power users from using search to cross-reference
+        products across categories. The query being cleared means the user cannot refine or modify their search.
+      </p>
+      <p slot="fix">
+        Two options: (1) Preferred — navigate to a genuine search results page (<code>/search/?q=Whey+Protein</code>)
+        that shows relevance-ranked results with the query pre-filled in the search input and a clear "X results
+        for 'Whey Protein'" heading. (2) If the category redirect is intentional for known high-confidence queries,
+        add a banner explaining the redirect: "Showing results for 'Whey Protein' — browsing Whey Protein Powders"
+        and persist the query in the search input so the user can refine.
+      </p>
+    </FindingCard>
+
+    <!-- MEDIUM PRIORITY -->
+
+    <FindingCard
+      title="Typeahead only triggers after 4 characters — too slow for short queries"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="typeahead-trigger-threshold"
+    >
+      <p slot="what">
+        The autocomplete dropdown does not appear after 1, 2, or 3 characters are typed. It activates after the
+        4th character ("Whey"). Queries like "whey", "bcaa", "creatine", or "zinc" are common short searches
+        that are fully typed before any assistance appears.
+      </p>
+      <p slot="why">
+        Each character typed without a response is a moment of uncertainty for the user. Industry best practice
+        triggers typeahead at 2–3 characters. Delaying to 4 characters means users who type quickly will often
+        have pressed Enter before they see suggestions — bypassing the helpful direct-to-product links in
+        "Recommendations" entirely. This reduces the value of the autocomplete investment.
+      </p>
+      <p slot="fix">
+        Lower the trigger threshold to 2 characters. Add a debounce of ~150ms to avoid excessive API calls.
+        For single-character inputs, consider showing popular/trending searches as a fallback.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Typeahead suggestions are not highlighted — typed characters not bolded in results"
+      viewport="Desktop"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="typeahead-no-highlight"
+    >
+      <p slot="what">
+        When a user types "Whey Protein", the suggestion list shows "whey protein", "impact whey protein",
+        "clear whey protein" etc. — but the matching portion of the user's query is not highlighted in bold
+        or any other treatment within each suggestion. All suggestions render in the same weight and colour
+        as plain text.
+      </p>
+      <p slot="why">
+        Lack of match highlighting is a usability regression. Users rely on the bolded portion to confirm
+        their query is being matched and to quickly scan which part of the suggestion is new information.
+        Without it, the list looks like a flat unsorted set of terms and requires more cognitive effort to parse.
+      </p>
+      <p slot="fix">
+        Wrap the matched portion of each suggestion in a <code>&lt;strong&gt;</code> or <code>&lt;mark&gt;</code>
+        element. For example: "impact <strong>whey protein</strong>" — where the typed characters "whey protein"
+        are bolded. This is standard behaviour in all major ecommerce search implementations.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Typeahead product recommendations show no price or rating"
+      viewport="Both"
+      priority="medium"
+      ticketType="design"
+      ticketable={true}
+      findingId="typeahead-recs-no-price"
+    >
+      <p slot="what">
+        The "Recommendations" section in the typeahead dropdown displays product images and names
+        (e.g. "Clear Whey Protein + Collagen", "Impact Whey Protein Milkshake") but no pricing,
+        no star rating, and no review count. The user cannot assess value at a glance and must
+        click through to the PDP to see price.
+      </p>
+      <p slot="why">
+        The typeahead is the highest-intent moment in the discovery journey — the user is actively
+        searching. Including price and ratings here (even just "£23.99 · ★4.5") gives the user
+        enough buying signal to click directly to the product rather than committing to a full
+        search results page. Omitting this information makes the recommendations feel like banners
+        rather than actionable product links.
+      </p>
+      <p slot="fix">
+        Add price (with was/save if on promotion) and a compact star + review count to each product
+        card in the typeahead. Keep cards compact — a single line below the image is sufficient.
+        Spec a design to avoid layout overflow at different query lengths.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="No 'View all results' link in the typeahead dropdown"
+      viewport="Both"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="typeahead-no-view-all"
+    >
+      <p slot="what">
+        The typeahead panel shows "Top Suggestions" (text links) and "Recommendations" (product cards)
+        but provides no link to view all results for the query. The only way to proceed is to press
+        Enter, click a suggestion, or click a product card — all of which bypass a genuine search
+        results page.
+      </p>
+      <p slot="why">
+        Power users and users searching for comparison (e.g. "which whey protein is best value?") want
+        to see a ranked list of all matching products — not just 2 recommended ones. Without a "View
+        all X results" link, the typeahead becomes a dead end for these users. It also acts as a
+        safety net for cases where the curated suggestions don't match the user's intent.
+      </p>
+      <p slot="fix">
+        Add a "View all results for '[query]'" link at the bottom of the typeahead panel, linking to
+        the search results page (<code>/search/?q={query}</code>). This is a low-effort engineering
+        change with high usability value.
+      </p>
+    </FindingCard>
+
+    <!-- LOW PRIORITY -->
+
+    <FindingCard
+      title="Typeahead suggestions render in all lowercase — inconsistent with brand typography"
+      viewport="Both"
+      priority="low"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="typeahead-lowercase-suggestions"
+    >
+      <p slot="what">
+        All autocomplete suggestions ("whey protein", "impact whey protein", "clear whey protein" etc.)
+        are rendered in lowercase even when the user has typed "Whey Protein" in title case. This is
+        a minor visual inconsistency but creates a mismatch between input and suggestions.
+      </p>
+      <p slot="why">
+        Minor brand polish issue. Sentence case or title case presentation would look more intentional
+        and match the product names shown in the "Recommendations" cards directly below.
+      </p>
+      <p slot="fix">
+        Apply <code>text-transform: capitalize</code> or <code>text-transform: sentence</code> via CSS
+        to the suggestion list items, or normalise at the data layer. Either approach is a small fix.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="aria-autocomplete attribute missing from search combobox"
+      viewport="Both"
+      priority="low"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="aria-autocomplete-missing"
+    >
+      <p slot="what">
+        The search input (<code>role="combobox"</code>) does not have an <code>aria-autocomplete</code>
+        attribute. The DOM shows <code>aria-haspopup="dialog"</code> and <code>aria-expanded</code>,
+        but <code>aria-autocomplete</code> is null. Additionally, <code>aria-expanded</code> remains
+        <code>"false"</code> when the suggestion panel is open — it is not toggled to <code>"true"</code>.
+      </p>
+      <p slot="why">
+        Screen reader users rely on <code>aria-autocomplete="list"</code> to understand that suggestions
+        will appear as they type. Without it, assistive technology may not announce the suggestion list,
+        making the search inaccessible for users with visual impairments. The static <code>aria-expanded="false"</code>
+        also means screen readers will not announce when the panel opens. This violates WCAG 2.1 AA
+        criterion 4.1.2 (Name, Role, Value).
+      </p>
+      <p slot="fix">
+        Set <code>aria-autocomplete="list"</code> on the combobox input. Ensure <code>aria-expanded</code>
+        is toggled to <code>"true"</code> when the suggestion panel is visible and back to <code>"false"</code>
+        when it closes. Also verify the suggestion panel has a valid <code>role="listbox"</code> or
+        <code>role="dialog"</code> with each suggestion as <code>role="option"</code>.
+      </p>
+    </FindingCard>
+
+    <FindingCard
+      title="Quick Buy button font size is 16px — off the 14px button spec"
+      viewport="Both"
+      priority="low"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="quickbuy-font-size"
+    >
+      <p slot="what">
+        The Quick Buy CTA button on the Whey Protein category page renders at <code>font-size: 16px</code>.
+        The Myprotein design token spec for buttons is <code>14px Bold</code>.
+      </p>
+      <p slot="why">
+        Minor design consistency deviation. At 16px the button text can look heavy against the surrounding
+        product card content and may subtly break the visual hierarchy of the card if other elements
+        are spec'd at 14px.
+      </p>
+      <p slot="fix">
+        Update the Quick Buy button component CSS to <code>font-size: 14px</code>. Verify no button
+        instances elsewhere have been hardcoded to 16px.
+      </p>
+    </FindingCard>
+
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Design Consistency</h2>
+    <p>
+      The search bar itself is visually clean — correct Figtree typeface, appropriate border radius, and a
+      clear focus ring on interaction. The Quick Buy button on the destination category page uses the correct
+      32px border radius and dark teal background, but is rendered at 16px font size rather than the specified
+      14px. The typeahead dropdown presentation is functional but rough: suggestion text is all-lowercase with
+      no type treatment hierarchy between sections ("Top Suggestions" vs "Recommendations"), and product cards
+      in the dropdown lack the pricing and rating elements present on every other product surface on the site.
+      The H1 on the redirected category page is 48px (on-scale) and renders correctly in Figtree. No hardcoded
+      colours were detected on the primary elements inspected.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Accessibility Notes</h2>
+    <p>
+      The most significant accessibility issue is the incomplete ARIA implementation on the search combobox.
+      The <code>aria-autocomplete</code> attribute is absent and <code>aria-expanded</code> is not updated
+      dynamically when the typeahead panel opens — both are required for WCAG 2.1 AA compliance under
+      criterion 4.1.2 (Name, Role, Value). This means screen reader users may receive no announcement that
+      suggestions are available, effectively making the search typeahead invisible to assistive technology.
+      The empty-search-submit bug (finding <code>empty-search-submit</code>) also presents an accessibility
+      concern: landing on a page with 1,982 undifferentiated results with no context message creates a
+      disorienting experience for any user, but particularly those relying on screen readers who must
+      navigate the result list to understand where they are.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Conversion Summary</h2>
+    <p>
+      Search is one of the highest-intent entry points on any ecommerce site — a user typing "Whey Protein"
+      has high purchase intent. The current experience has two conversion-critical failures: the accidental
+      empty-search submit drops users into an unusable 1,982-result dump, and the silent category redirect
+      strips the user of their search context entirely. Of the two, the silent redirect is the more
+      structurally damaging — it means every search that matches a known category bypasses the search
+      results page, removing relevance ranking, cross-category comparison, and query refinement. Users
+      who land on the Whey Protein Powders category page with no query context have lost the thread of
+      their search intent. The typeahead medium-priority issues (late trigger, no highlights, no price/ratings,
+      no view-all link) represent compounding friction that reduces the value of the typeahead investment —
+      all are fixable without backend changes. Together these issues make the search experience the weakest
+      conversion surface currently on the site.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Recommended Implementation Order</h2>
+    <ol class="recommendations">
+      <li>
+        <strong>Fix empty-search submit bug</strong> — prevent icon click from navigating when input is empty;
+        redirect focus to input and open typeahead with trending searches instead. (Engineering, ~1 day)
+      </li>
+      <li>
+        <strong>Persist query after search submission</strong> — whether redirecting to category or search results,
+        keep the typed query in the search input and add a visible "Results for 'X'" heading. (Engineering, ~1 day)
+      </li>
+      <li>
+        <strong>Add 'View all results' link to typeahead</strong> — link to <code>/search/?q={query}</code>
+        at the bottom of the dropdown. (Engineering, ~half day)
+      </li>
+      <li>
+        <strong>Lower typeahead trigger to 2 characters</strong> — with 150ms debounce. (Engineering, ~half day)
+      </li>
+      <li>
+        <strong>Add match highlighting to suggestions</strong> — bold the typed query within each suggestion string.
+        (Engineering, ~half day)
+      </li>
+      <li>
+        <strong>Add price and rating to typeahead product cards</strong> — spec required from design before build.
+        (Design + Engineering, ~2 days)
+      </li>
+      <li>
+        <strong>Fix ARIA on search combobox</strong> — add <code>aria-autocomplete="list"</code> and dynamic
+        <code>aria-expanded</code> toggle. (Engineering, ~half day)
+      </li>
+      <li>
+        <strong>Fix Quick Buy font size</strong> — set to 14px per design tokens. (Engineering, ~1 hour)
+      </li>
+    </ol>
+  </section>
+
+</ReportLayout>
+
+<style is:global>
+  .finding-card code {
+    font-family: Menlo, Monaco, 'Courier New', monospace;
+    font-size: 12px;
+    background: var(--color-bg-muted);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--color-text-heading);
+  }
+</style>
+
+<style>
+  .report-intro { margin-bottom: 40px; }
+  .report-h1 { font-size: 26px; font-weight: 800; color: var(--color-text-heading); line-height: 1.25; margin-bottom: 6px; }
+  .report-meta { font-size: 13px; color: var(--color-text-body); opacity: 0.65; margin-bottom: 14px; }
+  .report-summary { font-size: 15px; line-height: 1.7; color: var(--color-text-body); max-width: 680px; }
+  .findings-section { margin-bottom: 48px; }
+  .section-heading { font-size: 18px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(0, 57, 66, 0.1); }
+  .prose-section { margin-bottom: 36px; }
+  .prose-section p { font-size: 15px; line-height: 1.7; color: var(--color-text-body); }
+  .recommendations { padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .recommendations li { font-size: 14px; line-height: 1.6; color: var(--color-text-body); }
+</style>

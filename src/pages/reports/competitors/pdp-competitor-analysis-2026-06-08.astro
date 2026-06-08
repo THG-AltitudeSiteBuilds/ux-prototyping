@@ -9,12 +9,13 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
     <h1 class="report-h1">PDP Competitor Analysis</h1>
     <p class="report-meta">Product Detail Page &mdash; Analysed 8 June 2026</p>
     <p class="report-summary">
-      Four competitor PDPs were reviewed against Myprotein's Impact Whey Protein page:
+      Five competitor PDPs were reviewed against Myprotein's Impact Whey Protein page:
       The Protein Works (Whey Protein 360), Optimum Nutrition (Gold Standard 100% Whey),
-      Healf (Sprout Living Epic Protein), and Huel (Complete Protein). Nine opportunities
-      were identified across the four — spanning upsell architecture, review intelligence,
-      subscription framing, in-page personalisation, and flavour selector UX. None are
-      currently present on Myprotein's Impact Whey PDP.
+      Healf (Sprout Living Epic Protein), Huel (Complete Protein), and Bulk (Pure Whey
+      Protein). Eleven opportunities were identified across the five — spanning upsell
+      architecture, review intelligence, subscription framing, in-page personalisation,
+      flavour selector UX, and bundle purchasing mechanics. None are currently present on
+      Myprotein's Impact Whey PDP.
     </p>
   </section>
 
@@ -349,20 +350,97 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
 
   </section>
 
+  <!-- ─── Bulk ─────────────────────────────────────────────────────────── -->
+
+  <section class="competitor-section">
+    <div class="competitor-header">
+      <h2 class="competitor-name">Bulk</h2>
+      <p class="competitor-url">bulk.com &mdash; Pure Whey Protein™</p>
+    </div>
+
+    <OpportunityCard
+      title="Pre-checked 'Customers also bought' bundle with running total and single add-all CTA"
+      competitor="Bulk"
+      viewport="Both"
+      categories="conversion"
+      opportunityId="bulk-fbt-bundle"
+    >
+      <p slot="what">
+        Below the main product panel, Bulk shows a "Customers also bought" section with three
+        complementary products — each with a pre-ticked checkbox, product image, name, variant,
+        star rating, and discounted price. Below the three items, a live running total shows the
+        combined saving: <strong>"Total price £55.97 → £31.97"</strong>. A single full-width
+        green CTA — "Add selection to basket" — adds all ticked items to the basket in one click.
+        Users can untick any item to remove it and the total updates accordingly.
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/bulk-mid-desktop.png" alt="Bulk 'Customers also bought' section with pre-checked items, running total, and single add-all CTA" />
+      </p>
+      <p slot="why">
+        Pre-ticking the bundle items shifts the default behaviour: the user must actively opt out
+        of the additional products rather than opt in. Combined with the running total — which makes
+        the bundled saving immediately legible — and a single CTA, this pattern significantly
+        reduces the friction of multi-item purchases. A user buying whey protein is almost always
+        also a candidate for creatine, a shaker, or a complementary supplement; surfacing those
+        with one-click add removes the need for a second purchase journey.
+      </p>
+      <p slot="opportunity">
+        Myprotein's "Frequently bought with" section shows related products but functions as a
+        standard carousel without checkboxes, a running total, or a bundle CTA. Introducing a
+        pre-checked bundle mechanic — even for a curated set of two products (e.g. Impact Whey +
+        Creatine Monohydrate) — with a combined discounted total and a single "Add both to basket"
+        CTA would be a meaningful conversion lever, particularly for first-time buyers who are
+        likely building out their first supplement stack.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="Live Trustpilot feed with timestamped recent reviews on the PDP"
+      competitor="Bulk"
+      viewport="Desktop"
+      categories="trust"
+      opportunityId="bulk-live-trustpilot-feed"
+    >
+      <p slot="what">
+        Below the main product content, Bulk embeds a full Trustpilot widget showing the aggregate
+        score ("Excellent, based on 65,071 reviews") alongside four individual review cards pulled
+        in live from Trustpilot. Each card shows the reviewer's name, star rating, review title,
+        truncated review text, a "Verified" badge, and a timestamp — "6 hours ago", "7 hours ago",
+        "8 hours ago". The section notes "Showing our 4 &amp; 5 star reviews."
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/bulk-lower-desktop.png" alt="Bulk live Trustpilot feed showing four timestamped recent review cards embedded in the PDP" />
+      </p>
+      <p slot="why">
+        An aggregate score tells a user what others think; a live feed of recent timestamped reviews
+        tells them that people are buying and reviewing right now. The recency signal — "6 hours ago"
+        — is a form of demand proof that a static score cannot provide. Verified badges and named
+        reviewers add authenticity. This pattern is particularly effective for new visitors arriving
+        from paid ads (like the Bulk URL with UTM parameters) who have no prior brand familiarity
+        and need trust established quickly.
+      </p>
+      <p slot="opportunity">
+        Myprotein surfaces a Trustpilot aggregate score on the PDP but does not embed a live feed
+        of recent individual reviews. Given Myprotein's review volume (210,000+), a live widget
+        showing the most recent 3–4 reviews would be highly credible — there will always be a
+        review from today or yesterday. This is a low-effort integration using the standard
+        Trustpilot embed widget, and would make the trust signal on the PDP substantially more
+        dynamic than a static score badge.
+      </p>
+    </OpportunityCard>
+
+  </section>
+
   <!-- ─── Where MP Leads ─────────────────────────────────────────────────── -->
 
   <section class="prose-section">
     <h2 class="section-heading">Areas Where Myprotein Already Leads</h2>
     <p>
       Myprotein's review volume (210,000+ on Impact Whey alone) is a trust advantage none of
-      these four competitors come close to matching — ON has ~1,725, TPW has 135, Healf's product
-      has 27, and Huel does not surface a review count on the PDP. Myprotein's flavour range (50+
-      for Impact Whey) far exceeds all four. The Trustpilot aggregate score is already surfaced on
-      the Myprotein PDP — this matches or beats TPW and ON. Myprotein's structured content tabs
-      (nutrition, ingredients, key benefits, reviews) give users more ways to explore detail than
-      most competitor pages reviewed. Huel has a more developed brand storytelling approach
-      (celebrity endorsements, press mentions, expert citations) but this reflects a different
-      marketing budget and positioning rather than a PDP UX pattern Myprotein is missing.
+      these five competitors come close to matching — Bulk has 65,071 Trustpilot reviews
+      (brand-level), ON has ~1,725 on this product, TPW has 135, Healf's product has 27, and Huel
+      does not surface a review count on the PDP. Myprotein's flavour range (50+ for Impact Whey)
+      far exceeds all five. The Trustpilot aggregate score is already surfaced on the Myprotein
+      PDP. Myprotein's structured content tabs (nutrition, ingredients, key benefits, reviews)
+      give users more ways to explore detail without navigating away than most competitor pages
+      reviewed. Huel's brand storytelling depth (celebrity endorsements, press mentions) reflects
+      a different marketing budget and positioning — not a PDP UX gap for Myprotein to close.
     </p>
   </section>
 
@@ -412,6 +490,18 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
       <div class="screenshot-col">
         <p class="screenshot-label">Huel — Desktop</p>
         <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/huel-full-desktop.png" alt="Huel Complete Protein PDP desktop" />
+      </div>
+      <div class="screenshot-col">
+        <p class="screenshot-label">Myprotein — Desktop</p>
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/myprotein-full-desktop.png" alt="Myprotein Impact Whey Protein PDP desktop" />
+      </div>
+    </div>
+
+    <h3 class="screenshot-competitor">Bulk</h3>
+    <div class="screenshot-grid">
+      <div class="screenshot-col">
+        <p class="screenshot-label">Bulk — Desktop</p>
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/bulk-full-desktop.png" alt="Bulk Pure Whey Protein PDP desktop" />
       </div>
       <div class="screenshot-col">
         <p class="screenshot-label">Myprotein — Desktop</p>

@@ -9,13 +9,14 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
     <h1 class="report-h1">PDP Competitor Analysis</h1>
     <p class="report-meta">Product Detail Page &mdash; Analysed 8 June 2026</p>
     <p class="report-summary">
-      Five competitor PDPs were reviewed against Myprotein's Impact Whey Protein page:
+      Six competitor PDPs were reviewed against Myprotein's Impact Whey Protein page:
       The Protein Works (Whey Protein 360), Optimum Nutrition (Gold Standard 100% Whey),
-      Healf (Sprout Living Epic Protein), Huel (Complete Protein), and Bulk (Pure Whey
-      Protein). Twelve opportunities were identified — eleven sourced from competitor
-      patterns, plus one latent opportunity derived from comparing flavour ranges across
-      all five: Myprotein's 50+ flavours is the widest range in the category by a large
-      margin, but the PDP makes almost no conversion use of it.
+      Healf (Sprout Living Epic Protein), Huel (Complete Protein), Bulk (Pure Whey
+      Protein), and Naked Nutrition (Chocolate Whey Protein Powder). Fourteen opportunities
+      were identified — thirteen sourced from competitor patterns, plus one latent opportunity
+      derived from comparing flavour ranges across all six: Myprotein's 50+ flavours is the
+      widest range in the category by a large margin, but the PDP makes almost no conversion
+      use of it.
     </p>
   </section>
 
@@ -427,6 +428,85 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
 
   </section>
 
+  <!-- ─── Naked Nutrition ──────────────────────────────────────────────── -->
+
+  <section class="competitor-section">
+    <div class="competitor-header">
+      <h2 class="competitor-name">Naked Nutrition</h2>
+      <p class="competitor-url">nakednutrition.com &mdash; Chocolate Whey Protein Powder (2280g)</p>
+    </div>
+
+    <OpportunityCard
+      title="'% would recommend' metric displayed alongside the star rating"
+      competitor="Naked Nutrition"
+      viewport="Both"
+      categories="trust"
+      opportunityId="naked-nutrition-recommend-pct"
+    >
+      <p slot="what">
+        In the reviews section header, Naked Nutrition displays two parallel metrics at equal
+        visual weight: the aggregate star rating ("4.8 ★ Based on 7,479 reviews") on the left,
+        and "99% would recommend these products" on the right. The recommendation percentage
+        sits at the same typographic scale as the rating — both are the first things a user
+        reads when they reach the reviews section.
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/naked-nutrition-recommend-metric-detail.png" alt="Naked Nutrition reviews section showing '4.8 stars based on 7,479 reviews' alongside '99% would recommend these products' at equal visual weight" />
+      </p>
+      <p slot="why">
+        A star rating tells a user how well-liked a product is on a numeric scale. A
+        recommendation percentage tells them something more human: would the people who bought
+        this buy it again, or tell a friend? These are different questions with different
+        psychological weight. A user who is undecided is often asking "will I regret this?" — and
+        "99% of buyers would recommend it" answers that question more directly than "4.8 out of 5."
+        The two metrics complement rather than duplicate each other.
+      </p>
+      <p slot="opportunity">
+        Myprotein surfaces a Trustpilot aggregate score on the PDP but no recommendation
+        percentage. With 210,000+ reviews on Impact Whey, Myprotein almost certainly has a
+        high "would recommend" rate that would make this signal very credible. Adding a
+        "X% of customers would recommend this product" line beside or below the aggregate
+        score — ideally sourced from review platform data already collected — would add a
+        distinct and emotionally resonant trust signal at minimal implementation cost.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="Review cards that show which specific variant the reviewer purchased"
+      competitor="Naked Nutrition"
+      viewport="Both"
+      categories="trust,discovery"
+      opportunityId="naked-nutrition-review-variant-attr"
+    >
+      <p slot="what">
+        Each review card on Naked Nutrition shows a "Reviewing" block beneath the reviewer's
+        name: a thumbnail of the specific product, the product name, and the exact variant
+        purchased — e.g. "Vanilla Whey Protein Powder | Naked Vanilla Whey – 5LB". This appears
+        as a distinct sub-card within the reviewer metadata column, before the review text.
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/naked-nutrition-review-variant-detail.png" alt="Naked Nutrition review card showing 'Reviewing: Vanilla Whey Protein Powder | Naked Vanilla Whey – 5LB' with product thumbnail beneath the reviewer name" />
+      </p>
+      <p slot="why">
+        A taste review is only meaningful if you know which flavour the reviewer bought. On a
+        product with multiple variants, aggregating all reviews into a single undifferentiated
+        list degrades the usefulness of every review: a "great flavour!" comment from someone
+        who bought Vanilla is noise to a shopper deciding between Chocolate Brownie and Salted
+        Caramel. Showing the purchased variant turns each review into a contextually relevant
+        data point rather than a generic endorsement. It also subtly reinforces trust — it
+        confirms the reviewer actually bought and received a specific product.
+      </p>
+      <p slot="opportunity">
+        Myprotein's Impact Whey reviews are aggregated across all 50+ flavours and multiple
+        sizes with no variant attribution displayed. A user choosing between flavours has no
+        way to filter or identify which reviews are relevant to their choice. Adding the
+        purchased variant (flavour + size) as a metadata line on each review card — even as a
+        small text label — would make the review corpus significantly more useful for
+        flavour-undecided shoppers. This is particularly high-value given the latent flavour
+        range opportunity already identified: if Myprotein surfaces 50+ flavours as a
+        conversion argument, variant-attributed reviews become the evidence layer that makes
+        that argument credible.
+      </p>
+    </OpportunityCard>
+
+  </section>
+
   <!-- ─── Latent Myprotein Opportunity ─────────────────────────────────── -->
 
   <section class="competitor-section">
@@ -544,6 +624,18 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
       <div class="screenshot-col">
         <p class="screenshot-label">Huel — Desktop</p>
         <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/huel-full-desktop.png" alt="Huel Complete Protein PDP desktop" />
+      </div>
+      <div class="screenshot-col">
+        <p class="screenshot-label">Myprotein — Desktop</p>
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/myprotein-full-desktop.png" alt="Myprotein Impact Whey Protein PDP desktop" />
+      </div>
+    </div>
+
+    <h3 class="screenshot-competitor">Naked Nutrition</h3>
+    <div class="screenshot-grid">
+      <div class="screenshot-col">
+        <p class="screenshot-label">Naked Nutrition — Desktop</p>
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/naked-nutrition-full-desktop.png" alt="Naked Nutrition Chocolate Whey Protein Powder PDP desktop" />
       </div>
       <div class="screenshot-col">
         <p class="screenshot-label">Myprotein — Desktop</p>

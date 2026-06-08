@@ -1,0 +1,170 @@
+---
+const {
+  title,
+  competitor,
+  viewport = 'Both',
+  categories = '',
+  opportunityId,
+} = Astro.props;
+
+const categoryList = categories.split(',').map(c => c.trim()).filter(Boolean);
+
+const categoryColours: Record<string, string> = {
+  conversion:      '#E8F5E9',
+  trust:           '#E3F2FD',
+  discovery:       '#FFF3E0',
+  content:         '#F3E5F5',
+  personalisation: '#FCE4EC',
+  mobile:          '#E0F7FA',
+};
+---
+
+<div class="opportunity-card" id={opportunityId}>
+  <div class="card-header">
+    <h3 class="card-title">{title}</h3>
+    <div class="card-meta">
+      <span class="meta-competitor">{competitor}</span>
+      <span class="meta-viewport">{viewport}</span>
+    </div>
+  </div>
+
+  {categoryList.length > 0 && (
+    <div class="card-categories">
+      {categoryList.map(cat => (
+        <span
+          class="category-tag"
+          style={`background: ${categoryColours[cat] ?? '#F5F5F5'}`}
+        >
+          {cat}
+        </span>
+      ))}
+    </div>
+  )}
+
+  <div class="card-section">
+    <p class="section-label">What they do</p>
+    <div class="section-content">
+      <slot name="what" />
+    </div>
+  </div>
+
+  <div class="card-section">
+    <p class="section-label">Why it works</p>
+    <div class="section-content">
+      <slot name="why" />
+    </div>
+  </div>
+
+  <div class="card-section card-section--opportunity">
+    <p class="section-label">Opportunity for Myprotein</p>
+    <div class="section-content">
+      <slot name="opportunity" />
+    </div>
+  </div>
+</div>
+
+<style>
+  .opportunity-card {
+    border: 1px solid rgba(0, 57, 66, 0.12);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    background: var(--color-bg-card, #fff);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .card-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .meta-competitor {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-text-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    opacity: 0.5;
+  }
+
+  .meta-viewport {
+    font-size: 11px;
+    color: var(--color-text-body);
+    opacity: 0.45;
+  }
+
+  .card-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .category-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    color: #333;
+    text-transform: capitalize;
+    letter-spacing: 0.02em;
+  }
+
+  .card-section {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(0, 57, 66, 0.06);
+  }
+
+  .card-section--opportunity {
+    background: rgba(0, 57, 66, 0.03);
+    border-radius: 8px;
+    padding: 14px 16px;
+    border: none;
+    margin-top: 16px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-body);
+    opacity: 0.5;
+    margin: 0 0 6px 0;
+  }
+
+  .section-content {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+  }
+
+  .section-content p { margin: 0; }
+
+  .section-content img {
+    display: block;
+    width: 100%;
+    border-radius: 8px;
+    margin-top: 12px;
+    border: 1px solid rgba(0,57,66,0.08);
+  }
+</style>

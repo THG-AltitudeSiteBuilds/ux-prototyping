@@ -1,0 +1,189 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+import OpportunityCard from '@/components/OpportunityCard.astro';
+---
+
+<ReportLayout title="The Protein Works vs Myprotein — PDP Competitor Analysis">
+
+  <section class="report-intro">
+    <h1 class="report-h1">Competitor Analysis: The Protein Works vs Myprotein</h1>
+    <p class="report-meta">Product Detail Page &mdash; Analysed 8 June 2026</p>
+    <p class="report-summary">
+      The Protein Works positions itself as a science-led, flavour-obsessed protein brand targeting
+      serious fitness consumers who want transparency and range. Their Whey Protein 360 PDP was
+      compared against Myprotein's Impact Whey Protein PDP — the closest equivalent entry-level
+      whey product. Three patterns stood out where TPW's PDP earns conversion advantages Myprotein's
+      current PDP doesn't replicate: an in-page product tier comparison table that drives informed
+      upsell, a rating distribution breakdown that builds trust through transparency, and customer
+      quotes embedded directly in cross-sell product cards.
+    </p>
+  </section>
+
+  <section class="opportunities-section">
+    <h2 class="section-heading">Opportunities for Myprotein</h2>
+
+    <OpportunityCard
+      title="In-page product tier comparison table"
+      competitor="The Protein Works"
+      viewport="Desktop"
+      categories="conversion,discovery"
+      opportunityId="tier-comparison-table"
+    >
+      <p slot="what">
+        Below the main product content, TPW includes a section titled "Worth the upgrade? 100 per cent."
+        which presents a structured side-by-side table comparing their three Whey Protein 360 tiers
+        (BLACK, GOLD, PLATINUM) across ~10 nutritional attributes: price per serving, protein per
+        serving, number of protein sources, calories, vitamins &amp; minerals, approved health benefits,
+        flavour count, premium flavours, digestive enzymes, and GLP-1 compatibility. Each tier is
+        labelled with a purchase intent framing ("Best Price", "Best Value", "Best Rated") and uses
+        check/cross marks for boolean attributes. The table sits on a dark background and links
+        directly to each tier's product page.
+        <img src="/assets/reports/competitors/the-protein-works-vs-myprotein-pdp-2026-06-08/tpw-tier-comparison-detail.png" alt="TPW in-page product tier comparison table showing BLACK, GOLD and PLATINUM tiers side by side" />
+      </p>
+      <p slot="why">
+        A user landing on the entry-level whey page is often mid-decision — they know they want whey
+        protein but haven't committed to a tier or brand. Showing the upgrade comparison on the same
+        page captures that indecision in favour of a higher-value product without requiring navigation.
+        The framing ("Best Price" vs "Best Value" vs "Best Rated") is deliberately chosen: it doesn't
+        make the entry tier look inferior, it just makes the middle tier feel obviously worth the small
+        price increase. This is a well-established CRO pattern — exposing tiered options at the point
+        of consideration increases average order value and reduces cross-session drop-off.
+      </p>
+      <p slot="opportunity">
+        Myprotein sells Impact Whey, Impact Whey Advanced, and THE Whey as a de facto tier stack, but
+        the PDP makes no attempt to surface this. A user on the Impact Whey page has no in-page prompt
+        to consider Impact Whey Advanced (more protein, added BCAAs) without navigating elsewhere.
+        Adding a compact "Compare the range" module — even as a 2-column card comparison rather than
+        a full table — to the Impact Whey PDP could intercept undecided shoppers and move them toward
+        a higher-margin product. The labelling approach ("Best Value", "Most Popular") is worth
+        borrowing directly.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="Rating distribution breakdown with percentage bars"
+      competitor="The Protein Works"
+      viewport="Both"
+      categories="trust"
+      opportunityId="rating-breakdown-bars"
+    >
+      <p slot="what">
+        In the reviews section, TPW displays a full percentage distribution per star rating alongside
+        the aggregate score. Each rating tier (1–5 stars) has a horizontal bar and an explicit
+        percentage: 5★ 40%, 4★ 4%, 3★ 8%, 2★ 11%, 1★ 37%. Crucially, the distribution is shown
+        even when it is unflattering — 37% of reviews are 1-star on this particular product, and
+        they make no attempt to hide or truncate this.
+        <img src="/assets/reports/competitors/the-protein-works-vs-myprotein-pdp-2026-06-08/tpw-reviews-breakdown-detail.png" alt="TPW rating distribution breakdown showing percentage bars per star rating" />
+      </p>
+      <p slot="why">
+        Showing the full distribution, including negative skews, is paradoxically a trust signal.
+        Users who see only an aggregate score are left to wonder whether it reflects a genuine spread
+        or an artificially managed set. A visible distribution lets customers self-qualify: a user
+        who filters for 1-star reviews to understand the failure modes is more informed and therefore
+        less likely to return the product. Hiding the distribution invites suspicion; showing it
+        honestly reduces it.
+      </p>
+      <p slot="opportunity">
+        Myprotein shows an aggregate rating and total review count (4.4 stars, 210k+ reviews) but
+        does not surface a star-by-star percentage breakdown on the PDP. With 210,000+ reviews,
+        Myprotein has far more data to make this credible and useful than TPW does. A distribution
+        bar chart in the reviews section — especially showing the dominant 4- and 5-star clusters
+        that Impact Whey likely has — would give users the transparency signal without the risk
+        of undermining confidence.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="Customer quote embedded in cross-sell product cards"
+      competitor="The Protein Works"
+      viewport="Both"
+      categories="trust,conversion"
+      opportunityId="crosssell-customer-quotes"
+    >
+      <p slot="what">
+        In the "Customers Also Viewed" section, each product card includes a short pulled customer
+        quote alongside the standard rating, price, and CTA. Example: "These are genuinely the best
+        protein bars I've ever tasted! I went for the peanut punk... — DanStan". The quote appears
+        between the star rating and the price, in small italic text. Each card also has two CTAs:
+        a secondary "Quick Buy" and a primary "Product Details".
+        <img src="/assets/reports/competitors/the-protein-works-vs-myprotein-pdp-2026-06-08/tpw-crosssell-detail.png" alt="TPW cross-sell product cards showing embedded customer quotes alongside ratings and CTAs" />
+      </p>
+      <p slot="why">
+        Cross-sell carousels typically have low engagement because they feel transactional — just
+        another product grid. A customer quote adds a human signal that differentiates each product
+        beyond its image and price. The quote doesn't need to be the best review ever written; its
+        function is to give the user a lived-experience anchor at the moment of consideration, before
+        they've committed to clicking through. It also reinforces that these products have been
+        bought and validated by real customers, not just algorithmically surfaced.
+      </p>
+      <p slot="opportunity">
+        Myprotein's "Recommended for you" carousel shows product images, names, discounted pricing,
+        and a Quick Buy button — but no social proof on the card itself. Given that Myprotein has
+        one of the largest review datasets in the UK sports nutrition market, pulling a short
+        highlighted review into each cross-sell card is feasible and would make the carousel feel
+        less generic. Even showing a review snippet for the top-reviewed variant of each product
+        would meaningfully increase the perceived confidence of clicking through.
+      </p>
+    </OpportunityCard>
+
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Areas Where Myprotein Already Leads</h2>
+    <p>
+      Myprotein's Impact Whey PDP has a meaningfully larger review base (210,000+ vs TPW's 135 on
+      this specific product), which gives far greater social proof weight at a glance. Myprotein
+      also surfaces a Trustpilot aggregate score on the PDP, as does TPW — so this is a draw, not
+      a gap. Myprotein's flavour range for Impact Whey is substantially wider (50+ flavours) than
+      TPW's 5, which is a genuine product-level advantage that the PDP communicates through its
+      flavour selector. The size selector on Myprotein's PDP is also standard and clear. TPW's
+      per-serving price display on size options (£0.40–£0.55 per shake) is the one area where
+      their size selector goes further than Myprotein's — but this is a marginal gap compared to
+      the three opportunities above.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Competitor Context</h2>
+    <p>
+      The Protein Works is a UK-based sports nutrition brand founded in 2012 that has built its
+      identity around flavour innovation, nutritional transparency, and a tiered product architecture
+      (BLACK / GOLD / PLATINUM). Their audience skews toward gym-regular consumers who research
+      before buying and value detailed ingredient breakdowns. Unlike Myprotein, which competes on
+      scale and accessibility, TPW positions itself as a considered purchase. Their PDP reflects this:
+      it is content-heavy, narrative-driven, and designed to justify a buying decision rather than
+      simply present product information. This context explains why the tier comparison table and
+      rating transparency patterns exist — they serve a more deliberative shopper, not an impulse buyer.
+    </p>
+  </section>
+
+  <section class="screenshots-section">
+    <h2 class="section-heading">Page Screenshots</h2>
+    <div class="screenshot-grid">
+      <div class="screenshot-col">
+        <p class="screenshot-label">The Protein Works — Desktop</p>
+        <img src="/assets/reports/competitors/the-protein-works-vs-myprotein-pdp-2026-06-08/tpw-full-desktop.png" alt="The Protein Works Whey Protein 360 PDP full page desktop screenshot" />
+      </div>
+      <div class="screenshot-col">
+        <p class="screenshot-label">Myprotein — Desktop</p>
+        <img src="/assets/reports/competitors/the-protein-works-vs-myprotein-pdp-2026-06-08/myprotein-full-desktop.png" alt="Myprotein Impact Whey Protein PDP full page desktop screenshot" />
+      </div>
+    </div>
+  </section>
+
+</ReportLayout>
+
+<style>
+  .report-intro { margin-bottom: 40px; }
+  .report-h1 { font-size: 26px; font-weight: 800; color: var(--color-text-heading); line-height: 1.25; margin-bottom: 6px; }
+  .report-meta { font-size: 13px; color: var(--color-text-body); opacity: 0.65; margin-bottom: 14px; }
+  .report-summary { font-size: 15px; line-height: 1.7; color: var(--color-text-body); max-width: 680px; }
+  .opportunities-section { margin-bottom: 48px; }
+  .section-heading { font-size: 18px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(0, 57, 66, 0.1); }
+  .prose-section { margin-bottom: 36px; }
+  .prose-section p { font-size: 15px; line-height: 1.7; color: var(--color-text-body); }
+  .screenshot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .screenshot-col img { width: 100%; border-radius: 8px; border: 1px solid rgba(0,57,66,0.08); display: block; margin-top: 8px; }
+  .screenshot-label { font-size: 12px; font-weight: 600; color: var(--color-text-body); opacity: 0.55; margin: 0; text-transform: uppercase; letter-spacing: 0.05em; }
+  .screenshots-section { margin-top: 48px; }
+</style>

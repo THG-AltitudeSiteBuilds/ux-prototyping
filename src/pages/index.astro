@@ -1,7 +1,505 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Welcome from "../components/Welcome.astro";
+import '@/styles/design-system.css';
 ---
-<Layout title="Welcome to Altitude">
-<Welcome />
-</Layout>
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Myprotein UX Intelligence — agent-powered audits, competitor analysis and design QA for the Myprotein design team." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet" />
+    <title>UX Intelligence — Myprotein Design</title>
+  </head>
+  <body>
+
+    <!-- ─── Nav ──────────────────────────────────────────────────────────── -->
+    <nav class="site-nav">
+      <div class="nav-inner">
+        <span class="nav-brand">UX Intelligence</span>
+        <div class="nav-links">
+          <a href="/reports" class="nav-link">UX Reviews</a>
+          <a href="/reports/competitors" class="nav-link">Competitor Analysis</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- ─── Hero ─────────────────────────────────────────────────────────── -->
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="hero-eyebrow">Myprotein Design Team</p>
+        <h1 class="hero-heading">UX Intelligence<br />powered by Claude</h1>
+        <p class="hero-body">
+          A set of AI agents that audit Myprotein pages, analyse competitor patterns,
+          QA designs against live builds, and set up new design projects — all from
+          within Claude Code or Claude.ai.
+        </p>
+        <div class="hero-actions">
+          <a href="/reports" class="btn btn--primary">View UX Reviews</a>
+          <a href="/reports/competitors" class="btn btn--secondary">Competitor Analysis</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Agents ────────────────────────────────────────────────────────── -->
+    <section class="section">
+      <div class="section-inner">
+        <h2 class="section-heading">Available agents</h2>
+        <p class="section-sub">
+          Each agent is a skill that runs inside Claude. Type the trigger phrase in
+          Claude Code or Claude.ai to invoke it.
+        </p>
+
+        <div class="agent-grid">
+
+          <div class="agent-card">
+            <div class="agent-icon agent-icon--review">↗</div>
+            <div class="agent-body">
+              <h3 class="agent-name">UX Review</h3>
+              <p class="agent-trigger"><code>/myprotein-ux-review</code></p>
+              <p class="agent-desc">
+                Audits any Myprotein page for UX, accessibility and conversion
+                opportunities. Paste a myprotein.com URL and get a structured
+                report — findings rated by severity, with screenshots and specific
+                recommendations.
+              </p>
+              <p class="agent-trigger-hint">
+                Trigger: <em>"review this Myprotein page"</em>, <em>"audit the checkout"</em>,
+                or paste any myprotein.com URL.
+              </p>
+            </div>
+          </div>
+
+          <div class="agent-card">
+            <div class="agent-icon agent-icon--competitor">⇄</div>
+            <div class="agent-body">
+              <h3 class="agent-name">Competitor Analysis</h3>
+              <p class="agent-trigger"><code>/competitor-analysis</code></p>
+              <p class="agent-desc">
+                Reviews a competitor page against the equivalent Myprotein page.
+                Surfaces only genuine gaps — patterns the competitor does that
+                Myprotein doesn't, or doesn't do as well. Zero findings is a valid
+                result.
+              </p>
+              <p class="agent-trigger-hint">
+                Trigger: <em>"compare Gymshark's PDP to ours"</em>,
+                <em>"what does Bulk do well on their basket?"</em>,
+                or paste a competitor URL.
+              </p>
+            </div>
+          </div>
+
+          <div class="agent-card">
+            <div class="agent-icon agent-icon--qa">✓</div>
+            <div class="agent-body">
+              <h3 class="agent-name">Design QA</h3>
+              <p class="agent-trigger"><code>/design-qa</code></p>
+              <p class="agent-desc">
+                Compares a Figma design to a live or staging build. Flags visual
+                diffs, spacing and type inconsistencies, and checks that interactive
+                elements — buttons, links, forms, nav — work correctly.
+              </p>
+              <p class="agent-trigger-hint">
+                Trigger: <em>"QA this"</em>, <em>"does the build match the design?"</em>,
+                or provide both a Figma URL and a live URL.
+              </p>
+            </div>
+          </div>
+
+          <div class="agent-card">
+            <div class="agent-icon agent-icon--prep">◎</div>
+            <div class="agent-body">
+              <h3 class="agent-name">Project Prep</h3>
+              <p class="agent-trigger"><code>/myprotein-prep-agent</code></p>
+              <p class="agent-desc">
+                Sets up a new design project from scratch. Runs competitor research,
+                creates a Figma file with the right structure, and drafts a project
+                brief — so you can start designing rather than setting up.
+              </p>
+              <p class="agent-trigger-hint">
+                Trigger: <em>"prep for the basket redesign"</em>,
+                <em>"set up a Figma file for the checkout"</em>,
+                or <em>"start a new design project"</em>.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── Reports ──────────────────────────────────────────────────────── -->
+    <section class="section section--alt">
+      <div class="section-inner">
+        <h2 class="section-heading">Reports</h2>
+        <p class="section-sub">
+          Every agent run that produces a report is saved here. Browse by type.
+        </p>
+
+        <div class="report-hub-grid">
+
+          <a href="/reports" class="report-hub-card">
+            <div class="report-hub-header">
+              <span class="report-hub-type">UX Reviews</span>
+            </div>
+            <h3 class="report-hub-title">Myprotein page audits</h3>
+            <p class="report-hub-desc">
+              Page-by-page UX and conversion reviews across Myprotein — PDP, PLP,
+              basket, search, quick buy, and more. Each report shows findings with
+              severity ratings and screenshots.
+            </p>
+            <span class="report-hub-cta">Browse reports →</span>
+          </a>
+
+          <a href="/reports/competitors" class="report-hub-card">
+            <div class="report-hub-header">
+              <span class="report-hub-type">Competitor Analysis</span>
+            </div>
+            <h3 class="report-hub-title">Competitor intelligence</h3>
+            <p class="report-hub-desc">
+              Structured comparisons of competitor pages against Myprotein equivalents.
+              The current PDP report covers 6 brands and 14 opportunities — from
+              TPW and Optimum Nutrition to Naked Nutrition.
+            </p>
+            <span class="report-hub-cta">Browse reports →</span>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── How it works ─────────────────────────────────────────────────── -->
+    <section class="section">
+      <div class="section-inner">
+        <h2 class="section-heading">How it works</h2>
+        <p class="section-sub">Three steps, from prompt to published report.</p>
+
+        <ol class="steps">
+          <li class="step">
+            <span class="step-number">1</span>
+            <div class="step-body">
+              <h3 class="step-title">Open Claude Code or Claude.ai</h3>
+              <p class="step-desc">
+                In this repo, Claude Code has the agents installed. In Claude.ai,
+                the skills are available via the cowork setup. Either way, just
+                start a new conversation.
+              </p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-number">2</span>
+            <div class="step-body">
+              <h3 class="step-title">Trigger an agent</h3>
+              <p class="step-desc">
+                Say what you want to do in plain English — or use a slash command
+                directly. The agent picks up context from any URLs or Figma links
+                you share in the same message.
+              </p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-number">3</span>
+            <div class="step-body">
+              <h3 class="step-title">Report is committed and deployed</h3>
+              <p class="step-desc">
+                The agent writes the report, commits the screenshots and Astro file
+                to this repo, and the site redeploys automatically. The report is
+                live within a few minutes.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ─── Footer ───────────────────────────────────────────────────────── -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span class="footer-brand">UX Intelligence — Myprotein Design</span>
+        <span class="footer-note">Powered by Claude · Built on THG Altitude</span>
+      </div>
+    </footer>
+
+  </body>
+</html>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--color-bg-page);
+    color: var(--color-text-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Nav ─────────────────────────────────────────────────────── */
+  .site-nav {
+    background: var(--color-primary);
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+  .nav-brand {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-mint);
+    letter-spacing: 0.02em;
+  }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-link {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .nav-link:hover { color: #fff; }
+
+  /* ── Hero ────────────────────────────────────────────────────── */
+  .hero {
+    background: var(--color-primary);
+    padding: 80px 24px 96px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    right: -120px;
+    top: -80px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(148,229,181,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-inner {
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .hero-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-mint);
+    margin-bottom: 16px;
+  }
+  .hero-heading {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+  .hero-body {
+    font-size: 17px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.72);
+    max-width: 560px;
+    margin-bottom: 36px;
+  }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 24px;
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn--primary { background: var(--color-mint); color: var(--color-primary); }
+  .btn--secondary { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
+
+  /* ── Sections ────────────────────────────────────────────────── */
+  .section { padding: 72px 24px; }
+  .section--alt { background: #F0F4F3; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-heading {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--color-text-heading);
+    margin-bottom: 8px;
+  }
+  .section-sub {
+    font-size: 15px;
+    color: var(--color-text-body);
+    opacity: 0.7;
+    margin-bottom: 40px;
+    max-width: 520px;
+  }
+
+  /* ── Agent grid ──────────────────────────────────────────────── */
+  .agent-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .agent-card {
+    background: var(--color-bg-card);
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .agent-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .agent-icon--review     { background: #E3F2FD; color: #1565C0; }
+  .agent-icon--competitor { background: #FFF3E0; color: #E65100; }
+  .agent-icon--qa         { background: #E8F5E9; color: #2E7D32; }
+  .agent-icon--prep       { background: #F3E5F5; color: #6A1B9A; }
+
+  .agent-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 2px;
+  }
+  .agent-trigger code {
+    font-size: 12px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    background: var(--color-bg-muted);
+    color: var(--color-primary);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  .agent-desc {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+  }
+  .agent-trigger-hint {
+    font-size: 12px;
+    color: var(--color-text-body);
+    opacity: 0.6;
+    line-height: 1.5;
+    border-top: 1px solid rgba(0,57,66,0.07);
+    padding-top: 12px;
+    margin-top: auto;
+  }
+
+  /* ── Report hub ──────────────────────────────────────────────── */
+  .report-hub-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+  }
+  .report-hub-card {
+    background: var(--color-bg-card);
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    padding: 28px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+  }
+  .report-hub-card:hover {
+    border-color: rgba(0,57,66,0.3);
+    box-shadow: 0 6px 20px rgba(0,57,66,0.09);
+    transform: translateY(-2px);
+  }
+  .report-hub-type {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-primary);
+    opacity: 0.5;
+  }
+  .report-hub-title {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+  }
+  .report-hub-desc {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+    flex: 1;
+  }
+  .report-hub-cta {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-top: 8px;
+  }
+
+  /* ── Steps ───────────────────────────────────────────────────── */
+  .steps { list-style: none; display: flex; flex-direction: column; max-width: 680px; }
+  .step {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    padding: 28px 0;
+    border-bottom: 1px solid rgba(0,57,66,0.08);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-number {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-mint);
+    font-size: 14px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+  .step-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 6px;
+  }
+  .step-desc {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+  }
+
+  /* ── Footer ──────────────────────────────────────────────────── */
+  .site-footer { background: var(--color-primary); padding: 24px; }
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .footer-brand { font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.7); }
+  .footer-note  { font-size: 12px; color: rgba(255,255,255,0.4); }
+</style>

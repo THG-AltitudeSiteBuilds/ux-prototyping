@@ -9,11 +9,12 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
     <h1 class="report-h1">PDP Competitor Analysis</h1>
     <p class="report-meta">Product Detail Page &mdash; Analysed 8 June 2026</p>
     <p class="report-summary">
-      Three competitor PDPs were reviewed against Myprotein's Impact Whey Protein page:
+      Four competitor PDPs were reviewed against Myprotein's Impact Whey Protein page:
       The Protein Works (Whey Protein 360), Optimum Nutrition (Gold Standard 100% Whey),
-      and Healf (Sprout Living Epic Protein). Seven opportunities were identified across
-      the three — spanning upsell architecture, review intelligence, subscription framing,
-      and in-page personalisation. None are currently present on Myprotein's Impact Whey PDP.
+      Healf (Sprout Living Epic Protein), and Huel (Complete Protein). Nine opportunities
+      were identified across the four — spanning upsell architecture, review intelligence,
+      subscription framing, in-page personalisation, and flavour selector UX. None are
+      currently present on Myprotein's Impact Whey PDP.
     </p>
   </section>
 
@@ -271,19 +272,97 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
 
   </section>
 
+  <!-- ─── Huel ──────────────────────────────────────────────────────────── -->
+
+  <section class="competitor-section">
+    <div class="competitor-header">
+      <h2 class="competitor-name">Huel</h2>
+      <p class="competitor-url">uk.huel.com &mdash; Complete Protein</p>
+    </div>
+
+    <OpportunityCard
+      title="Flavour selector as a visual list with photography and bestseller label"
+      competitor="Huel"
+      viewport="Both"
+      categories="discovery,conversion"
+      opportunityId="huel-flavour-selector"
+    >
+      <p slot="what">
+        Huel presents flavour options as a vertical list of cards rather than colour swatches.
+        Each card shows a product lifestyle photograph, the flavour name, the price per bag
+        (£22.50/bag), and a quantity add button. The most popular option is labelled
+        <strong>🔥 BESTSELLER</strong> in the top-left of its card. Users can see all six flavours
+        at once with no hover or tooltip required.
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/huel-atf-detail.png" alt="Huel flavour selector showing visual cards with product photography, BESTSELLER label, price per bag, and add button" />
+      </p>
+      <p slot="why">
+        Flavour is one of the most anxiety-inducing decisions in protein purchasing — especially
+        for first-time buyers who have no reference point for what "Strawberries &amp; Cream" or
+        "Banana Milkshake" will taste like. Photography gives sensory cues that a colour swatch
+        cannot. The BESTSELLER label functions as social proof at the point of flavour selection,
+        reducing decision paralysis by giving the user a safe default. Showing price per bag inline
+        also means there are no surprises when the flavour choice affects pricing.
+      </p>
+      <p slot="opportunity">
+        Myprotein's Impact Whey flavour selector uses small circular swatches with flavour names
+        on hover — functional but minimal. With 50+ flavours, a user has almost no visual cues
+        to guide their choice. A redesigned selector that shows even a partial visual treatment —
+        lifestyle imagery for the top 6–8 flavours, a "Best Seller" label on the most-purchased
+        option, and inline popularity signals — would meaningfully reduce the cognitive load of
+        an already complex choice and nudge undecided users toward the most-loved options.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="Subscription delivery frequency selector in the add-to-cart"
+      competitor="Huel"
+      viewport="Both"
+      categories="conversion"
+      opportunityId="huel-subscription-frequency"
+    >
+      <p slot="what">
+        In the add-to-cart panel, alongside the subscription price (£22.50, 10% off one-time),
+        Huel presents a delivery frequency selector with four options: every 2, 4, 6, or 8 weeks.
+        The selected frequency is displayed inline. One-time purchase remains available as a
+        secondary option. Price per serving (£0.87 subscription / £0.96 one-time) is shown as a
+        highlighted chip beside the serving count, above the price.
+      </p>
+      <p slot="why">
+        Subscription hesitation frequently comes down to commitment anxiety: "What if I don't go
+        through a bag every month?" Offering frequency choice removes this objection at source.
+        A user who trains three times a week will use protein differently from someone who uses it
+        daily. Frequency flexibility also increases subscription retention — customers who chose
+        their own interval are less likely to cancel because they have too much stock. The
+        per-serving price chip reframes the subscription from "how much I'm spending" to
+        "how much each shake costs", which is a more palatable number.
+      </p>
+      <p slot="opportunity">
+        Myprotein's Subscribe &amp; Save is a binary choice — subscribe or don't — with a fixed
+        delivery cadence. Introducing selectable frequency options (every 4, 6, or 8 weeks) in
+        the ATC panel would remove the most common objection to subscribing for lower-frequency
+        users. This is a framing and UX change rather than a logistics build, since flexible
+        subscription intervals are standard in most subscription fulfilment platforms. Pairing
+        it with a per-serving price chip displayed above the total price would reinforce the
+        value case simultaneously.
+      </p>
+    </OpportunityCard>
+
+  </section>
+
   <!-- ─── Where MP Leads ─────────────────────────────────────────────────── -->
 
   <section class="prose-section">
     <h2 class="section-heading">Areas Where Myprotein Already Leads</h2>
     <p>
-      Myprotein's review volume (210,000+ on Impact Whey alone) is a trust advantage that none
-      of these three competitors come close to matching — ON has ~1,725, TPW has 135, and Healf's
-      listed product has 27. Myprotein's flavour range (50+ for Impact Whey) far exceeds all three.
-      The Trustpilot aggregate score is already surfaced on the Myprotein PDP, as it is on TPW's
-      and ON's — this is a draw, not a gap. Myprotein's structured content tabs (nutrition,
-      ingredients, key benefits, reviews) give users more ways to explore detail without navigating
-      away than any of the three competitor pages reviewed. The product image gallery on Myprotein's
-      PDP is also stronger than ON's sparse presentation, and the add-to-bag area is clean and clear.
+      Myprotein's review volume (210,000+ on Impact Whey alone) is a trust advantage none of
+      these four competitors come close to matching — ON has ~1,725, TPW has 135, Healf's product
+      has 27, and Huel does not surface a review count on the PDP. Myprotein's flavour range (50+
+      for Impact Whey) far exceeds all four. The Trustpilot aggregate score is already surfaced on
+      the Myprotein PDP — this matches or beats TPW and ON. Myprotein's structured content tabs
+      (nutrition, ingredients, key benefits, reviews) give users more ways to explore detail than
+      most competitor pages reviewed. Huel has a more developed brand storytelling approach
+      (celebrity endorsements, press mentions, expert citations) but this reflects a different
+      marketing budget and positioning rather than a PDP UX pattern Myprotein is missing.
     </p>
   </section>
 
@@ -321,6 +400,18 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
       <div class="screenshot-col">
         <p class="screenshot-label">Healf — Desktop</p>
         <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/healf-full-desktop.png" alt="Healf Sprout Living Epic Protein PDP desktop" />
+      </div>
+      <div class="screenshot-col">
+        <p class="screenshot-label">Myprotein — Desktop</p>
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/myprotein-full-desktop.png" alt="Myprotein Impact Whey Protein PDP desktop" />
+      </div>
+    </div>
+
+    <h3 class="screenshot-competitor">Huel</h3>
+    <div class="screenshot-grid">
+      <div class="screenshot-col">
+        <p class="screenshot-label">Huel — Desktop</p>
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/huel-full-desktop.png" alt="Huel Complete Protein PDP desktop" />
       </div>
       <div class="screenshot-col">
         <p class="screenshot-label">Myprotein — Desktop</p>

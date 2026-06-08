@@ -1,0 +1,158 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+import OpportunityCard from '@/components/OpportunityCard.astro';
+---
+
+<ReportLayout title="Optimum Nutrition vs Myprotein — PDP Competitor Analysis">
+
+  <section class="report-intro">
+    <h1 class="report-h1">Competitor Analysis: Optimum Nutrition vs Myprotein</h1>
+    <p class="report-meta">Product Detail Page &mdash; Analysed 8 June 2026</p>
+    <p class="report-summary">
+      Optimum Nutrition is the world's best-selling whey protein brand, built on a reputation for
+      clinical-grade quality and consistency rather than value or range. Their Gold Standard 100%
+      Whey PDP was compared against Myprotein's Impact Whey Protein PDP. ON's page is lean by
+      design — fewer sections, more editorial weight — but two review-intelligence patterns stand
+      out as genuine gaps: a review attribute summary surfaced directly below the star rating above
+      the fold, and an AI-generated review synthesis with topic-based filtering in the reviews
+      section. Both make ON's social proof feel more informative at a glance, despite Myprotein
+      having a significantly larger review dataset.
+    </p>
+  </section>
+
+  <section class="opportunities-section">
+    <h2 class="section-heading">Opportunities for Myprotein</h2>
+
+    <OpportunityCard
+      title="Review attribute highlights beside the star rating"
+      competitor="Optimum Nutrition"
+      viewport="Both"
+      categories="trust,conversion"
+      opportunityId="review-attribute-highlights"
+    >
+      <p slot="what">
+        Directly below the star rating and review count, ON displays a short inline callout:
+        <strong>"Highly rated by customers for: Delivery Speed, Taste and Mixability, Value for Money"</strong>.
+        Each attribute is a clickable link that filters the reviews section to show only reviews
+        mentioning that dimension. The callout appears above the product bullets and add-to-cart
+        area — it is the first thing a user reads after the aggregate score.
+        <img src="/assets/reports/competitors/optimum-nutrition-vs-myprotein-pdp-2026-06-08/on-atf-detail.png" alt="Optimum Nutrition PDP showing 'Highly rated by customers for: Delivery Speed, Taste and Mixability, Value for Money' directly below the star rating" />
+      </p>
+      <p slot="why">
+        A star rating tells a user how well-liked a product is. An attribute summary tells them
+        <em>why</em>. For a shopper who is undecided between two protein powders with similar ratings,
+        seeing "Taste and Mixability" called out explicitly is a significantly stronger signal than
+        "4.4 stars". It collapses the work of reading dozens of reviews into a three-word reassurance.
+        The clickable links also give curious users a direct path to filtered evidence — reducing
+        the friction of finding relevant reviews without requiring search or sorting.
+      </p>
+      <p slot="opportunity">
+        Myprotein surfaces a Trustpilot aggregate score and total count on the PDP but does not
+        break reviews down by attribute anywhere above the fold. With 210,000+ reviews on Impact
+        Whey alone, the data to surface attribute-level highlights is clearly there — the question
+        is whether it is structured in a way that supports this. Even a static, editorially curated
+        version ("Customers love the taste variety and value per serving") in the area near the
+        star rating would provide this signal without requiring a full review platform integration.
+        A dynamic version powered by review tagging would be the stronger implementation.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="AI-generated review summary with topic filter chips"
+      competitor="Optimum Nutrition"
+      viewport="Both"
+      categories="trust,content"
+      opportunityId="ai-review-summary"
+    >
+      <p slot="what">
+        At the top of the reviews section, before any individual review is shown, ON displays a
+        paragraph-length AI-synthesised summary of what customers say: <em>"Customers praise its
+        great taste, easy mixing, and high value, making it a top choice for serious athletes."</em>
+        Below this is a "Read summary by topics" CTA. Directly below the search and sort controls
+        sits a row of topic filter chips — "size", "ingredients", "results", "absorption", "quality",
+        "weight", "smell", "taste" — each filtering the review list to show only reviews that mention
+        that topic.
+        <img src="/assets/reports/competitors/optimum-nutrition-vs-myprotein-pdp-2026-06-08/on-reviews-section.png" alt="Optimum Nutrition reviews section showing AI summary paragraph, topic filter chips, and review helpfulness voting" />
+      </p>
+      <p slot="why">
+        No one reads 1,725 reviews. An AI synthesis lets a user get the substance of the community's
+        verdict in ten seconds. For high-review-count products, the reviews section risks becoming
+        noise rather than signal — the summary resolves this. The topic chips extend the utility:
+        a user who cares specifically about mixability can filter to only those reviews rather than
+        hunting through pages. Together these patterns turn the reviews section from a scrollable
+        wall of text into a structured, navigable knowledge base.
+      </p>
+      <p slot="opportunity">
+        Myprotein's Impact Whey has 210,000+ reviews — a dataset that makes ON's 1,725 look
+        nascent by comparison. Yet the reviews section on Myprotein's PDP is a standard paginated
+        list with star and sort filters, but no synthesis, no topic navigation, and no AI summary.
+        The opportunity here is significant: a product with this review volume is exactly where
+        an AI summary would be most useful and most credible. Even a static editorial summary
+        (updated quarterly) would be a meaningful step. Topic chips mapped to common review themes
+        — flavour, mixability, value, results — would be relatively low effort to implement against
+        an existing tagged review corpus.
+      </p>
+    </OpportunityCard>
+
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Areas Where Myprotein Already Leads</h2>
+    <p>
+      Myprotein's review volume (210,000+ vs ON's 1,725 for this product) is a substantial trust
+      advantage that no pattern on ON's PDP can fully compensate for — breadth of social proof at
+      scale is difficult to replicate. Myprotein's flavour range for Impact Whey (50+ flavours)
+      far exceeds ON's Gold Standard offering, and this is communicated clearly through the flavour
+      selector on the PDP. Myprotein also has a Subscribe &amp; Save option, which ON's PDP does
+      not prominently feature. ON's PDP is noticeably sparse below the fold — heavy on editorial
+      imagery and light on product information — where Myprotein's structured content tabs (nutrition,
+      ingredients, reviews) give users more ways to explore without navigating away.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Competitor Context</h2>
+    <p>
+      Optimum Nutrition (owned by Glanbia since 2008) is the defining brand in mainstream whey
+      protein globally. Gold Standard is consistently the world's best-selling whey, sold in
+      over 90 countries. Their positioning is built on quality assurance, clinical formulation,
+      and athlete endorsements rather than price or flavour innovation. Their target audience is
+      serious gym-goers and athletes who are brand-loyal and research-driven. The PDP reflects
+      this: it is confident rather than persuasive, leaning on the product's reputation and
+      award credentials rather than detailed ingredient storytelling. The review patterns they
+      have built are worth noting precisely because they serve a deliberative, trust-led shopper —
+      the same type that Myprotein increasingly needs to convert as it moves beyond its value-led
+      positioning.
+    </p>
+  </section>
+
+  <section class="screenshots-section">
+    <h2 class="section-heading">Page Screenshots</h2>
+    <div class="screenshot-grid">
+      <div class="screenshot-col">
+        <p class="screenshot-label">Optimum Nutrition — Desktop</p>
+        <img src="/assets/reports/competitors/optimum-nutrition-vs-myprotein-pdp-2026-06-08/on-full-desktop.png" alt="Optimum Nutrition Gold Standard Whey PDP full page desktop screenshot" />
+      </div>
+      <div class="screenshot-col">
+        <p class="screenshot-label">Myprotein — Desktop</p>
+        <img src="/assets/reports/competitors/optimum-nutrition-vs-myprotein-pdp-2026-06-08/myprotein-full-desktop.png" alt="Myprotein Impact Whey Protein PDP full page desktop screenshot" />
+      </div>
+    </div>
+  </section>
+
+</ReportLayout>
+
+<style>
+  .report-intro { margin-bottom: 40px; }
+  .report-h1 { font-size: 26px; font-weight: 800; color: var(--color-text-heading); line-height: 1.25; margin-bottom: 6px; }
+  .report-meta { font-size: 13px; color: var(--color-text-body); opacity: 0.65; margin-bottom: 14px; }
+  .report-summary { font-size: 15px; line-height: 1.7; color: var(--color-text-body); max-width: 680px; }
+  .opportunities-section { margin-bottom: 48px; }
+  .section-heading { font-size: 18px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(0, 57, 66, 0.1); }
+  .prose-section { margin-bottom: 36px; }
+  .prose-section p { font-size: 15px; line-height: 1.7; color: var(--color-text-body); }
+  .screenshot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .screenshot-col img { width: 100%; border-radius: 8px; border: 1px solid rgba(0,57,66,0.08); display: block; margin-top: 8px; }
+  .screenshot-label { font-size: 12px; font-weight: 600; color: var(--color-text-body); opacity: 0.55; margin: 0; text-transform: uppercase; letter-spacing: 0.05em; }
+  .screenshots-section { margin-top: 48px; }
+</style>

@@ -8,17 +8,24 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <p class="gs-eyebrow">Setup Guide</p>
     <h1 class="gs-h1">Getting started</h1>
     <p class="gs-summary">
-      The UX Intelligence agents run inside <strong>Claude Code</strong> — a command-line tool
-      that connects Claude directly to this repository. You'll need a GitHub account with access
-      to the repo, and Claude Code installed on your machine. This guide walks you through both.
+      The UX Intelligence agents run inside <strong>Claude Code</strong> — available as a desktop
+      app that connects Claude directly to a local copy of this repository on your machine.
+      You'll need a GitHub account with access to the repo, the repo cloned locally, the Claude
+      Code desktop app installed, two plugins (a Chrome extension and a GitHub connector), and
+      the agent skills activated. This guide walks you through each step.
     </p>
     <div class="gs-notice">
       <strong>Why Claude Code, not Claude.ai?</strong>
-      Claude.ai can trigger the agents and read pages, but it can't write files to this
-      repository — so reports won't be saved and screenshots won't be committed. Claude Code
-      runs inside the repo on your machine, which is what gives it permission to create files,
-      commit screenshots, and push the finished report to the site.
+      Claude.ai can chat and analyse pages, but it can't write files to this repository or push
+      commits — so reports won't be saved and screenshots won't appear on the site. Claude Code
+      runs in the context of the repo on your machine, which is what gives it permission to
+      create report files, commit screenshots, and push everything live.
     </div>
+    <p class="gs-terminal-note">
+      <strong>Prefer the terminal?</strong> If you're already comfortable with git and npm,
+      <code>npm install -g @anthropic-ai/claude-code</code> then <code>claude</code> from
+      inside the repo is all you need. The rest of this guide focuses on the desktop app.
+    </p>
   </section>
 
   <!-- ── Step 1: GitHub account ─────────────────────────────── -->
@@ -29,15 +36,15 @@ import ReportLayout from '@/components/ReportLayout.astro';
     </h2>
     <p class="gs-body">
       If you don't already have one, sign up for a free GitHub account. You'll need this to
-      request access to the repo.
+      request access to the private repository.
     </p>
     <a href="https://github.com/signup" target="_blank" rel="noopener" class="gs-external-link">
       <span class="gs-external-icon">↗</span>
-      github.com/signup
+      github.com/signup — create a free account
     </a>
     <p class="gs-body gs-body--note">
-      Use your THG work email address when signing up so it's easy for the repo admin to verify
-      who you are when granting access.
+      Use your THG work email address so it's easy for the repo admin to verify who you are
+      when granting access.
     </p>
   </section>
 
@@ -48,9 +55,9 @@ import ReportLayout from '@/components/ReportLayout.astro';
       Request access to the repository
     </h2>
     <p class="gs-body">
-      The repository is private. Once you have a GitHub account, ask David Jones
-      (<code>@davidedwardjones18</code> on GitHub) to add you as a collaborator. Share your
-      GitHub username and he'll send an invite.
+      The repository is private. Once you have a GitHub account, message David Jones and share
+      your GitHub username — he'll add you as a collaborator and GitHub will send you an email
+      invite. Accept the invite to gain write access.
     </p>
     <div class="gs-repo-card">
       <div class="gs-repo-header">
@@ -68,8 +75,8 @@ import ReportLayout from '@/components/ReportLayout.astro';
       </a>
     </div>
     <p class="gs-body gs-body--note">
-      Once you accept the invite, you'll have <strong>write access</strong> — needed so Claude
-      Code can push new report pages and screenshots to the repo on your behalf.
+      Write access is required — not just read access. This is what allows Claude Code to commit
+      new report files and push them to the site on your behalf.
     </p>
   </section>
 
@@ -77,96 +84,306 @@ import ReportLayout from '@/components/ReportLayout.astro';
   <section class="gs-section">
     <h2 class="gs-section-heading">
       <span class="gs-step-badge">3</span>
-      Clone the repository
+      Clone the repository to your machine
     </h2>
     <p class="gs-body">
-      Once you have access, clone the repo to your machine. Open a terminal and run:
+      The agents need the repo to exist as a local folder on your machine — they write files
+      directly into it. The easiest way to clone it is with <strong>GitHub Desktop</strong>,
+      a free app that handles authentication and gives you a simple UI for committing and
+      pushing changes.
     </p>
-    <pre class="gs-code">git clone https://github.com/THG-AltitudeSiteBuilds/ux-prototyping.git
-cd ux-prototyping</pre>
-    <p class="gs-body">
-      If you're prompted for GitHub credentials, use a
-      <a href="https://github.com/settings/tokens" target="_blank" rel="noopener" class="gs-inline-link">personal access token</a>
-      rather than your password — GitHub no longer accepts passwords over HTTPS. Set the token
-      scope to <code>repo</code> (full control of private repositories).
-    </p>
-  </section>
 
-  <!-- ── Step 4: Install Claude Code ───────────────────────── -->
-  <section class="gs-section">
-    <h2 class="gs-section-heading">
-      <span class="gs-step-badge">4</span>
-      Install Claude Code
-    </h2>
-    <p class="gs-body">
-      Claude Code is a CLI tool that runs Claude inside your terminal, with access to your local
-      files and git. Install it via npm:
-    </p>
-    <pre class="gs-code">npm install -g @anthropic-ai/claude-code</pre>
-    <p class="gs-body">
-      Once installed, authenticate with your Anthropic account:
-    </p>
-    <pre class="gs-code">claude</pre>
-    <p class="gs-body">
-      This opens a browser window to log in. Use your work Anthropic account if the team has
-      one, or your personal account if you're on an individual plan. If you don't have an
-      Anthropic account yet, sign up at
-      <a href="https://claude.ai" target="_blank" rel="noopener" class="gs-inline-link">claude.ai</a>
-      — a Pro plan ($20/month) is sufficient for running the agents.
-    </p>
-    <a href="https://docs.anthropic.com/en/docs/claude-code/getting-started" target="_blank" rel="noopener" class="gs-external-link">
-      <span class="gs-external-icon">↗</span>
-      Claude Code — official getting started docs
-    </a>
-  </section>
+    <div class="gs-substeps">
 
-  <!-- ── Step 5: Open the repo in Claude Code ─────────────── -->
-  <section class="gs-section">
-    <h2 class="gs-section-heading">
-      <span class="gs-step-badge">5</span>
-      Open the repo in Claude Code
-    </h2>
-    <p class="gs-body">
-      Navigate to the cloned repo in your terminal and launch Claude Code:
-    </p>
-    <pre class="gs-code">cd ux-prototyping
-claude</pre>
-    <p class="gs-body">
-      Claude Code starts in the context of this repository. The agents are already installed
-      as skills — you'll see them available as slash commands. You're now ready to run your
-      first report.
-    </p>
-    <div class="gs-tip">
-      <strong>Check the agents are available.</strong>
-      Type <code>/</code> in the Claude Code prompt to see the list of available slash commands.
-      You should see <code>/myprotein-ux-review</code>, <code>/competitor-analysis</code>,
-      <code>/design-qa</code>, and <code>/myprotein-prep-agent</code> in the list.
-      If they're missing, run <code>/setup-cowork</code> to install the skills.
+      <div class="gs-substep">
+        <span class="gs-substep-label">3a</span>
+        <div>
+          <p class="gs-substep-title">Download GitHub Desktop</p>
+          <p class="gs-substep-body">Install GitHub Desktop and sign in with your GitHub account.</p>
+          <a href="https://desktop.github.com" target="_blank" rel="noopener" class="gs-external-link">
+            <span class="gs-external-icon">↗</span>
+            desktop.github.com
+          </a>
+        </div>
+      </div>
+
+      <div class="gs-substep">
+        <span class="gs-substep-label">3b</span>
+        <div>
+          <p class="gs-substep-title">Clone the repository</p>
+          <p class="gs-substep-body">
+            In GitHub Desktop: <strong>File → Clone Repository</strong>, then search for
+            <code>THG-AltitudeSiteBuilds/ux-prototyping</code>. Choose a local path you'll
+            remember — for example <code>~/Documents/GitHub/ux-prototyping</code>. Click
+            <strong>Clone</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="gs-substep">
+        <span class="gs-substep-label">3c</span>
+        <div>
+          <p class="gs-substep-title">Note the local path</p>
+          <p class="gs-substep-body">
+            In GitHub Desktop, go to <strong>Repository → Show in Finder</strong> (Mac) or
+            <strong>Show in Explorer</strong> (Windows). Note the full folder path — you'll
+            need to point Claude Code at this folder in step 5.
+          </p>
+        </div>
+      </div>
+
     </div>
   </section>
 
-  <!-- ── Step 6: Run your first report ─────────────────────── -->
+  <!-- ── Step 4: Install Claude Code desktop app ───────────── -->
+  <section class="gs-section">
+    <h2 class="gs-section-heading">
+      <span class="gs-step-badge">4</span>
+      Install the Claude Code desktop app
+    </h2>
+    <p class="gs-body">
+      Claude Code is built into the Claude desktop app. Download it from Anthropic and sign in
+      with your Anthropic account. If you don't have one, a Claude Pro plan ($20/month) is
+      sufficient for running the agents.
+    </p>
+    <a href="https://claude.ai/download" target="_blank" rel="noopener" class="gs-external-link">
+      <span class="gs-external-icon">↗</span>
+      claude.ai/download — download the desktop app
+    </a>
+    <p class="gs-body">
+      Once installed, open the app and sign in. You'll land in a standard Claude chat interface —
+      Claude Code is accessed via the project/folder selector, which you'll set up in the next step.
+    </p>
+    <div class="gs-tip">
+      <strong>Not sure if you have an Anthropic account?</strong>
+      If you use Claude.ai in a browser already, you have an account — use the same credentials
+      to log in to the desktop app.
+    </div>
+  </section>
+
+  <!-- ── Step 5: Open the repo ─────────────────────────────── -->
+  <section class="gs-section">
+    <h2 class="gs-section-heading">
+      <span class="gs-step-badge">5</span>
+      Open the repository in Claude Code
+    </h2>
+    <p class="gs-body">
+      This is the step that connects Claude Code to the local repo on your machine — without
+      this, the agents can't write report files or commit screenshots.
+    </p>
+
+    <div class="gs-substeps">
+
+      <div class="gs-substep">
+        <span class="gs-substep-label">5a</span>
+        <div>
+          <p class="gs-substep-title">Open a new project</p>
+          <p class="gs-substep-body">
+            In the Claude desktop app, look for <strong>Claude Code</strong> or the
+            <strong>terminal/project icon</strong> — it's usually in the left sidebar or
+            accessible via the menu. Click it to open the Claude Code panel.
+          </p>
+        </div>
+      </div>
+
+      <div class="gs-substep">
+        <span class="gs-substep-label">5b</span>
+        <div>
+          <p class="gs-substep-title">Select the repo folder</p>
+          <p class="gs-substep-body">
+            Claude Code will prompt you to select a project folder. Navigate to the
+            <code>ux-prototyping</code> folder you cloned in step 3 and select it. Claude
+            Code will start in the context of that folder — it now has access to all the
+            repo files and can write new ones.
+          </p>
+        </div>
+      </div>
+
+      <div class="gs-substep">
+        <span class="gs-substep-label">5c</span>
+        <div>
+          <p class="gs-substep-title">Confirm it's working</p>
+          <p class="gs-substep-body">
+            Type <code>/</code> in the Claude Code prompt. You should see a list of available
+            slash commands. If you can see the list, the session is running correctly inside
+            the repo.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Step 6: Plugins ────────────────────────────────────── -->
   <section class="gs-section">
     <h2 class="gs-section-heading">
       <span class="gs-step-badge">6</span>
+      Install required plugins
+    </h2>
+    <p class="gs-body">
+      Two plugins are needed for the agents to work properly: a Chrome browser extension so
+      Claude can navigate to pages and take screenshots, and a GitHub connector so Claude can
+      push commits to the repo. Both are configured in Claude Code's settings.
+    </p>
+
+    <!-- Chrome extension -->
+    <div class="gs-plugin-card">
+      <div class="gs-plugin-header">
+        <span class="gs-plugin-badge gs-plugin-badge--chrome">Chrome</span>
+        <h3 class="gs-plugin-name">Claude in Chrome extension</h3>
+      </div>
+      <p class="gs-plugin-desc">
+        This extension connects Claude Code to your Chrome browser. Without it, the UX Review
+        and Competitor Analysis agents can't open URLs, scroll pages, or take screenshots —
+        which are the core of what those agents do.
+      </p>
+      <div class="gs-plugin-steps">
+        <p class="gs-plugin-step"><span class="gs-plugin-step-num">1</span> Install the extension from the Chrome Web Store:</p>
+        <a href="https://chromewebstore.google.com/detail/claude/pnaoflhkifljdmpmollaobhbknaeeafh" target="_blank" rel="noopener" class="gs-external-link gs-external-link--sm">
+          <span class="gs-external-icon">↗</span>
+          Claude extension — Chrome Web Store
+        </a>
+        <p class="gs-plugin-step"><span class="gs-plugin-step-num">2</span> Once installed, open a Chrome tab and click the extension icon — you'll be prompted to connect it to your Claude account. Sign in with the same account you use in the desktop app.</p>
+        <p class="gs-plugin-step"><span class="gs-plugin-step-num">3</span> In Claude Code, the extension will appear automatically as an available tool. You can confirm it's connected by typing <code>/</code> and looking for Chrome-related tools in the list.</p>
+      </div>
+    </div>
+
+    <!-- GitHub MCP -->
+    <div class="gs-plugin-card">
+      <div class="gs-plugin-header">
+        <span class="gs-plugin-badge gs-plugin-badge--github">GitHub</span>
+        <h3 class="gs-plugin-name">GitHub MCP connector</h3>
+      </div>
+      <p class="gs-plugin-desc">
+        This connector gives Claude Code deeper GitHub integration — it can read repository
+        structure, check commit history, and authenticate pushes. Without it, Claude can still
+        run git commands locally but won't have full GitHub context.
+      </p>
+      <div class="gs-plugin-steps">
+        <p class="gs-plugin-step"><span class="gs-plugin-step-num">1</span> In the Claude desktop app, go to <strong>Settings → Extensions</strong> (or <strong>Integrations</strong> depending on your version) and search for <strong>GitHub</strong>.</p>
+        <p class="gs-plugin-step"><span class="gs-plugin-step-num">2</span> Click <strong>Connect</strong> and authorise Claude to access your GitHub account. This will open a GitHub OAuth page — approve the access for the <code>THG-AltitudeSiteBuilds</code> organisation.</p>
+        <p class="gs-plugin-step"><span class="gs-plugin-step-num">3</span> Once connected, GitHub will appear as an available tool in Claude Code sessions. You only need to do this once — it persists across sessions.</p>
+      </div>
+      <p class="gs-body gs-body--note" style="margin-top: 12px; margin-bottom: 0;">
+        If you can't see the GitHub integration in Settings, it may not be available on your
+        Claude plan. Basic git operations (commit, push, pull) still work without it — the
+        agents use your local git credentials directly. GitHub Desktop handles authentication
+        automatically so pushes should work even without the MCP connector.
+      </p>
+    </div>
+
+  </section>
+
+  <!-- ── Step 7: Install skills ────────────────────────────── -->
+  <section class="gs-section">
+    <h2 class="gs-section-heading">
+      <span class="gs-step-badge">7</span>
+      Activate the agent skills
+    </h2>
+    <p class="gs-body">
+      The UX Intelligence agents are packaged as <em>skills</em> — reusable, named workflows
+      that Claude knows how to run. They need to be installed into your Claude Code session
+      before the slash commands become available.
+    </p>
+
+    <div class="gs-substeps">
+
+      <div class="gs-substep">
+        <span class="gs-substep-label">7a</span>
+        <div>
+          <p class="gs-substep-title">Run the cowork setup command</p>
+          <p class="gs-substep-body">
+            With the repo open in Claude Code, type this command and press Enter:
+          </p>
+          <pre class="gs-code">/setup-cowork</pre>
+          <p class="gs-substep-body">
+            This command scans the repo for available skills and installs them into your session.
+            Follow any prompts it shows — it may ask you to confirm which skills to enable.
+          </p>
+        </div>
+      </div>
+
+      <div class="gs-substep">
+        <span class="gs-substep-label">7b</span>
+        <div>
+          <p class="gs-substep-title">Confirm all four agents are available</p>
+          <p class="gs-substep-body">
+            Type <code>/</code> to open the slash command picker. You should see all four
+            agent commands in the list:
+          </p>
+          <div class="gs-skill-list">
+            <div class="gs-skill-row">
+              <code class="gs-skill-cmd">/myprotein-ux-review</code>
+              <span class="gs-skill-label">UX Review agent</span>
+            </div>
+            <div class="gs-skill-row">
+              <code class="gs-skill-cmd">/competitor-analysis</code>
+              <span class="gs-skill-label">Competitor Analysis agent</span>
+            </div>
+            <div class="gs-skill-row">
+              <code class="gs-skill-cmd">/design-qa</code>
+              <span class="gs-skill-label">Design QA agent</span>
+            </div>
+            <div class="gs-skill-row">
+              <code class="gs-skill-cmd">/myprotein-prep-agent</code>
+              <span class="gs-skill-label">Project Prep agent</span>
+            </div>
+          </div>
+          <p class="gs-substep-body" style="margin-top: 12px;">
+            If any are missing, run <code>/setup-cowork</code> again. If they still don't
+            appear, check that you opened the correct folder in step 5 — the skills are read
+            from the repo's <code>.claude/</code> directory.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Step 8: First report ───────────────────────────────── -->
+  <section class="gs-section">
+    <h2 class="gs-section-heading">
+      <span class="gs-step-badge">8</span>
       Run your first report
     </h2>
     <p class="gs-body">
-      With Claude Code open inside the repo, trigger the UX Review agent with a URL:
+      You're ready. Trigger the UX Review agent with any Myprotein URL:
     </p>
     <pre class="gs-code">/myprotein-ux-review https://www.myprotein.com/sports-nutrition/impact-whey-protein/10530943.html</pre>
     <p class="gs-body">
-      The agent will navigate to the page, take screenshots, analyse the UX, and write a report
-      file. When it's done, commit and push the output:
+      Claude Code will navigate to the page in Chrome, take screenshots, analyse the UX, and
+      write a report file into the repo. When it finishes, it will tell you which files it
+      created. Commit and push using GitHub Desktop:
     </p>
-    <pre class="gs-code">git add src/pages/reports/ src/assets/reports/
-git commit -m "Add UX review: Impact Whey PDP (2026-06-08)"
-git push</pre>
-    <p class="gs-body">
-      Vercel picks up the push and redeploys automatically — the report is live within a couple
-      of minutes. See the individual
-      <a href="/#agents" class="gs-inline-link">agent guides</a>
-      for the full step-by-step walkthrough for each agent type.
+
+    <div class="gs-substeps">
+      <div class="gs-substep">
+        <span class="gs-substep-label">→</span>
+        <div>
+          <p class="gs-substep-title">Commit in GitHub Desktop</p>
+          <p class="gs-substep-body">
+            Open GitHub Desktop. The new report file and screenshots will appear as
+            uncommitted changes in the left panel. Select all of them, write a commit message
+            (e.g. <em>"Add UX review: Impact Whey PDP"</em>), and click <strong>Commit to main</strong>.
+          </p>
+        </div>
+      </div>
+      <div class="gs-substep">
+        <span class="gs-substep-label">→</span>
+        <div>
+          <p class="gs-substep-title">Push to GitHub</p>
+          <p class="gs-substep-body">
+            Click <strong>Push origin</strong> in GitHub Desktop. Vercel picks up the push
+            and redeploys the site automatically — the report is live within about 2 minutes.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <p class="gs-body" style="margin-top: 8px;">
+      See the <a href="/agents/ux-review" class="gs-inline-link">agent guides</a> for a
+      detailed walkthrough of each agent, what to expect at every step, and how to handle
+      common issues.
     </p>
   </section>
 
@@ -175,35 +392,37 @@ git push</pre>
     <h2 class="gs-section-heading">Common setup issues</h2>
     <ul class="gs-tips-list">
       <li>
-        <strong><code>git push</code> asks for a username and password.</strong>
-        GitHub no longer accepts account passwords over HTTPS. Go to
-        <a href="https://github.com/settings/tokens/new" target="_blank" rel="noopener" class="gs-inline-link">github.com/settings/tokens/new</a>,
-        generate a token with <code>repo</code> scope, and use that as your password. Store it
-        in your macOS Keychain so you're not prompted again.
+        <strong>Claude Code can't find the repo folder.</strong>
+        Make sure you selected the root <code>ux-prototyping</code> folder — not a subfolder
+        like <code>src/</code> or <code>src/pages/</code>. The repo root is the folder that
+        contains <code>package.json</code> and <code>src/</code>. If you're not sure, use
+        GitHub Desktop's <strong>Show in Finder / Explorer</strong> to open the exact folder,
+        then drag that folder into Claude Code's project selector.
       </li>
       <li>
-        <strong>Claude Code says "authentication required" or "no API key".</strong>
-        Run <code>claude auth</code> in your terminal to re-authenticate. If you're on a team
-        plan, ask David for the shared API key and set it with
-        <code>export ANTHROPIC_API_KEY=your-key</code> in your shell profile.
+        <strong>Slash commands show up but the agents don't run — just errors.</strong>
+        The most common cause is the Chrome extension not being connected. Open Chrome, click
+        the Claude extension icon, and make sure it shows as connected (not "disconnected" or
+        "sign in required"). The UX Review and Competitor Analysis agents both need Chrome open
+        and connected before they'll work.
       </li>
       <li>
-        <strong>Slash commands aren't showing up.</strong>
-        The skills need to be installed. Run <code>/setup-cowork</code> from inside the Claude
-        Code prompt and follow the prompts. This installs the agent skills into your Claude Code
-        session.
+        <strong>GitHub Desktop push fails — "permission denied" or "authentication failed".</strong>
+        This usually means you accepted the repo invite but GitHub Desktop hasn't refreshed your
+        permissions. In GitHub Desktop, go to <strong>GitHub Desktop → Preferences → Accounts</strong>,
+        sign out, and sign back in. Then try the push again.
       </li>
       <li>
-        <strong>Can I use Claude.ai instead of Claude Code?</strong>
-        For reading and analysing pages, yes. But Claude.ai can't write files to this repo or
-        push commits — so the report won't be saved and screenshots won't appear on the site.
-        For anything that produces a report, use Claude Code.
+        <strong>The skills aren't appearing after running <code>/setup-cowork</code>.</strong>
+        Try closing and reopening Claude Code with the repo folder selected, then run
+        <code>/setup-cowork</code> again. Skills are loaded from the <code>.claude/</code>
+        folder in the repo root — if you opened the wrong folder, they won't be found.
       </li>
       <li>
-        <strong>I cloned the repo but <code>npm run dev</code> doesn't work.</strong>
-        The local dev server is only needed if you're editing the site itself. You don't need it
-        to run the agents — Claude Code only needs the repo files, not a running server. If you
-        do want the dev server, run <code>npm install</code> first to pull in dependencies.
+        <strong>Can I use Claude.ai in a browser tab instead of the desktop app?</strong>
+        For exploring and analysing, yes. But Claude.ai can't write to this repo, commit
+        screenshots, or push to the site. For anything that produces a saved report, use the
+        Claude Code desktop app with the repo folder open.
       </li>
     </ul>
   </section>
@@ -219,25 +438,39 @@ git push</pre>
           <p class="gs-link-sub">THG-AltitudeSiteBuilds/ux-prototyping</p>
         </div>
       </a>
-      <a href="https://docs.anthropic.com/en/docs/claude-code/getting-started" target="_blank" rel="noopener" class="gs-link-card">
+      <a href="https://claude.ai/download" target="_blank" rel="noopener" class="gs-link-card">
         <span class="gs-link-icon">⌘</span>
         <div>
-          <p class="gs-link-title">Claude Code docs</p>
-          <p class="gs-link-sub">Installation, authentication, commands</p>
+          <p class="gs-link-title">Claude desktop app</p>
+          <p class="gs-link-sub">Download for Mac or Windows</p>
         </div>
       </a>
-      <a href="https://github.com/settings/tokens/new" target="_blank" rel="noopener" class="gs-link-card">
-        <span class="gs-link-icon">⚿</span>
+      <a href="https://desktop.github.com" target="_blank" rel="noopener" class="gs-link-card">
+        <span class="gs-link-icon">⎇</span>
         <div>
-          <p class="gs-link-title">GitHub personal access token</p>
-          <p class="gs-link-sub">Create a token with repo scope</p>
+          <p class="gs-link-title">GitHub Desktop</p>
+          <p class="gs-link-sub">Clone, commit, and push without the terminal</p>
+        </div>
+      </a>
+      <a href="https://chromewebstore.google.com/detail/claude/pnaoflhkifljdmpmollaobhbknaeeafh" target="_blank" rel="noopener" class="gs-link-card">
+        <span class="gs-link-icon">⬡</span>
+        <div>
+          <p class="gs-link-title">Claude Chrome extension</p>
+          <p class="gs-link-sub">Required for screenshot and page navigation</p>
         </div>
       </a>
       <a href="/agents/ux-review" class="gs-link-card">
         <span class="gs-link-icon">↗</span>
         <div>
           <p class="gs-link-title">Agent guides</p>
-          <p class="gs-link-sub">Step-by-step for each agent</p>
+          <p class="gs-link-sub">Step-by-step for each agent type</p>
+        </div>
+      </a>
+      <a href="https://docs.anthropic.com/en/docs/claude-code/getting-started" target="_blank" rel="noopener" class="gs-link-card">
+        <span class="gs-link-icon">⬚</span>
+        <div>
+          <p class="gs-link-title">Claude Code docs</p>
+          <p class="gs-link-sub">Official Anthropic documentation</p>
         </div>
       </a>
     </div>
@@ -282,6 +515,7 @@ git push</pre>
     line-height: 1.65;
     color: var(--color-text-body);
     max-width: 680px;
+    margin-bottom: 14px;
   }
   .gs-notice strong {
     display: block;
@@ -289,6 +523,18 @@ git push</pre>
     color: #BF360C;
     margin-bottom: 4px;
   }
+  .gs-terminal-note {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--color-text-body);
+    opacity: 0.6;
+    max-width: 680px;
+    background: var(--color-bg-muted);
+    border: var(--card-border);
+    border-radius: 8px;
+    padding: 10px 14px;
+  }
+  .gs-terminal-note strong { font-weight: 700; opacity: 1; color: var(--color-text-heading); }
 
   /* ── Sections ───────────────────────────────────────────── */
   .gs-section {
@@ -342,6 +588,56 @@ git push</pre>
   }
   .gs-inline-link:hover { opacity: 0.75; }
 
+  /* ── Substeps ───────────────────────────────────────────── */
+  .gs-substeps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 680px;
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    background: var(--color-bg-card);
+  }
+  .gs-substep {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(0,57,66,0.07);
+  }
+  .gs-substep:last-child { border-bottom: none; }
+  .gs-substep-label {
+    flex-shrink: 0;
+    min-width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--color-bg-muted);
+    border: var(--card-border);
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    letter-spacing: 0.02em;
+  }
+  .gs-substep-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 5px;
+  }
+  .gs-substep-body {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+    margin-bottom: 10px;
+  }
+  .gs-substep-body:last-child { margin-bottom: 0; }
+
   /* ── Code blocks ────────────────────────────────────────── */
   code {
     font-family: 'SF Mono', 'Fira Code', monospace;
@@ -356,11 +652,11 @@ git push</pre>
     font-size: 13px;
     background: var(--color-primary);
     color: var(--color-mint);
-    padding: 16px 20px;
+    padding: 14px 20px;
     border-radius: 10px;
     line-height: 1.7;
     overflow-x: auto;
-    margin-bottom: 16px;
+    margin: 10px 0 12px;
     white-space: pre;
     max-width: 680px;
   }
@@ -378,17 +674,19 @@ git push</pre>
     border: var(--card-border);
     border-radius: 99px;
     padding: 7px 16px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     transition: box-shadow 0.15s, transform 0.1s;
   }
   .gs-external-link:hover {
     box-shadow: 0 4px 12px rgba(0,57,66,0.1);
     transform: translateY(-1px);
   }
-  .gs-external-icon {
-    font-size: 14px;
-    opacity: 0.6;
+  .gs-external-link--sm {
+    font-size: 12px;
+    padding: 5px 12px;
+    margin-bottom: 10px;
   }
+  .gs-external-icon { font-size: 13px; opacity: 0.55; }
 
   /* ── Repo card ──────────────────────────────────────────── */
   .gs-repo-card {
@@ -396,23 +694,14 @@ git push</pre>
     border: var(--card-border);
     border-radius: var(--radius-card);
     padding: 20px 22px;
-    max-width: 480px;
+    max-width: 460px;
     margin-bottom: 14px;
     display: flex;
     flex-direction: column;
     gap: 10px;
   }
-  .gs-repo-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .gs-repo-icon {
-    font-size: 24px;
-    color: var(--color-primary);
-    opacity: 0.5;
-    flex-shrink: 0;
-  }
+  .gs-repo-header { display: flex; align-items: center; gap: 12px; }
+  .gs-repo-icon { font-size: 22px; color: var(--color-primary); opacity: 0.4; flex-shrink: 0; }
   .gs-repo-org {
     font-size: 11px;
     font-weight: 700;
@@ -421,23 +710,9 @@ git push</pre>
     color: var(--color-text-body);
     opacity: 0.5;
   }
-  .gs-repo-name {
-    font-size: 16px;
-    font-weight: 800;
-    color: var(--color-text-heading);
-    line-height: 1.2;
-  }
-  .gs-repo-desc {
-    font-size: 13px;
-    line-height: 1.6;
-    color: var(--color-text-body);
-  }
-  .gs-repo-link {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--color-primary);
-    text-decoration: none;
-  }
+  .gs-repo-name { font-size: 16px; font-weight: 800; color: var(--color-text-heading); line-height: 1.2; }
+  .gs-repo-desc { font-size: 13px; line-height: 1.6; color: var(--color-text-body); }
+  .gs-repo-link { font-size: 13px; font-weight: 600; color: var(--color-primary); text-decoration: none; }
   .gs-repo-link:hover { text-decoration: underline; }
 
   /* ── Tip box ────────────────────────────────────────────── */
@@ -445,18 +720,98 @@ git push</pre>
     background: var(--color-bg-muted);
     border: var(--card-border);
     border-radius: var(--radius-card);
-    padding: 14px 18px;
-    font-size: 14px;
+    padding: 13px 16px;
+    font-size: 13.5px;
     line-height: 1.65;
     color: var(--color-text-body);
     max-width: 680px;
     margin-top: 4px;
   }
-  .gs-tip strong {
-    display: block;
+  .gs-tip strong { display: block; font-weight: 700; color: var(--color-text-heading); margin-bottom: 3px; }
+
+  /* ── Plugin cards ───────────────────────────────────────── */
+  .gs-plugin-card {
+    background: var(--color-bg-card);
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    padding: 20px 22px;
+    max-width: 680px;
+    margin-bottom: 16px;
+  }
+  .gs-plugin-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .gs-plugin-badge {
+    font-size: 11px;
     font-weight: 700;
-    color: var(--color-text-heading);
-    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    padding: 3px 9px;
+    border-radius: 99px;
+  }
+  .gs-plugin-badge--chrome { background: #FDE8E8; color: #B71C1C; }
+  .gs-plugin-badge--github { background: #E8EAF6; color: #1A237E; }
+  .gs-plugin-name { font-size: 15px; font-weight: 700; color: var(--color-text-heading); }
+  .gs-plugin-desc {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(0,57,66,0.07);
+  }
+  .gs-plugin-steps { display: flex; flex-direction: column; gap: 10px; }
+  .gs-plugin-step {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .gs-plugin-step-num {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--color-bg-muted);
+    border: var(--card-border);
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+
+  /* ── Skill list ─────────────────────────────────────────── */
+  .gs-skill-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .gs-skill-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .gs-skill-cmd {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    background: var(--color-primary);
+    color: var(--color-mint);
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .gs-skill-label {
+    font-size: 13px;
+    color: var(--color-text-body);
   }
 
   /* ── Tips list ──────────────────────────────────────────── */
@@ -508,20 +863,10 @@ git push</pre>
   .gs-link-icon {
     font-size: 18px;
     color: var(--color-primary);
-    opacity: 0.4;
+    opacity: 0.35;
     flex-shrink: 0;
     margin-top: 1px;
   }
-  .gs-link-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--color-text-heading);
-    margin-bottom: 3px;
-  }
-  .gs-link-sub {
-    font-size: 12px;
-    color: var(--color-text-body);
-    opacity: 0.65;
-    line-height: 1.4;
-  }
+  .gs-link-title { font-size: 14px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 3px; }
+  .gs-link-sub { font-size: 12px; color: var(--color-text-body); opacity: 0.65; line-height: 1.4; }
 </style>

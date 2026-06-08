@@ -20,6 +20,12 @@ routes:
     type: static
     directory: public
     filename: favicon.svg
+
+  - pathPrefix: /assets/
+    name: public-assets
+    type: static
+    directory: public/assets
+
 cache:
   - pathRules:
       anyMatch:

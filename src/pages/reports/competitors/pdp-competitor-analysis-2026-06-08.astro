@@ -1,6 +1,28 @@
 ---
 import ReportLayout from '@/components/ReportLayout.astro';
 import OpportunityCard from '@/components/OpportunityCard.astro';
+
+const BASE = '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08';
+
+import imgTpwTierComparison from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/tpw-tier-comparison-detail.png';
+import imgTpwSizeSelector from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/tpw-size-selector-detail.png';
+import imgTpwReviewsBreakdown from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/tpw-reviews-breakdown-detail.png';
+import imgTpwFull from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/tpw-full-desktop.png';
+import imgOnAtf from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/on-atf-detail.png';
+import imgOnReviews from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/on-reviews-section.png';
+import imgOnFull from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/on-full-desktop.png';
+import imgHealfSubscribe from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/healf-subscribe-cta-detail.png';
+import imgHealfFull from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/healf-full-desktop.png';
+import imgHealfLower from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/healf-lower-desktop.png';
+import imgHuelAtf from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/huel-atf-detail.png';
+import imgHuelFull from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/huel-full-desktop.png';
+import imgBulkMid from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/bulk-mid-desktop.png';
+import imgBulkLower from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/bulk-lower-desktop.png';
+import imgBulkFull from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/bulk-full-desktop.png';
+import imgNakedRecommend from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/naked-nutrition-recommend-metric-detail.png';
+import imgNakedReviewVariant from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/naked-nutrition-review-variant-detail.png';
+import imgNakedFull from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/naked-nutrition-full-desktop.png';
+import imgMpFull from '@/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/myprotein-full-desktop.png';
 ---
 
 <ReportLayout title="PDP Competitor Analysis — June 2026">
@@ -43,7 +65,7 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
         and GLP-1 compatibility. Each column is framed with a purchase-intent label ("Best Price",
         "Best Value", "Best Rated") and uses check/cross marks for boolean attributes. Links from
         the table go directly to each tier's product page.
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/tpw-tier-comparison-detail.png" alt="TPW in-page product tier comparison table showing BLACK, GOLD and PLATINUM tiers side by side" />
+        <img src={imgTpwTierComparison.src} alt="TPW in-page product tier comparison table showing BLACK, GOLD and PLATINUM tiers side by side" />
       </p>
       <p slot="why">
         A user on an entry-level product page is often mid-decision — they know they want whey
@@ -73,7 +95,7 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
         TPW's size selector displays the price-per-serving directly beneath each size chip:
         20 shakes (600g) at £0.55 each, 40 shakes at £0.50 each, 80 shakes at £0.43 each,
         160 shakes at £0.40 each. The cost-per-serving is always visible — no interaction required.
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/tpw-size-selector-detail.png" alt="TPW size selector showing per-serving price beneath each size option" />
+        <img src={imgTpwSizeSelector.src} alt="TPW size selector showing per-serving price beneath each size option" />
       </p>
       <p slot="why">
         A larger bag is a higher upfront price. Showing cost-per-serving reframes the decision:
@@ -101,7 +123,7 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
         aggregate score: 5★ 40%, 4★ 4%, 3★ 8%, 2★ 11%, 1★ 37%. Each tier has a proportional
         horizontal bar and explicit percentage. The distribution is shown unfiltered — even when
         the split is unflattering.
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/tpw-reviews-breakdown-detail.png" alt="TPW rating distribution showing percentage bars per star rating" />
+        <img src={imgTpwReviewsBreakdown.src} alt="TPW rating distribution showing percentage bars per star rating" />
       </p>
       <p slot="why">
         Showing the full distribution is paradoxically a trust signal. Users who see only an
@@ -141,7 +163,7 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
         Each attribute is a clickable link that jumps to the reviews section filtered to reviews
         mentioning that dimension. The callout appears above the product bullets and the
         add-to-cart area — it is the first thing a user reads after the aggregate score.
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/on-atf-detail.png" alt="Optimum Nutrition PDP showing 'Highly rated by customers for: Delivery Speed, Taste and Mixability, Value for Money' directly below the star rating" />
+        <img src={imgOnAtf.src} alt="Optimum Nutrition PDP showing 'Highly rated by customers for: Delivery Speed, Taste and Mixability, Value for Money' directly below the star rating" />
       </p>
       <p slot="why">
         A star rating tells a user how well-liked a product is. An attribute summary tells them
@@ -173,7 +195,7 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
         value, making it a top choice for serious athletes."</em> Below the search and sort controls
         sits a row of topic filter chips — "size", "ingredients", "results", "absorption", "quality",
         "weight", "smell", "taste" — each filtering the review list to reviews mentioning that topic.
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/on-reviews-section.png" alt="Optimum Nutrition reviews section showing AI summary paragraph and topic filter chips" />
+        <img src={imgOnReviews.src} alt="Optimum Nutrition reviews section showing AI summary paragraph and topic filter chips" />
       </p>
       <p slot="why">
         No one reads 1,725 reviews. An AI synthesis gives users the substance of the community's
@@ -218,7 +240,7 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
         suitability" entry point (a tab alongside "Product description") that helps users determine
         whether the product fits their specific goal. Both elements appear above the price and
         add-to-cart section.
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/healf-subscribe-cta-detail.png" alt="Healf PDP showing goal chips (Muscle building, Recovery, Weight management) and Assess suitability tab above the add-to-cart" />
+        <img src={imgHealfSubscribe.src} alt="Healf PDP showing goal chips (Muscle building, Recovery, Weight management) and Assess suitability tab above the add-to-cart" />
       </p>
       <p slot="why">
         Protein powder is bought for different reasons by different people. A user targeting
@@ -252,7 +274,7 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
         benefit lines sit beneath it: "✓ Free delivery on subscriptions" and "✓ Free sample each
         month". A sticky bar persists at the bottom of the screen throughout the page scroll,
         showing the same subscription framing and price.
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/healf-lower-desktop.png" alt="Healf sticky ATC bar showing Subscribe & save 10% as primary CTA with discounted price" />
+        <img src={imgHealfLower.src} alt="Healf sticky ATC bar showing Subscribe & save 10% as primary CTA with discounted price" />
       </p>
       <p slot="why">
         Defaulting to subscription — rather than treating it as an optional upgrade — changes
@@ -295,7 +317,7 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
         (£22.50/bag), and a quantity add button. The most popular option is labelled
         <strong>🔥 BESTSELLER</strong> in the top-left of its card. Users can see all six flavours
         at once with no hover or tooltip required.
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/huel-atf-detail.png" alt="Huel flavour selector showing visual cards with product photography, BESTSELLER label, price per bag, and add button" />
+        <img src={imgHuelAtf.src} alt="Huel flavour selector showing visual cards with product photography, BESTSELLER label, price per bag, and add button" />
       </p>
       <p slot="why">
         Flavour is one of the most anxiety-inducing decisions in protein purchasing — especially
@@ -373,7 +395,7 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
         combined saving: <strong>"Total price £55.97 → £31.97"</strong>. A single full-width
         green CTA — "Add selection to basket" — adds all ticked items to the basket in one click.
         Users can untick any item to remove it and the total updates accordingly.
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/bulk-mid-desktop.png" alt="Bulk 'Customers also bought' section with pre-checked items, running total, and single add-all CTA" />
+        <img src={imgBulkMid.src} alt="Bulk 'Customers also bought' section with pre-checked items, running total, and single add-all CTA" />
       </p>
       <p slot="why">
         Pre-ticking the bundle items shifts the default behaviour: the user must actively opt out
@@ -406,7 +428,7 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
         in live from Trustpilot. Each card shows the reviewer's name, star rating, review title,
         truncated review text, a "Verified" badge, and a timestamp — "6 hours ago", "7 hours ago",
         "8 hours ago". The section notes "Showing our 4 &amp; 5 star reviews."
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/bulk-lower-desktop.png" alt="Bulk live Trustpilot feed showing four timestamped recent review cards embedded in the PDP" />
+        <img src={imgBulkLower.src} alt="Bulk live Trustpilot feed showing four timestamped recent review cards embedded in the PDP" />
       </p>
       <p slot="why">
         An aggregate score tells a user what others think; a live feed of recent timestamped reviews
@@ -449,7 +471,7 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
         and "99% would recommend these products" on the right. The recommendation percentage
         sits at the same typographic scale as the rating — both are the first things a user
         reads when they reach the reviews section.
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/naked-nutrition-recommend-metric-detail.png" alt="Naked Nutrition reviews section showing '4.8 stars based on 7,479 reviews' alongside '99% would recommend these products' at equal visual weight" />
+        <img src={imgNakedRecommend.src} alt="Naked Nutrition reviews section showing '4.8 stars based on 7,479 reviews' alongside '99% would recommend these products' at equal visual weight" />
       </p>
       <p slot="why">
         A star rating tells a user how well-liked a product is on a numeric scale. A
@@ -481,7 +503,7 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
         name: a thumbnail of the specific product, the product name, and the exact variant
         purchased — e.g. "Vanilla Whey Protein Powder | Naked Vanilla Whey – 5LB". This appears
         as a distinct sub-card within the reviewer metadata column, before the review text.
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/naked-nutrition-review-variant-detail.png" alt="Naked Nutrition review card showing 'Reviewing: Vanilla Whey Protein Powder | Naked Vanilla Whey – 5LB' with product thumbnail beneath the reviewer name" />
+        <img src={imgNakedReviewVariant.src} alt="Naked Nutrition review card showing 'Reviewing: Vanilla Whey Protein Powder | Naked Vanilla Whey – 5LB' with product thumbnail beneath the reviewer name" />
       </p>
       <p slot="why">
         A taste review is only meaningful if you know which flavour the reviewer bought. On a
@@ -587,11 +609,11 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
     <div class="screenshot-grid">
       <div class="screenshot-col">
         <p class="screenshot-label">The Protein Works — Desktop</p>
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/tpw-full-desktop.png" alt="The Protein Works Whey Protein 360 PDP desktop" />
+        <img src={imgTpwFull.src} alt="The Protein Works Whey Protein 360 PDP desktop" />
       </div>
       <div class="screenshot-col">
         <p class="screenshot-label">Myprotein — Desktop</p>
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/myprotein-full-desktop.png" alt="Myprotein Impact Whey Protein PDP desktop" />
+        <img src={imgMpFull.src} alt="Myprotein Impact Whey Protein PDP desktop" />
       </div>
     </div>
 
@@ -599,11 +621,11 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
     <div class="screenshot-grid">
       <div class="screenshot-col">
         <p class="screenshot-label">Optimum Nutrition — Desktop</p>
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/on-full-desktop.png" alt="Optimum Nutrition Gold Standard Whey PDP desktop" />
+        <img src={imgOnFull.src} alt="Optimum Nutrition Gold Standard Whey PDP desktop" />
       </div>
       <div class="screenshot-col">
         <p class="screenshot-label">Myprotein — Desktop</p>
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/myprotein-full-desktop.png" alt="Myprotein Impact Whey Protein PDP desktop" />
+        <img src={imgMpFull.src} alt="Myprotein Impact Whey Protein PDP desktop" />
       </div>
     </div>
 
@@ -611,11 +633,11 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
     <div class="screenshot-grid">
       <div class="screenshot-col">
         <p class="screenshot-label">Healf — Desktop</p>
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/healf-full-desktop.png" alt="Healf Sprout Living Epic Protein PDP desktop" />
+        <img src={imgHealfFull.src} alt="Healf Sprout Living Epic Protein PDP desktop" />
       </div>
       <div class="screenshot-col">
         <p class="screenshot-label">Myprotein — Desktop</p>
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/myprotein-full-desktop.png" alt="Myprotein Impact Whey Protein PDP desktop" />
+        <img src={imgMpFull.src} alt="Myprotein Impact Whey Protein PDP desktop" />
       </div>
     </div>
 
@@ -623,11 +645,11 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
     <div class="screenshot-grid">
       <div class="screenshot-col">
         <p class="screenshot-label">Huel — Desktop</p>
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/huel-full-desktop.png" alt="Huel Complete Protein PDP desktop" />
+        <img src={imgHuelFull.src} alt="Huel Complete Protein PDP desktop" />
       </div>
       <div class="screenshot-col">
         <p class="screenshot-label">Myprotein — Desktop</p>
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/myprotein-full-desktop.png" alt="Myprotein Impact Whey Protein PDP desktop" />
+        <img src={imgMpFull.src} alt="Myprotein Impact Whey Protein PDP desktop" />
       </div>
     </div>
 
@@ -635,11 +657,11 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
     <div class="screenshot-grid">
       <div class="screenshot-col">
         <p class="screenshot-label">Naked Nutrition — Desktop</p>
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/naked-nutrition-full-desktop.png" alt="Naked Nutrition Chocolate Whey Protein Powder PDP desktop" />
+        <img src={imgNakedFull.src} alt="Naked Nutrition Chocolate Whey Protein Powder PDP desktop" />
       </div>
       <div class="screenshot-col">
         <p class="screenshot-label">Myprotein — Desktop</p>
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/myprotein-full-desktop.png" alt="Myprotein Impact Whey Protein PDP desktop" />
+        <img src={imgMpFull.src} alt="Myprotein Impact Whey Protein PDP desktop" />
       </div>
     </div>
 
@@ -647,11 +669,11 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
     <div class="screenshot-grid">
       <div class="screenshot-col">
         <p class="screenshot-label">Bulk — Desktop</p>
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/bulk-full-desktop.png" alt="Bulk Pure Whey Protein PDP desktop" />
+        <img src={imgBulkFull.src} alt="Bulk Pure Whey Protein PDP desktop" />
       </div>
       <div class="screenshot-col">
         <p class="screenshot-label">Myprotein — Desktop</p>
-        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/myprotein-full-desktop.png" alt="Myprotein Impact Whey Protein PDP desktop" />
+        <img src={imgMpFull.src} alt="Myprotein Impact Whey Protein PDP desktop" />
       </div>
     </div>
   </section>

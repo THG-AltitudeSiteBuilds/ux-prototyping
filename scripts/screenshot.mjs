@@ -3,7 +3,7 @@
  * screenshot.mjs
  *
  * Takes targeted screenshots of a URL using headless Chrome + CDP.
- * Saves PNGs into public/assets/reports/<slug>/
+ * Saves PNGs into src/assets/reports/<slug>/
  *
  * Usage:
  *   node scripts/screenshot.mjs <url> <slug> [config-file]
@@ -40,7 +40,7 @@ if (!url || !slug) {
   process.exit(1);
 }
 
-const ASSETS = join(ROOT, 'public', 'assets', 'reports', slug);
+const ASSETS = join(ROOT, 'src', 'assets', 'reports', slug);
 
 // Auto-select config based on URL pattern if not provided
 function resolveConfig(configArg, url) {

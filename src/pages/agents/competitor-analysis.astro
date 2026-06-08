@@ -1,0 +1,430 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+---
+
+<ReportLayout title="Competitor Analysis Agent">
+
+  <section class="agent-intro">
+    <p class="agent-eyebrow">Agent Guide</p>
+    <h1 class="agent-h1">Competitor Analysis</h1>
+    <p class="agent-summary">
+      The Competitor Analysis agent reviews a competitor's page side-by-side with the equivalent
+      Myprotein page, and surfaces only genuine gaps — patterns the competitor does that Myprotein
+      doesn't, or doesn't do as well. It's deliberately conservative: zero findings is a valid
+      result, and a finding is only included if the agent can show both sides of the comparison with
+      a screenshot. Use it when you're starting a redesign and want to know what the market is doing,
+      or when a specific competitor is getting attention and you want to understand why.
+    </p>
+  </section>
+
+  <!-- ── Before you start ────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Before you start</h2>
+    <ul class="checklist">
+      <li>The full URL of the competitor page you want analysed</li>
+      <li>The full URL of the equivalent Myprotein page (e.g. their PDP vs our PDP for a comparable product)</li>
+      <li>Both URLs should be publicly accessible — no login required</li>
+      <li>Have a clear page type in mind (PDP, PLP, basket, checkout) — the agent compares like-for-like, not across different page types</li>
+      <li>You're running Claude Code inside this repo so the agent can commit the output files</li>
+    </ul>
+  </section>
+
+  <!-- ── How to trigger ──────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">How to trigger it</h2>
+    <p class="guide-body">Use the slash command directly, or describe the comparison in plain English:</p>
+    <div class="trigger-block">
+      <code class="trigger-command">/competitor-analysis</code>
+    </div>
+    <div class="trigger-examples">
+      <span class="trigger-chip">"compare Gymshark's PDP to ours"</span>
+      <span class="trigger-chip">"what does Bulk do well on their basket?"</span>
+      <span class="trigger-chip">"look at [competitor URL] and find opportunities"</span>
+      <span class="trigger-chip">"anything worth stealing from this page?"</span>
+    </div>
+    <p class="guide-body guide-body--tip">Include both the competitor URL and the Myprotein URL in your message. If you only provide one URL, the agent will ask for the other before starting.</p>
+  </section>
+
+  <!-- ── Step-by-step walkthrough ───────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Step-by-step walkthrough</h2>
+    <ol class="steps">
+      <li class="step">
+        <span class="step-number">1</span>
+        <div class="step-body">
+          <h3 class="step-title">URL validation and report slug</h3>
+          <p class="step-desc">
+            The agent confirms it has both URLs, identifies the page type (PDP, PLP, basket, etc.),
+            and derives a report slug from the competitor brand name and page type, e.g.
+            <code>pdp-competitor-analysis-2026-06-08</code>. It will confirm the slug with you if it's
+            uncertain.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">2</span>
+        <div class="step-body">
+          <h3 class="step-title">Screenshot both pages</h3>
+          <p class="step-desc">
+            The agent opens both URLs in a headless browser at 1440px desktop width and scrolls
+            through each page systematically, capturing screenshots of every major section.
+            Screenshots of the competitor page are saved to
+            <code>src/assets/reports/competitors/[slug]/</code>. Myprotein screenshots are captured
+            inline for comparison but the agent uses existing Myprotein report assets where they're
+            already available.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">3</span>
+        <div class="step-body">
+          <h3 class="step-title">Section-by-section comparison</h3>
+          <p class="step-desc">
+            The agent divides each page into sections (above the fold, product information, social
+            proof, cross-sell, etc.) and compares each section across both pages. For every section
+            it asks: does the competitor do something Myprotein doesn't? Is there a meaningful
+            quality difference? It looks for patterns across UX, content strategy, trust signals,
+            navigation, and conversion mechanics.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">4</span>
+        <div class="step-body">
+          <h3 class="step-title">Opportunities are filtered for genuine gaps</h3>
+          <p class="step-desc">
+            The agent applies a conservative filter: it only includes an opportunity if (a) the
+            competitor demonstrably does it, (b) Myprotein demonstrably doesn't or does it worse,
+            and (c) it would plausibly improve conversion, usability, or trust for Myprotein's
+            audience. Parity items — where both pages perform similarly — are discarded.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">5</span>
+        <div class="step-body">
+          <h3 class="step-title">Report is written</h3>
+          <p class="step-desc">
+            The agent writes <code>src/pages/reports/competitors/[slug].astro</code> using the
+            <code>ReportLayout</code> wrapper. Each opportunity card shows the competitor screenshot,
+            the equivalent Myprotein state, a description of the gap, and a recommended action.
+            If multiple competitors were reviewed in the same run, they're grouped by opportunity
+            theme rather than brand.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">6</span>
+        <div class="step-body">
+          <h3 class="step-title">Agent hands back to you</h3>
+          <p class="step-desc">
+            The agent tells you how many opportunities it found and lists the files it created.
+            If it found zero genuine opportunities, it explains which sections were reviewed and
+            why nothing met the threshold — that's also useful information.
+          </p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ── Committing the output ──────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Committing the output</h2>
+
+    <h3 class="sub-heading">Files created</h3>
+    <ul class="file-list">
+      <li><code>src/pages/reports/competitors/[slug].astro</code> — the analysis report page</li>
+      <li><code>src/assets/reports/competitors/[slug]/*.png</code> — competitor screenshots</li>
+    </ul>
+
+    <h3 class="sub-heading">Git commands</h3>
+    <pre class="code-block">git add src/pages/reports/competitors/[slug].astro src/assets/reports/competitors/[slug]/
+git commit -m "Add competitor analysis: [Page Type] — [Brand(s)] ([date])"
+git push</pre>
+
+    <h3 class="sub-heading">Suggested commit message format</h3>
+    <pre class="code-block">Add competitor analysis: PDP — Gymshark, Bulk, TPW (2026-06-08)</pre>
+
+    <h3 class="sub-heading">Verifying the report is live</h3>
+    <p class="guide-body">
+      After pushing, visit <code>/reports/competitors/[slug]</code> on the deployed site once
+      Vercel has redeployed (typically under 2 minutes). Check that all competitor screenshots
+      load and the opportunity cards render correctly.
+    </p>
+  </section>
+
+  <!-- ── Example output ────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Example output</h2>
+    <p class="guide-body">
+      The PDP competitor analysis from 8 June 2026 covers 6 brands — Gymshark, Bulk, TPW,
+      Optimum Nutrition, MyVegan, and Naked Nutrition — and surfaces 14 opportunities across
+      trust signals, content, and conversion mechanics:
+    </p>
+    <a href="/reports/competitors/pdp-competitor-analysis-2026-06-08" class="example-link">
+      View: PDP Competitor Analysis (June 2026) →
+    </a>
+  </section>
+
+  <!-- ── Tips and common issues ────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Tips and common issues</h2>
+    <ul class="tips-list">
+      <li>
+        <strong>Zero findings is a valid result.</strong>
+        Don't interpret an empty report as a failure. It means the competitor doesn't do anything
+        on that page that Myprotein doesn't already do. That's useful to know — it tells you the
+        page is competitive and your design energy should go elsewhere.
+      </li>
+      <li>
+        <strong>Competitor page is behind a login or bot detection.</strong>
+        Some competitor sites (especially checkout pages) block headless browsers. The agent will
+        flag this in the report. For these pages, manually capture screenshots and describe the
+        pattern to the agent — it can write a structured opportunity card from a description.
+      </li>
+      <li>
+        <strong>Only compare equivalent page types.</strong>
+        A competitor's PDP compared to Myprotein's PLP won't produce useful output. Make sure both
+        URLs are the same page type and, where possible, comparable product categories
+        (e.g. protein powder vs protein powder, not protein vs clothing).
+      </li>
+      <li>
+        <strong>Running multiple competitors in one session.</strong>
+        You can pass multiple competitor URLs in one message — the agent will screenshot all of
+        them and produce a single consolidated report grouped by opportunity theme. This is usually
+        more useful than one report per brand.
+      </li>
+      <li>
+        <strong>Report includes something that Myprotein already does.</strong>
+        Sometimes the agent misses a Myprotein feature on a specific page variant or test cell.
+        If an opportunity is already addressed, add a note in the report file and commit — it
+        keeps a historical record and you don't need to re-run the agent.
+      </li>
+    </ul>
+  </section>
+
+</ReportLayout>
+
+<style>
+  .agent-intro { margin-bottom: 48px; }
+  .agent-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+    opacity: 0.5;
+    margin-bottom: 10px;
+  }
+  .agent-h1 {
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 800;
+    color: var(--color-text-heading);
+    margin-bottom: 16px;
+    line-height: 1.15;
+  }
+  .agent-summary {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-text-body);
+    max-width: 680px;
+  }
+
+  .guide-section { margin-bottom: 52px; }
+  .section-heading {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--color-text-heading);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(0,57,66,0.08);
+  }
+  .sub-heading {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin: 20px 0 8px;
+  }
+
+  .guide-body {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+    margin-bottom: 16px;
+  }
+  .guide-body--tip {
+    background: var(--color-bg-muted);
+    border-left: 3px solid var(--color-mint);
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    margin-top: 12px;
+  }
+
+  .checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .checklist li {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-text-body);
+    padding-left: 22px;
+    position: relative;
+  }
+  .checklist li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    opacity: 0.4;
+    font-size: 13px;
+  }
+
+  .trigger-block { margin-bottom: 16px; }
+  .trigger-command {
+    display: inline-block;
+    font-size: 15px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    background: var(--color-primary);
+    color: var(--color-mint);
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  .trigger-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .trigger-chip {
+    font-size: 13px;
+    background: var(--color-bg-muted);
+    border: var(--card-border);
+    border-radius: var(--radius-chip);
+    padding: 5px 12px;
+    color: var(--color-text-body);
+    font-style: italic;
+  }
+
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12.5px;
+    background: var(--color-bg-muted);
+    color: var(--color-primary);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .code-block {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    background: var(--color-bg-muted);
+    color: var(--color-text-heading);
+    padding: 16px 20px;
+    border-radius: 8px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    border: var(--card-border);
+    white-space: pre;
+  }
+
+  .file-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .file-list li {
+    font-size: 14px;
+    color: var(--color-text-body);
+    padding-left: 16px;
+    position: relative;
+  }
+  .file-list li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: var(--color-primary);
+    opacity: 0.4;
+  }
+
+  .steps { list-style: none; display: flex; flex-direction: column; }
+  .step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(0,57,66,0.08);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-number {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-mint);
+    font-size: 13px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+  .step-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 6px;
+  }
+  .step-desc {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+  }
+
+  .example-link {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    padding: 14px 20px;
+    background: var(--color-bg-card);
+    transition: box-shadow 0.15s, transform 0.1s;
+  }
+  .example-link:hover {
+    box-shadow: var(--card-shadow);
+    transform: translateY(-1px);
+  }
+
+  .tips-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .tips-list li {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+    background: var(--color-bg-card);
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    padding: 16px 18px;
+  }
+  .tips-list strong {
+    display: block;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 4px;
+  }
+</style>

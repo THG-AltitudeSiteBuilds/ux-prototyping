@@ -1,0 +1,393 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+---
+
+<ReportLayout title="Project Prep Agent">
+
+  <section class="agent-intro">
+    <p class="agent-eyebrow">Agent Guide</p>
+    <h1 class="agent-h1">Project Prep</h1>
+    <p class="agent-summary">
+      The Project Prep agent sets up a new design project before you start designing. Give it a
+      project name and page type and it runs competitor research, pulls UX review data for the
+      equivalent Myprotein page, creates a structured Figma file with the right frames and
+      component library linked, and drafts a project brief. The goal is to eliminate the setup
+      phase entirely — you should be designing, not gathering reference material and creating blank
+      Figma files.
+    </p>
+  </section>
+
+  <!-- ── Before you start ────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Before you start</h2>
+    <ul class="checklist">
+      <li>A clear name for the project and the page type you're redesigning (e.g. "basket redesign", "PDP refresh", "new checkout flow")</li>
+      <li>Figma access: the agent creates and structures a Figma file, so the Figma MCP server must be connected in your Claude Code session</li>
+      <li>Know which Figma team or project the new file should live in — the agent will ask if you don't specify</li>
+      <li>Optional: any existing constraints or context you want baked into the brief (e.g. "mobile-first only", "must use existing component library", "targeting the supplement audience")</li>
+    </ul>
+  </section>
+
+  <!-- ── How to trigger ──────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">How to trigger it</h2>
+    <p class="guide-body">Use the slash command directly, or describe the project you're starting:</p>
+    <div class="trigger-block">
+      <code class="trigger-command">/myprotein-prep-agent</code>
+    </div>
+    <div class="trigger-examples">
+      <span class="trigger-chip">"prep for the basket redesign"</span>
+      <span class="trigger-chip">"set up a Figma file for the checkout"</span>
+      <span class="trigger-chip">"I need to redesign the PDP"</span>
+      <span class="trigger-chip">"start a new design project for the search page"</span>
+    </div>
+    <p class="guide-body guide-body--tip">The more context you give up front — page type, audience, constraints — the less the agent needs to ask before it starts. A phrase like "prep for the basket redesign, mobile-first, existing component library" will kick off without any follow-up questions.</p>
+  </section>
+
+  <!-- ── Step-by-step walkthrough ───────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Step-by-step walkthrough</h2>
+    <ol class="steps">
+      <li class="step">
+        <span class="step-number">1</span>
+        <div class="step-body">
+          <h3 class="step-title">Project scope is confirmed</h3>
+          <p class="step-desc">
+            The agent confirms the page type and any constraints you've specified. If you haven't
+            told it which Figma project to use, it will list your available Figma projects and ask
+            you to pick one. Once confirmed, it proceeds without further questions.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">2</span>
+        <div class="step-body">
+          <h3 class="step-title">Competitor research is run</h3>
+          <p class="step-desc">
+            The agent triggers a lightweight competitor sweep — it navigates to the equivalent page
+            on a set of key competitors (Gymshark, Bulk, TPW, Optimum Nutrition) and captures
+            above-the-fold screenshots. This is a faster, lighter version of the full Competitor
+            Analysis agent: it's enough to prime you for the design phase without producing a
+            complete comparative report. If a full competitor report already exists in this repo
+            for the same page type, the agent links to that instead of re-running.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">3</span>
+        <div class="step-body">
+          <h3 class="step-title">Existing UX review data is gathered</h3>
+          <p class="step-desc">
+            The agent scans the reports in <code>src/pages/reports/</code> for any existing UX
+            reviews of the page type you're redesigning. If a recent review exists, it extracts
+            the key findings and includes them in the project brief as "known issues to address."
+            This connects your design work directly to the evidence already collected.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">4</span>
+        <div class="step-body">
+          <h3 class="step-title">Figma file is created and structured</h3>
+          <p class="step-desc">
+            The agent creates a new Figma file in your specified project. It sets up the standard
+            frame structure — a Cover page, a Research page (with competitor screenshots and UX
+            findings imported), a Design page with desktop and mobile frames at the correct Astro
+            widths (1440px and 390px), and a Handoff page. The Myprotein component library is
+            linked so design tokens and components are available immediately.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">5</span>
+        <div class="step-body">
+          <h3 class="step-title">Project brief is drafted</h3>
+          <p class="step-desc">
+            The agent writes a project brief as a text block on the Figma Cover page and also as a
+            summary in the chat. The brief covers: the problem the redesign is solving (from UX
+            review findings), what competitors do that we don't (from competitor research), key
+            design constraints, and a suggested success metric. The brief is a starting point —
+            edit it directly in Figma once the file is created.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">6</span>
+        <div class="step-body">
+          <h3 class="step-title">Agent hands back to you</h3>
+          <p class="step-desc">
+            The agent shares a direct link to the new Figma file and summarises what it created.
+            From here you go straight to Figma and start designing. There are no files to commit
+            to this repo from a Project Prep run — all output lives in Figma.
+          </p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ── Committing the output ──────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Committing the output</h2>
+    <p class="guide-body">
+      Project Prep does not produce files that need to be committed to this repo. All output lives
+      in the Figma file the agent creates. There is nothing to <code>git add</code> or
+      <code>git push</code> after a Project Prep run.
+    </p>
+    <p class="guide-body">
+      If the agent also triggered a competitor analysis as part of setup and saved a report page,
+      that file would be committed separately — the agent will tell you if this happened and give
+      you the exact commands to use.
+    </p>
+  </section>
+
+  <!-- ── Example output ────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Example output</h2>
+    <p class="guide-body">
+      No Project Prep runs have been logged on this site yet — because the output is a Figma file,
+      not a report page. The first time you run the agent, the Figma file link will be shared in
+      chat. You can record it here manually if you want a reference.
+    </p>
+    <div class="no-example">
+      No live example yet — run <code>/myprotein-prep-agent</code> to generate the first one.
+    </div>
+  </section>
+
+  <!-- ── Tips and common issues ────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Tips and common issues</h2>
+    <ul class="tips-list">
+      <li>
+        <strong>Figma MCP server isn't connected.</strong>
+        The agent will fail at step 4 if the Figma MCP server isn't available. Run
+        <code>/setup-cowork</code> to check your MCP connections, or go to
+        <code>Settings → MCP Servers</code> in Claude Code and confirm the Figma server is listed
+        and connected.
+      </li>
+      <li>
+        <strong>Agent creates the Figma file in the wrong project.</strong>
+        If you have multiple Figma projects, always specify the target project in your trigger
+        message (e.g. "set up a Figma file in the Myprotein Design project for the basket redesign").
+        If the file ends up in the wrong place, it's easier to move it in Figma manually than to
+        re-run the agent.
+      </li>
+      <li>
+        <strong>Competitor research step takes longer than expected.</strong>
+        The competitor sweep visits 4–5 URLs in sequence. This typically takes 2–4 minutes. If
+        a competitor site is slow or blocking the headless browser, the agent will skip it and note
+        that it was skipped — the rest of the setup continues normally.
+      </li>
+      <li>
+        <strong>No existing UX review for the page type you're redesigning.</strong>
+        If there's no UX review in the repo for your target page, the agent will note this in the
+        brief and suggest running a <code>/myprotein-ux-review</code> first. You can do this before
+        starting the redesign, or run the prep agent now and do the review separately — either order
+        works.
+      </li>
+      <li>
+        <strong>Brief doesn't reflect your actual constraints.</strong>
+        The drafted brief is a starting point, not a final document. Edit it directly in Figma on
+        the Cover page. The most important thing is that the competitor screenshots and UX findings
+        are already in place — the brief text is the easiest part to adjust yourself.
+      </li>
+    </ul>
+  </section>
+
+</ReportLayout>
+
+<style>
+  .agent-intro { margin-bottom: 48px; }
+  .agent-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+    opacity: 0.5;
+    margin-bottom: 10px;
+  }
+  .agent-h1 {
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 800;
+    color: var(--color-text-heading);
+    margin-bottom: 16px;
+    line-height: 1.15;
+  }
+  .agent-summary {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-text-body);
+    max-width: 680px;
+  }
+
+  .guide-section { margin-bottom: 52px; }
+  .section-heading {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--color-text-heading);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(0,57,66,0.08);
+  }
+  .sub-heading {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin: 20px 0 8px;
+  }
+
+  .guide-body {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+    margin-bottom: 16px;
+  }
+  .guide-body--tip {
+    background: var(--color-bg-muted);
+    border-left: 3px solid var(--color-mint);
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    margin-top: 12px;
+  }
+
+  .checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .checklist li {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-text-body);
+    padding-left: 22px;
+    position: relative;
+  }
+  .checklist li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    opacity: 0.4;
+    font-size: 13px;
+  }
+
+  .trigger-block { margin-bottom: 16px; }
+  .trigger-command {
+    display: inline-block;
+    font-size: 15px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    background: var(--color-primary);
+    color: var(--color-mint);
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  .trigger-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .trigger-chip {
+    font-size: 13px;
+    background: var(--color-bg-muted);
+    border: var(--card-border);
+    border-radius: var(--radius-chip);
+    padding: 5px 12px;
+    color: var(--color-text-body);
+    font-style: italic;
+  }
+
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12.5px;
+    background: var(--color-bg-muted);
+    color: var(--color-primary);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .code-block {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    background: var(--color-bg-muted);
+    color: var(--color-text-heading);
+    padding: 16px 20px;
+    border-radius: 8px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    border: var(--card-border);
+    white-space: pre;
+  }
+
+  .steps { list-style: none; display: flex; flex-direction: column; }
+  .step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(0,57,66,0.08);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-number {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-mint);
+    font-size: 13px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+  .step-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 6px;
+  }
+  .step-desc {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+  }
+
+  .no-example {
+    font-size: 14px;
+    color: var(--color-text-body);
+    background: var(--color-bg-muted);
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    padding: 16px 20px;
+    font-style: italic;
+    opacity: 0.8;
+  }
+
+  .tips-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .tips-list li {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+    background: var(--color-bg-card);
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    padding: 16px 18px;
+  }
+  .tips-list strong {
+    display: block;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 4px;
+  }
+</style>

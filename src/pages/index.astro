@@ -55,7 +55,7 @@ import '@/styles/design-system.css';
 
         <div class="agent-grid">
 
-          <div class="agent-card">
+          <a href="/agents/ux-review" class="agent-card agent-card--link">
             <div class="agent-icon agent-icon--review">↗</div>
             <div class="agent-body">
               <h3 class="agent-name">UX Review</h3>
@@ -70,10 +70,11 @@ import '@/styles/design-system.css';
                 Trigger: <em>"review this Myprotein page"</em>, <em>"audit the checkout"</em>,
                 or paste any myprotein.com URL.
               </p>
+              <span class="agent-guide-link">View agent guide →</span>
             </div>
-          </div>
+          </a>
 
-          <div class="agent-card">
+          <a href="/agents/competitor-analysis" class="agent-card agent-card--link">
             <div class="agent-icon agent-icon--competitor">⇄</div>
             <div class="agent-body">
               <h3 class="agent-name">Competitor Analysis</h3>
@@ -89,10 +90,11 @@ import '@/styles/design-system.css';
                 <em>"what does Bulk do well on their basket?"</em>,
                 or paste a competitor URL.
               </p>
+              <span class="agent-guide-link">View agent guide →</span>
             </div>
-          </div>
+          </a>
 
-          <div class="agent-card">
+          <a href="/agents/design-qa" class="agent-card agent-card--link">
             <div class="agent-icon agent-icon--qa">✓</div>
             <div class="agent-body">
               <h3 class="agent-name">Design QA</h3>
@@ -106,10 +108,11 @@ import '@/styles/design-system.css';
                 Trigger: <em>"QA this"</em>, <em>"does the build match the design?"</em>,
                 or provide both a Figma URL and a live URL.
               </p>
+              <span class="agent-guide-link">View agent guide →</span>
             </div>
-          </div>
+          </a>
 
-          <div class="agent-card">
+          <a href="/agents/project-prep" class="agent-card agent-card--link">
             <div class="agent-icon agent-icon--prep">◎</div>
             <div class="agent-body">
               <h3 class="agent-name">Project Prep</h3>
@@ -124,8 +127,9 @@ import '@/styles/design-system.css';
                 <em>"set up a Figma file for the checkout"</em>,
                 or <em>"start a new design project"</em>.
               </p>
+              <span class="agent-guide-link">View agent guide →</span>
             </div>
-          </div>
+          </a>
 
         </div>
       </div>
@@ -395,6 +399,17 @@ import '@/styles/design-system.css';
     line-height: 1.65;
     color: var(--color-text-body);
   }
+  .agent-card--link {
+    text-decoration: none;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+  }
+  .agent-card--link:hover {
+    border-color: rgba(0,57,66,0.3);
+    box-shadow: 0 6px 20px rgba(0,57,66,0.09);
+    transform: translateY(-2px);
+  }
+
   .agent-trigger-hint {
     font-size: 12px;
     color: var(--color-text-body);
@@ -404,6 +419,16 @@ import '@/styles/design-system.css';
     padding-top: 12px;
     margin-top: auto;
   }
+
+  .agent-guide-link {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-top: 10px;
+    opacity: 0.7;
+  }
+  .agent-card--link:hover .agent-guide-link { opacity: 1; }
 
   /* ── Report hub ──────────────────────────────────────────────── */
   .report-hub-grid {

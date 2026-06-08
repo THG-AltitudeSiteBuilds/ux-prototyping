@@ -1,0 +1,433 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+---
+
+<ReportLayout title="UX Review Agent">
+
+  <section class="agent-intro">
+    <p class="agent-eyebrow">Agent Guide</p>
+    <h1 class="agent-h1">UX Review</h1>
+    <p class="agent-summary">
+      The UX Review agent audits any live Myprotein page for UX, accessibility, and conversion
+      issues. Give it a myprotein.com URL and it navigates to the page, captures desktop and
+      mobile screenshots, and produces a structured report — every finding rated by severity,
+      with a specific recommendation and a screenshot showing the exact problem. Use it whenever
+      you want an objective, evidence-based read on a page before a redesign, after a release, or
+      as ongoing design debt tracking.
+    </p>
+  </section>
+
+  <!-- ── Before you start ────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Before you start</h2>
+    <ul class="checklist">
+      <li>The full URL of the Myprotein page you want reviewed (e.g. <code>https://www.myprotein.com/sports-nutrition/impact-whey-protein/10530943.html</code>)</li>
+      <li>The page should be publicly accessible — the agent cannot log in or handle pages that require authentication</li>
+      <li>If the page is behind a VPN or on a staging environment, confirm the URL is reachable from the machine running Claude Code</li>
+      <li>You're running Claude Code inside this repo so the agent can commit the output files</li>
+    </ul>
+  </section>
+
+  <!-- ── How to trigger ──────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">How to trigger it</h2>
+    <p class="guide-body">Use the slash command directly, or describe what you want in plain English — the agent recognises all of these:</p>
+    <div class="trigger-block">
+      <code class="trigger-command">/myprotein-ux-review</code>
+    </div>
+    <div class="trigger-examples">
+      <span class="trigger-chip">"review this Myprotein page [URL]"</span>
+      <span class="trigger-chip">"audit the basket UX"</span>
+      <span class="trigger-chip">"check the product page UX on this URL"</span>
+      <span class="trigger-chip">"how's the UX on the checkout?"</span>
+    </div>
+    <p class="guide-body guide-body--tip">Include the URL in the same message as the trigger. If you don't, the agent will ask for it before starting.</p>
+  </section>
+
+  <!-- ── Step-by-step walkthrough ───────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Step-by-step walkthrough</h2>
+    <p class="guide-body">Here is exactly what happens after you trigger the agent:</p>
+    <ol class="steps">
+      <li class="step">
+        <span class="step-number">1</span>
+        <div class="step-body">
+          <h3 class="step-title">URL validation and slug generation</h3>
+          <p class="step-desc">
+            The agent extracts the URL from your message and confirms it is a myprotein.com URL.
+            It then derives a slug for the report — typically the page name and today's date, e.g.
+            <code>myprotein-impact-whey-2026-06-01</code>. If it cannot determine a good slug it will ask you to confirm one.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">2</span>
+        <div class="step-body">
+          <h3 class="step-title">Desktop and mobile screenshots</h3>
+          <p class="step-desc">
+            The agent opens the URL in a headless browser via the Claude Preview tool at 1440px (desktop)
+            and 390px (mobile) widths. It scrolls through the page and captures screenshots of every major
+            section — above the fold, key interactive elements, the product panel, any modals that can be
+            triggered. Screenshots are saved to
+            <code>src/assets/reports/[slug]/</code> as PNG files named descriptively
+            (e.g. <code>above-fold-desktop.png</code>, <code>add-to-basket-desktop.png</code>).
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">3</span>
+        <div class="step-body">
+          <h3 class="step-title">Inspection and analysis</h3>
+          <p class="step-desc">
+            The agent reads the page's DOM and CSS to inspect spacing, typography, colour, touch-target
+            sizes, and ARIA labels. It correlates what it sees in the screenshots with what it finds in
+            the markup. This stage produces a raw list of candidate issues.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">4</span>
+        <div class="step-body">
+          <h3 class="step-title">Findings are rated and written up</h3>
+          <p class="step-desc">
+            Each candidate issue is assessed for user impact and ranked High, Medium, or Low. The agent
+            writes a structured finding for each one: what the problem is, why it affects conversion or
+            usability, and a specific recommended fix. Low-confidence observations are discarded — the
+            agent only surfaces issues it can evidence with a screenshot or DOM reference.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">5</span>
+        <div class="step-body">
+          <h3 class="step-title">Report file is written</h3>
+          <p class="step-desc">
+            The agent creates <code>src/pages/reports/[slug].astro</code> — a fully structured Astro
+            page using the <code>ReportLayout</code> wrapper and <code>FindingCard</code> components.
+            Each finding includes the screenshot imported directly from assets. The file is complete and
+            ready to commit with no manual edits needed.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">6</span>
+        <div class="step-body">
+          <h3 class="step-title">Agent hands back to you</h3>
+          <p class="step-desc">
+            The agent summarises what it found (e.g. "3 high, 2 medium, 1 low finding") and tells you
+            which files it created. It does not commit automatically — you commit in the next step.
+          </p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ── Committing the output ──────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Committing the output</h2>
+
+    <h3 class="sub-heading">Files created</h3>
+    <ul class="file-list">
+      <li><code>src/pages/reports/[slug].astro</code> — the report page</li>
+      <li><code>src/assets/reports/[slug]/*.png</code> — all screenshots (typically 4–10 files)</li>
+    </ul>
+
+    <h3 class="sub-heading">Git commands</h3>
+    <pre class="code-block">git add src/pages/reports/[slug].astro src/assets/reports/[slug]/
+git commit -m "Add UX review: [Page Name] ([date])"
+git push</pre>
+
+    <h3 class="sub-heading">Suggested commit message format</h3>
+    <pre class="code-block">Add UX review: Impact Whey PDP (2026-06-01)</pre>
+
+    <h3 class="sub-heading">Verifying the report is live</h3>
+    <p class="guide-body">
+      After pushing, Vercel will redeploy the site automatically (usually under 2 minutes). Visit
+      <code>/reports/[slug]</code> on the deployed URL to confirm the page is live, images load,
+      and the report reads correctly. You can also check the Vercel dashboard for the deployment
+      status.
+    </p>
+  </section>
+
+  <!-- ── Example output ────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Example output</h2>
+    <p class="guide-body">
+      The Protein PLP audit from 4 June 2026 is a good example of a finished report — 5 findings
+      across high and medium priority, with screenshots for each one:
+    </p>
+    <a href="/reports/myprotein-protein-plp-2026-06-04" class="example-link">
+      View: Protein Powder PLP audit →
+    </a>
+  </section>
+
+  <!-- ── Tips and common issues ────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Tips and common issues</h2>
+    <ul class="tips-list">
+      <li>
+        <strong>Page has a cookie consent banner that blocks the view.</strong>
+        The agent will attempt to dismiss it automatically. If it can't, it notes this in the report
+        and captures what it can. You can re-run after manually clearing cookies or with a direct
+        link that bypasses the banner.
+      </li>
+      <li>
+        <strong>Page requires login (e.g. account pages, checkout).</strong>
+        The agent cannot authenticate. For these pages, review manually and provide the agent with
+        a screenshot or describe the elements you want it to assess — it can still write a structured
+        finding and recommendation.
+      </li>
+      <li>
+        <strong>Screenshots show a half-loaded state.</strong>
+        Lazy-loaded images or lazy JavaScript components sometimes don't render in headless browsers.
+        If a screenshot looks broken, ask the agent to retry with an explicit wait
+        (<em>"wait for the product grid to load before screenshotting"</em>).
+      </li>
+      <li>
+        <strong>Fewer findings than expected.</strong>
+        Zero or very few findings is a valid result — it means the page is in good shape. Don't
+        prompt the agent to "find more issues"; that leads to inflated, low-confidence findings.
+      </li>
+      <li>
+        <strong>Report page has broken image paths after committing.</strong>
+        Check that the PNG filenames in the <code>.astro</code> file exactly match the files in
+        <code>src/assets/reports/[slug]/</code>. Astro's image imports are case-sensitive.
+      </li>
+    </ul>
+  </section>
+
+</ReportLayout>
+
+<style>
+  .agent-intro {
+    margin-bottom: 48px;
+  }
+  .agent-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+    opacity: 0.5;
+    margin-bottom: 10px;
+  }
+  .agent-h1 {
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 800;
+    color: var(--color-text-heading);
+    margin-bottom: 16px;
+    line-height: 1.15;
+  }
+  .agent-summary {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-text-body);
+    max-width: 680px;
+  }
+
+  .guide-section {
+    margin-bottom: 52px;
+  }
+  .section-heading {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--color-text-heading);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(0,57,66,0.08);
+  }
+  .sub-heading {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin: 20px 0 8px;
+  }
+
+  .guide-body {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+    margin-bottom: 16px;
+  }
+  .guide-body--tip {
+    background: var(--color-bg-muted);
+    border-left: 3px solid var(--color-mint);
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    margin-top: 12px;
+  }
+
+  .checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .checklist li {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-text-body);
+    padding-left: 22px;
+    position: relative;
+  }
+  .checklist li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    opacity: 0.4;
+    font-size: 13px;
+  }
+
+  .trigger-block {
+    margin-bottom: 16px;
+  }
+  .trigger-command {
+    display: inline-block;
+    font-size: 15px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    background: var(--color-primary);
+    color: var(--color-mint);
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  .trigger-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .trigger-chip {
+    font-size: 13px;
+    background: var(--color-bg-muted);
+    border: var(--card-border);
+    border-radius: var(--radius-chip);
+    padding: 5px 12px;
+    color: var(--color-text-body);
+    font-style: italic;
+  }
+
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12.5px;
+    background: var(--color-bg-muted);
+    color: var(--color-primary);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .code-block {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    background: var(--color-bg-muted);
+    color: var(--color-text-heading);
+    padding: 16px 20px;
+    border-radius: 8px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    border: var(--card-border);
+    white-space: pre;
+  }
+
+  .file-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .file-list li {
+    font-size: 14px;
+    color: var(--color-text-body);
+    padding-left: 16px;
+    position: relative;
+  }
+  .file-list li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: var(--color-primary);
+    opacity: 0.4;
+  }
+
+  .steps {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+  .step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(0,57,66,0.08);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-number {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-mint);
+    font-size: 13px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+  .step-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 6px;
+  }
+  .step-desc {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+  }
+
+  .example-link {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    padding: 14px 20px;
+    background: var(--color-bg-card);
+    transition: box-shadow 0.15s, transform 0.1s;
+  }
+  .example-link:hover {
+    box-shadow: var(--card-shadow);
+    transform: translateY(-1px);
+  }
+
+  .tips-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .tips-list li {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+    background: var(--color-bg-card);
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    padding: 16px 18px;
+  }
+  .tips-list strong {
+    display: block;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 4px;
+  }
+</style>

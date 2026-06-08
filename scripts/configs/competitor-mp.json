@@ -1,0 +1,6 @@
+{
+  "loadWait": 7000,
+  "shots": [
+    { "name": "myprotein-full-desktop", "scrollY": 0 }
+  ]
+}

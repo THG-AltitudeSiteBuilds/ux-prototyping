@@ -1,0 +1,9 @@
+{
+  "loadWait": 6000,
+  "shots": [
+    { "name": "tpw-full-desktop", "scrollY": 0 },
+    { "name": "tpw-size-selector-detail", "scrollY": 0, "clip": { "x": 0, "y": 400, "width": 720, "height": 280 } },
+    { "name": "tpw-tier-comparison-detail", "scrollY": 3200, "clipSelector": "table, [class*='comparison'], [class*='compare']", "maxHeight": 700 },
+    { "name": "tpw-crosssell-detail", "scrollY": 5900 }
+  ]
+}

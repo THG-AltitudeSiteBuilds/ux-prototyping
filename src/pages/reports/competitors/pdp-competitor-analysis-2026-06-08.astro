@@ -1,0 +1,374 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+import OpportunityCard from '@/components/OpportunityCard.astro';
+---
+
+<ReportLayout title="PDP Competitor Analysis — June 2026">
+
+  <section class="report-intro">
+    <h1 class="report-h1">PDP Competitor Analysis</h1>
+    <p class="report-meta">Product Detail Page &mdash; Analysed 8 June 2026</p>
+    <p class="report-summary">
+      Three competitor PDPs were reviewed against Myprotein's Impact Whey Protein page:
+      The Protein Works (Whey Protein 360), Optimum Nutrition (Gold Standard 100% Whey),
+      and Healf (Sprout Living Epic Protein). Seven opportunities were identified across
+      the three — spanning upsell architecture, review intelligence, subscription framing,
+      and in-page personalisation. None are currently present on Myprotein's Impact Whey PDP.
+    </p>
+  </section>
+
+  <!-- ─── The Protein Works ──────────────────────────────────────────────── -->
+
+  <section class="competitor-section">
+    <div class="competitor-header">
+      <h2 class="competitor-name">The Protein Works</h2>
+      <p class="competitor-url">theproteinworks.com &mdash; Whey Protein 360 BLACK Innovation</p>
+    </div>
+
+    <OpportunityCard
+      title="In-page product tier comparison table"
+      competitor="The Protein Works"
+      viewport="Desktop"
+      categories="conversion,discovery"
+      opportunityId="tpw-tier-comparison-table"
+    >
+      <p slot="what">
+        Below the main product content, TPW includes a "Worth the upgrade?" section presenting a
+        structured side-by-side table comparing their three whey tiers (BLACK, GOLD, PLATINUM)
+        across ~10 nutritional attributes: price per serving, protein per serving, protein sources,
+        calories, vitamins &amp; minerals, approved health benefits, flavour count, digestive enzymes,
+        and GLP-1 compatibility. Each column is framed with a purchase-intent label ("Best Price",
+        "Best Value", "Best Rated") and uses check/cross marks for boolean attributes. Links from
+        the table go directly to each tier's product page.
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/tpw-tier-comparison-detail.png" alt="TPW in-page product tier comparison table showing BLACK, GOLD and PLATINUM tiers side by side" />
+      </p>
+      <p slot="why">
+        A user on an entry-level product page is often mid-decision — they know they want whey
+        but haven't committed to a tier. Surfacing the upgrade comparison on the same page captures
+        that indecision in favour of a higher-value product without requiring navigation elsewhere.
+        The framing ("Best Price" vs "Best Value") doesn't make the entry tier feel inferior — it
+        makes the middle tier feel obviously worth the small price increase. This is a well-established
+        CRO pattern for increasing average order value.
+      </p>
+      <p slot="opportunity">
+        Myprotein sells Impact Whey, Impact Whey Advanced, and THE Whey as a de facto tier stack
+        but the PDP makes no attempt to surface this. A user on Impact Whey has no in-page prompt
+        to consider Impact Whey Advanced without navigating away. A compact "Compare the range"
+        module — even a 2-column card comparison — could intercept undecided shoppers. The labelling
+        approach ("Best Value", "Most Popular") is worth borrowing directly.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="Per-serving price on each size option"
+      competitor="The Protein Works"
+      viewport="Both"
+      categories="conversion"
+      opportunityId="tpw-per-serving-price"
+    >
+      <p slot="what">
+        TPW's size selector displays the price-per-serving directly beneath each size chip:
+        20 shakes (600g) at £0.55 each, 40 shakes at £0.50 each, 80 shakes at £0.43 each,
+        160 shakes at £0.40 each. The cost-per-serving is always visible — no interaction required.
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/tpw-size-selector-detail.png" alt="TPW size selector showing per-serving price beneath each size option" />
+      </p>
+      <p slot="why">
+        A larger bag is a higher upfront price. Showing cost-per-serving reframes the decision:
+        the larger purchase becomes cheaper per use, not just a bigger spend. This framing reduces
+        the psychological friction of committing to a larger size and nudges users toward higher-value
+        orders. It also eliminates the mental arithmetic a user would otherwise have to do themselves.
+      </p>
+      <p slot="opportunity">
+        Myprotein shows the total price per size option but does not display price-per-serving on
+        the size chips. Adding cost-per-serving beneath each size option on Impact Whey would make
+        the value case for larger sizes immediately legible — particularly for a product sold in
+        sizes ranging from 500g to 5kg, where the per-serve savings on larger bags are significant.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="Rating distribution bars with percentage breakdown"
+      competitor="The Protein Works"
+      viewport="Both"
+      categories="trust"
+      opportunityId="tpw-rating-breakdown-bars"
+    >
+      <p slot="what">
+        TPW's reviews section shows the full star-by-star percentage distribution alongside the
+        aggregate score: 5★ 40%, 4★ 4%, 3★ 8%, 2★ 11%, 1★ 37%. Each tier has a proportional
+        horizontal bar and explicit percentage. The distribution is shown unfiltered — even when
+        the split is unflattering.
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/tpw-reviews-breakdown-detail.png" alt="TPW rating distribution showing percentage bars per star rating" />
+      </p>
+      <p slot="why">
+        Showing the full distribution is paradoxically a trust signal. Users who see only an
+        aggregate score are left to wonder whether it reflects genuine spread. A visible distribution
+        lets customers self-qualify — a user who reads 1-star reviews to understand failure modes
+        is more informed and less likely to return. Hiding the distribution invites suspicion;
+        showing it honestly reduces it.
+      </p>
+      <p slot="opportunity">
+        Myprotein shows an aggregate rating and total count but no star-by-star breakdown on the PDP.
+        With 210,000+ reviews, Myprotein has far more data to make this credible and useful. A
+        distribution bar chart in the reviews section — showing the likely dominant 4- and 5-star
+        clusters on Impact Whey — would add a transparency signal without undermining confidence.
+      </p>
+    </OpportunityCard>
+
+  </section>
+
+  <!-- ─── Optimum Nutrition ──────────────────────────────────────────────── -->
+
+  <section class="competitor-section">
+    <div class="competitor-header">
+      <h2 class="competitor-name">Optimum Nutrition</h2>
+      <p class="competitor-url">optimumnutrition.com &mdash; Gold Standard 100% Whey Protein Powder</p>
+    </div>
+
+    <OpportunityCard
+      title="Review attribute highlights beside the star rating"
+      competitor="Optimum Nutrition"
+      viewport="Both"
+      categories="trust,conversion"
+      opportunityId="on-review-attribute-highlights"
+    >
+      <p slot="what">
+        Directly below ON's star rating and review count, a short inline callout reads:
+        <strong>"Highly rated by customers for: Delivery Speed, Taste and Mixability, Value for Money."</strong>
+        Each attribute is a clickable link that jumps to the reviews section filtered to reviews
+        mentioning that dimension. The callout appears above the product bullets and the
+        add-to-cart area — it is the first thing a user reads after the aggregate score.
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/on-atf-detail.png" alt="Optimum Nutrition PDP showing 'Highly rated by customers for: Delivery Speed, Taste and Mixability, Value for Money' directly below the star rating" />
+      </p>
+      <p slot="why">
+        A star rating tells a user how well-liked a product is. An attribute summary tells them
+        <em>why</em>. For a shopper comparing two proteins with similar ratings, "Taste and Mixability"
+        called out explicitly is a significantly stronger signal than "4.4 stars". It collapses
+        the work of reading dozens of reviews into a three-word reassurance, and the clickable
+        links give curious users a direct path to filtered evidence.
+      </p>
+      <p slot="opportunity">
+        Myprotein surfaces a Trustpilot aggregate score and total count but does not break reviews
+        down by attribute near the rating. With 210,000+ reviews on Impact Whey, the data to surface
+        attribute-level highlights clearly exists. Even a static, editorially curated version —
+        "Customers rate this highly for taste variety and value per serving" — near the star rating
+        would provide this signal. A dynamic version powered by review tagging would be the stronger
+        long-term implementation.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="AI-generated review summary with topic filter chips"
+      competitor="Optimum Nutrition"
+      viewport="Both"
+      categories="trust,content"
+      opportunityId="on-ai-review-summary"
+    >
+      <p slot="what">
+        At the top of ON's reviews section, before any individual review, an AI-synthesised paragraph
+        summarises what customers say: <em>"Customers praise its great taste, easy mixing, and high
+        value, making it a top choice for serious athletes."</em> Below the search and sort controls
+        sits a row of topic filter chips — "size", "ingredients", "results", "absorption", "quality",
+        "weight", "smell", "taste" — each filtering the review list to reviews mentioning that topic.
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/on-reviews-section.png" alt="Optimum Nutrition reviews section showing AI summary paragraph and topic filter chips" />
+      </p>
+      <p slot="why">
+        No one reads 1,725 reviews. An AI synthesis gives users the substance of the community's
+        verdict in ten seconds. For high-review-count products, the reviews section risks becoming
+        noise rather than signal — the summary resolves this. The topic chips extend the utility:
+        a user who cares specifically about mixability can filter directly rather than hunting through
+        pages. Together they turn the reviews section from a scrollable wall of text into a
+        structured, navigable knowledge base.
+      </p>
+      <p slot="opportunity">
+        Myprotein's Impact Whey has 210,000+ reviews — a dataset that makes ON's 1,725 look nascent.
+        Yet the reviews section is a standard paginated list with star and sort filters only — no
+        synthesis, no topic navigation, no AI summary. A product with this review volume is exactly
+        where an AI summary would be most useful and most credible. Even a static editorial summary
+        updated quarterly would be a meaningful step. Topic chips mapped to common themes — flavour,
+        mixability, value, results — would be relatively low effort against an existing tagged
+        review corpus.
+      </p>
+    </OpportunityCard>
+
+  </section>
+
+  <!-- ─── Healf ──────────────────────────────────────────────────────────── -->
+
+  <section class="competitor-section">
+    <div class="competitor-header">
+      <h2 class="competitor-name">Healf</h2>
+      <p class="competitor-url">healf.com &mdash; Sprout Living Epic Protein (Vanilla Lucuma)</p>
+    </div>
+
+    <OpportunityCard
+      title="Goal-based use-case chips above the add-to-cart"
+      competitor="Healf"
+      viewport="Both"
+      categories="personalisation,conversion"
+      opportunityId="healf-goal-chips"
+    >
+      <p slot="what">
+        Immediately below the product title and star rating, Healf asks: "What's your focus with
+        [product name]?" and presents four selectable chips: "Muscle building", "Recovery",
+        "Weight management", "Something else". Selecting a chip is paired with an "Assess
+        suitability" entry point (a tab alongside "Product description") that helps users determine
+        whether the product fits their specific goal. Both elements appear above the price and
+        add-to-cart section.
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/healf-subscribe-cta-detail.png" alt="Healf PDP showing goal chips (Muscle building, Recovery, Weight management) and Assess suitability tab above the add-to-cart" />
+      </p>
+      <p slot="why">
+        Protein powder is bought for different reasons by different people. A user targeting
+        muscle building needs to know about protein-per-serving and amino acid profile; a recovery
+        buyer cares about EAAs and digestibility. A goal chip doesn't just personalise the
+        experience — it signals that the brand understands why the user is here, which reduces
+        purchase hesitation. The suitability assessment adds a layer of confidence: the user
+        is being actively helped to make the right decision rather than left to judge alone.
+      </p>
+      <p slot="opportunity">
+        Myprotein's Impact Whey PDP makes no attempt to qualify the user's goal or surface
+        goal-specific content. For a product used across a wide range of goals — muscle gain,
+        weight loss, general health, sports recovery — a simple goal chip selector could unlock
+        context-relevant content: the relevant benefit bullets, a matched FAQ, or a
+        "this product is a good fit for you" confirmation signal. Even a static version (chips
+        that scroll to a relevant section) would add meaningful reassurance before the add-to-cart.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="Subscribe & save as primary CTA with inline benefit callouts"
+      competitor="Healf"
+      viewport="Both"
+      categories="conversion"
+      opportunityId="healf-subscribe-primary-cta"
+    >
+      <p slot="what">
+        On Healf's PDP, the subscription option is presented as the dominant choice — it is the
+        first, darker button in the add-to-cart area, labelled "Subscribe &amp; save 10%", with
+        the discounted price (£32.84) alongside the crossed-out full price (£41.99). Two inline
+        benefit lines sit beneath it: "✓ Free delivery on subscriptions" and "✓ Free sample each
+        month". A sticky bar persists at the bottom of the screen throughout the page scroll,
+        showing the same subscription framing and price.
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/healf-lower-desktop.png" alt="Healf sticky ATC bar showing Subscribe & save 10% as primary CTA with discounted price" />
+      </p>
+      <p slot="why">
+        Defaulting to subscription — rather than treating it as an optional upgrade — changes
+        the conversion dynamic. The user's path of least resistance is now the recurring order,
+        not the one-time purchase. Showing the specific benefits inline (free delivery, free
+        sample) makes the value exchange concrete at the moment of decision, rather than requiring
+        the user to hunt for subscription terms. The sticky bar ensures this framing is always
+        present regardless of where the user is on the page.
+      </p>
+      <p slot="opportunity">
+        Myprotein has a Subscribe &amp; Save option on PDPs but it is presented as a secondary
+        choice alongside the standard one-time purchase. Inverting the hierarchy — making
+        Subscribe the primary/pre-selected option and adding two or three specific benefit
+        callouts inline ("Free delivery · Cancel anytime · Save X%") — would increase subscription
+        conversion without requiring the user to seek out the option. This is a framing change
+        rather than a feature build.
+      </p>
+    </OpportunityCard>
+
+  </section>
+
+  <!-- ─── Where MP Leads ─────────────────────────────────────────────────── -->
+
+  <section class="prose-section">
+    <h2 class="section-heading">Areas Where Myprotein Already Leads</h2>
+    <p>
+      Myprotein's review volume (210,000+ on Impact Whey alone) is a trust advantage that none
+      of these three competitors come close to matching — ON has ~1,725, TPW has 135, and Healf's
+      listed product has 27. Myprotein's flavour range (50+ for Impact Whey) far exceeds all three.
+      The Trustpilot aggregate score is already surfaced on the Myprotein PDP, as it is on TPW's
+      and ON's — this is a draw, not a gap. Myprotein's structured content tabs (nutrition,
+      ingredients, key benefits, reviews) give users more ways to explore detail without navigating
+      away than any of the three competitor pages reviewed. The product image gallery on Myprotein's
+      PDP is also stronger than ON's sparse presentation, and the add-to-bag area is clean and clear.
+    </p>
+  </section>
+
+  <!-- ─── Screenshots ────────────────────────────────────────────────────── -->
+
+  <section class="screenshots-section">
+    <h2 class="section-heading">Page Screenshots</h2>
+
+    <h3 class="screenshot-competitor">The Protein Works</h3>
+    <div class="screenshot-grid">
+      <div class="screenshot-col">
+        <p class="screenshot-label">The Protein Works — Desktop</p>
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/tpw-full-desktop.png" alt="The Protein Works Whey Protein 360 PDP desktop" />
+      </div>
+      <div class="screenshot-col">
+        <p class="screenshot-label">Myprotein — Desktop</p>
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/myprotein-full-desktop.png" alt="Myprotein Impact Whey Protein PDP desktop" />
+      </div>
+    </div>
+
+    <h3 class="screenshot-competitor">Optimum Nutrition</h3>
+    <div class="screenshot-grid">
+      <div class="screenshot-col">
+        <p class="screenshot-label">Optimum Nutrition — Desktop</p>
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/on-full-desktop.png" alt="Optimum Nutrition Gold Standard Whey PDP desktop" />
+      </div>
+      <div class="screenshot-col">
+        <p class="screenshot-label">Myprotein — Desktop</p>
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/myprotein-full-desktop.png" alt="Myprotein Impact Whey Protein PDP desktop" />
+      </div>
+    </div>
+
+    <h3 class="screenshot-competitor">Healf</h3>
+    <div class="screenshot-grid">
+      <div class="screenshot-col">
+        <p class="screenshot-label">Healf — Desktop</p>
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/healf-full-desktop.png" alt="Healf Sprout Living Epic Protein PDP desktop" />
+      </div>
+      <div class="screenshot-col">
+        <p class="screenshot-label">Myprotein — Desktop</p>
+        <img src="/assets/reports/competitors/pdp-competitor-analysis-2026-06-08/myprotein-full-desktop.png" alt="Myprotein Impact Whey Protein PDP desktop" />
+      </div>
+    </div>
+  </section>
+
+</ReportLayout>
+
+<style>
+  .report-intro { margin-bottom: 48px; }
+  .report-h1 { font-size: 26px; font-weight: 800; color: var(--color-text-heading); line-height: 1.25; margin-bottom: 6px; }
+  .report-meta { font-size: 13px; color: var(--color-text-body); opacity: 0.65; margin-bottom: 14px; }
+  .report-summary { font-size: 15px; line-height: 1.7; color: var(--color-text-body); max-width: 680px; }
+
+  .competitor-section { margin-bottom: 56px; }
+
+  .competitor-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba(0, 57, 66, 0.1);
+  }
+
+  .competitor-name {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin: 0;
+  }
+
+  .competitor-url {
+    font-size: 12px;
+    color: var(--color-text-body);
+    opacity: 0.45;
+    margin: 0;
+  }
+
+  .section-heading { font-size: 18px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(0, 57, 66, 0.1); }
+  .prose-section { margin-bottom: 36px; }
+  .prose-section p { font-size: 15px; line-height: 1.7; color: var(--color-text-body); }
+
+  .screenshots-section { margin-top: 48px; }
+  .screenshot-competitor { font-size: 14px; font-weight: 700; color: var(--color-text-heading); margin: 28px 0 12px; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.05em; }
+  .screenshot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 32px; }
+  .screenshot-col img { width: 100%; border-radius: 8px; border: 1px solid rgba(0,57,66,0.08); display: block; margin-top: 8px; }
+  .screenshot-label { font-size: 12px; font-weight: 600; color: var(--color-text-body); opacity: 0.55; margin: 0; text-transform: uppercase; letter-spacing: 0.05em; }
+</style>

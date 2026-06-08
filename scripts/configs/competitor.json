@@ -1,0 +1,9 @@
+{
+  "loadWait": 6000,
+  "shots": [
+    {
+      "name": "full-desktop",
+      "scrollY": 0
+    }
+  ]
+}

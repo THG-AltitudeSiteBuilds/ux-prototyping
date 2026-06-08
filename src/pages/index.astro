@@ -23,6 +23,7 @@ import '@/styles/design-system.css';
         <div class="nav-links">
           <a href="/reports" class="nav-link">UX Reviews</a>
           <a href="/reports/competitors" class="nav-link">Competitor Analysis</a>
+          <a href="/getting-started" class="nav-link nav-link--cta">Get started</a>
         </div>
       </div>
     </nav>
@@ -38,7 +39,8 @@ import '@/styles/design-system.css';
           within Claude Code or Claude.ai.
         </p>
         <div class="hero-actions">
-          <a href="/reports" class="btn btn--primary">View UX Reviews</a>
+          <a href="/getting-started" class="btn btn--primary">Get started</a>
+          <a href="/reports" class="btn btn--secondary">View UX Reviews</a>
           <a href="/reports/competitors" class="btn btn--secondary">Competitor Analysis</a>
         </div>
       </div>
@@ -271,6 +273,15 @@ import '@/styles/design-system.css';
     transition: color 0.15s;
   }
   .nav-link:hover { color: #fff; }
+  .nav-link--cta {
+    background: var(--color-mint);
+    color: var(--color-primary) !important;
+    padding: 5px 14px;
+    border-radius: 99px;
+    font-weight: 700;
+    opacity: 1 !important;
+  }
+  .nav-link--cta:hover { opacity: 0.88 !important; }
 
   /* ── Hero ────────────────────────────────────────────────────── */
   .hero {

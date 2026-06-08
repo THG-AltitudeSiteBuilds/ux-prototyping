@@ -12,10 +12,10 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
       Five competitor PDPs were reviewed against Myprotein's Impact Whey Protein page:
       The Protein Works (Whey Protein 360), Optimum Nutrition (Gold Standard 100% Whey),
       Healf (Sprout Living Epic Protein), Huel (Complete Protein), and Bulk (Pure Whey
-      Protein). Eleven opportunities were identified across the five — spanning upsell
-      architecture, review intelligence, subscription framing, in-page personalisation,
-      flavour selector UX, and bundle purchasing mechanics. None are currently present on
-      Myprotein's Impact Whey PDP.
+      Protein). Twelve opportunities were identified — eleven sourced from competitor
+      patterns, plus one latent opportunity derived from comparing flavour ranges across
+      all five: Myprotein's 50+ flavours is the widest range in the category by a large
+      margin, but the PDP makes almost no conversion use of it.
     </p>
   </section>
 
@@ -422,6 +422,60 @@ import OpportunityCard from '@/components/OpportunityCard.astro';
         review from today or yesterday. This is a low-effort integration using the standard
         Trustpilot embed widget, and would make the trust signal on the PDP substantially more
         dynamic than a static score badge.
+      </p>
+    </OpportunityCard>
+
+  </section>
+
+  <!-- ─── Latent Myprotein Opportunity ─────────────────────────────────── -->
+
+  <section class="competitor-section">
+    <div class="competitor-header">
+      <h2 class="competitor-name">Myprotein — latent opportunity</h2>
+      <p class="competitor-url">Derived from comparing flavour ranges across all five competitors</p>
+    </div>
+
+    <OpportunityCard
+      title="Flavour range as an active conversion argument"
+      competitor="Myprotein"
+      viewport="Both"
+      categories="conversion,trust,discovery"
+      opportunityId="mp-flavour-range-conversion"
+    >
+      <p slot="what">
+        Myprotein offers 50+ flavours of Impact Whey — the widest range of any brand reviewed
+        by a significant margin (Bulk: ~20, ON: ~15, Huel: 6, TPW: 5). This is a genuine
+        product-level advantage. The current PDP treats flavour range as a functional selector
+        only: users scroll through swatches to pick one. The range is not surfaced as a claim,
+        a social proof signal, or a conversion argument anywhere on the page.
+      </p>
+      <p slot="why">
+        Range communicates investment, confidence, and scale in a way that a single product spec
+        cannot. A brand with 50 flavours has clearly iterated based on customer demand; a brand
+        with 5 hasn't. For a first-time buyer choosing between Myprotein and a competitor,
+        "50+ flavours" is a reassurance that they won't be stuck with one option if their first
+        choice doesn't work out — it lowers the perceived risk of committing. Range also functions
+        as a discovery driver: users who come for one flavour often browse others and return for
+        a second purchase in a different variant. None of the five competitors reviewed can
+        credibly make this claim.
+      </p>
+      <p slot="opportunity">
+        Three concrete ways to activate this on the PDP:
+        <br /><br />
+        <strong>1. Surface the number as a claim.</strong> A line near the flavour selector —
+        "Choose from 50+ flavours" — makes the range legible immediately, in the same way Huel
+        says "Choose from 6 tasty flavours." The number itself is the signal.
+        <br /><br />
+        <strong>2. Add bestseller and new labels to the selector.</strong> With 50+ options,
+        the selector currently creates choice paralysis. Labelling the top 3–5 as "Best Seller"
+        and any new additions as "New" gives undecided users a socially validated shortcut —
+        the same pattern Bulk uses for pricing and Huel uses for its top flavour. This turns
+        range from a liability (too many choices) into an asset (community-validated defaults).
+        <br /><br />
+        <strong>3. Pair range with per-serving price in the product summary.</strong>
+        A compact line above the ATC — "50+ flavours · from £0.54/serving" — creates a
+        value-and-range statement that no competitor can match. It pre-empts the two most
+        common objections (taste uncertainty and price) in a single line.
       </p>
     </OpportunityCard>
 

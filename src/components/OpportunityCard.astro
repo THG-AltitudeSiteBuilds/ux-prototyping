@@ -160,9 +160,11 @@ const categoryColours: Record<string, string> = {
 
   .section-content p { margin: 0; }
 
-  .section-content img {
+  .section-content :global(img) {
     display: block;
     width: 100%;
+    max-width: 100%;
+    height: auto;
     border-radius: 8px;
     margin-top: 12px;
     border: 1px solid rgba(0,57,66,0.08);

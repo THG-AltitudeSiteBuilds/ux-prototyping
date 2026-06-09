@@ -8,12 +8,13 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <p class="agent-eyebrow">Agent Guide</p>
     <h1 class="agent-h1">Design QA</h1>
     <p class="agent-summary">
-      The Design QA agent compares a Figma design to a live or staging build and produces a
-      structured list of visual and functional discrepancies. It checks spacing, typography,
-      colour, component fidelity, and whether interactive elements — buttons, links, forms,
-      navigation — work correctly on the built page. Use it after engineering delivers a new
-      feature or page variant to confirm the build matches the design before it goes to production,
-      or when a page drifts from its design spec over time.
+      The Design QA agent compares a Figma design frame to a live or staging build and
+      produces a structured list of every visual and functional discrepancy. It reads the
+      Figma spec via the MCP server, captures the live page at the correct matching viewport,
+      then works through layout, spacing, typography, colour, and interactive elements — verifying
+      that clicks produce actual DOM changes, not just that the cursor landed in the right place.
+      Use it after engineering delivers a new feature to confirm the build matches the spec before
+      going to production.
     </p>
   </section>
 
@@ -21,11 +22,11 @@ import ReportLayout from '@/components/ReportLayout.astro';
   <section class="guide-section">
     <h2 class="section-heading">Before you start</h2>
     <ul class="checklist">
-      <li>The Figma URL for the design you want to QA against — link to the specific frame or page, not the root file</li>
+      <li>The Figma URL for the design frame you want QA'd — link to a specific frame with a <code>node-id</code>, not the root file</li>
       <li>The live or staging URL of the built page</li>
-      <li>Figma access: the agent needs the Figma MCP server connected — confirm it's available in your Claude Code session before starting</li>
-      <li>If the build is on a staging URL that requires a VPN or basic auth, confirm it's accessible from your machine</li>
-      <li>Know which viewport(s) to check — desktop only, mobile only, or both. If you don't specify, the agent will check both.</li>
+      <li>Figma MCP is connected in your Claude Code session — the agent reads design specs directly from Figma</li>
+      <li>Confirm which viewport(s) to check. If you don't specify, the agent will match the Figma frame's <code>original_width</code> exactly — it never assumes desktop for a mobile frame</li>
+      <li>If the build is on a staging URL behind a VPN or basic auth, confirm it's reachable from your machine before starting</li>
     </ul>
   </section>
 
@@ -42,7 +43,7 @@ import ReportLayout from '@/components/ReportLayout.astro';
       <span class="trigger-chip">"compare figma to the live page"</span>
       <span class="trigger-chip">"did the engineer get this right?"</span>
     </div>
-    <p class="guide-body guide-body--tip">The more specific you are about which Figma frame to check, the more accurate the comparison. Link to a specific frame rather than the whole file page.</p>
+    <p class="guide-body guide-body--tip">The more specific the Figma link, the more accurate the QA. Link to the exact frame being reviewed rather than the whole file or a parent page.</p>
   </section>
 
   <!-- ── Step-by-step walkthrough ───────────────────────────── -->
@@ -54,115 +55,99 @@ import ReportLayout from '@/components/ReportLayout.astro';
         <div class="step-body">
           <h3 class="step-title">Figma design is read</h3>
           <p class="step-desc">
-            The agent connects to Figma via the MCP server and reads the design at your URL. It
-            extracts the visual spec for every component in the frame — dimensions, spacing, font
-            sizes, font weights, colour values, border radii, and the names of any components from
-            the design library. It also takes a screenshot of the Figma frame for reference.
+            The agent calls <code>get_screenshot</code> on the Figma URL to capture the design
+            frame, and reads the <code>original_width</code> from the response — this is the
+            frame's true canvas width and determines the viewport to use on the live page.
+            It also calls <code>get_design_context</code> to extract the exact spacing, padding,
+            typography, and colour values from the spec.
           </p>
         </div>
       </li>
       <li class="step">
         <span class="step-number">2</span>
         <div class="step-body">
-          <h3 class="step-title">Live page is screenshotted and inspected</h3>
+          <h3 class="step-title">Viewport is matched to the Figma frame</h3>
           <p class="step-desc">
-            The agent opens the live URL at the viewport sizes matching the Figma frame (desktop
-            1440px and/or mobile 390px). It captures screenshots and uses the browser preview tool
-            to inspect computed CSS values — spacing, font sizes, colours — for each section of
-            the page. Interactive elements are tested: buttons are clicked to confirm they respond,
-            links are checked to confirm they navigate, form inputs are checked to confirm focus
-            states.
+            The live page is always tested at the same width as the Figma frame — never assumed
+            to be desktop. Frames ≤430px wide use a 390px viewport; frames >768px use 1440px.
+            This matters: padding errors, layout breaks, and scroll container issues are only
+            visible at the correct size.
           </p>
         </div>
       </li>
       <li class="step">
         <span class="step-number">3</span>
         <div class="step-body">
-          <h3 class="step-title">Visual diff is computed</h3>
+          <h3 class="step-title">Live page is captured</h3>
           <p class="step-desc">
-            The agent compares the Figma spec against the computed CSS values and screenshots for
-            every element. Discrepancies are classified by type: spacing deviation, colour mismatch,
-            typography difference, missing component, incorrect component variant, or broken
-            interactive element.
+            The agent navigates to the live URL at the correct viewport, waits for full load
+            including skeleton states and lazy-loaded images, then takes a full-page screenshot
+            for side-by-side comparison with the Figma frame.
           </p>
         </div>
       </li>
       <li class="step">
         <span class="step-number">4</span>
         <div class="step-body">
-          <h3 class="step-title">Findings are filtered for meaningful deviations</h3>
+          <h3 class="step-title">Visual comparison — every category</h3>
           <p class="step-desc">
-            Not all deviations are worth raising. The agent filters out sub-pixel rounding
-            differences and browser-default rendering differences that are outside engineering
-            control. It surfaces issues where the deviation is 4px or more in spacing, any
-            colour that doesn't match the design token, any typography property that differs by
-            one size step or more, and any interactive element that doesn't behave as expected.
+            Working through the design systematically: <strong>layout and structure</strong>
+            (proportions, missing/extra sections); <strong>spacing and padding</strong> — checked
+            carefully against the Figma spec values, especially on mobile where a few extra px
+            of horizontal padding removes significant content width;
+            <strong>horizontal scroll containers</strong> — elements clipped at the Figma frame
+            edge signal scroll-reveal intent, and side margins preventing full-bleed on the live
+            page are a bug; <strong>typography</strong> (family, size, weight, colour, letter
+            spacing); and <strong>colour and visual style</strong> (backgrounds, borders, radius,
+            shadows). The agent also checks that data elements show the correct <em>type</em> of
+            content — benefit icons vs nutrition macros look similar but communicate entirely
+            different things.
           </p>
         </div>
       </li>
       <li class="step">
         <span class="step-number">5</span>
         <div class="step-body">
-          <h3 class="step-title">QA report is written (optional)</h3>
+          <h3 class="step-title">Interaction testing — outcomes verified, not just clicks</h3>
           <p class="step-desc">
-            If you ask the agent to save the output, it writes a report to
-            <code>src/pages/reports/[slug].astro</code> with side-by-side screenshots and a
-            table of deviations. If you just want a summary in the chat without committing a report
-            page, specify that — the agent will respond in-conversation and skip writing files.
+            For every interactive element the agent verifies the expected DOM change happened
+            after the click — a click that registers but changes nothing is a Fail. Tabs pass
+            only when: (1) the clicked tab gains its active state, (2) the previously active
+            tab loses its active state, and (3) the content area updates. The agent tests
+            product type tabs, filter tabs, dropdowns, accordions, image galleries, subscription
+            toggles, and ATC buttons. Anchor links (<code>href="#section"</code>) are flagged
+            for manual verification — automated clicks don't reliably trigger native anchor
+            scroll in extension-controlled tabs.
           </p>
         </div>
       </li>
       <li class="step">
         <span class="step-number">6</span>
         <div class="step-body">
-          <h3 class="step-title">Agent hands back to you</h3>
+          <h3 class="step-title">QA report is written</h3>
           <p class="step-desc">
-            The agent summarises the total number of discrepancies found, grouped by type (visual,
-            spacing, typography, interactive). It lists the most critical issues first. You can then
-            share the report with engineering or raise individual findings as tickets.
+            The output is a structured markdown report with two tables: a <strong>visual
+            discrepancies table</strong> (location, design spec, live implementation, severity)
+            and an <strong>interaction test results table</strong> (element, expected, actual,
+            status: ✅ Pass / ❌ Fail / ⚠️ Verify manually). The report ends with an overall
+            status — 🟢 Approved, 🟡 Approved with minor fixes, or 🔴 Needs rework — and a
+            short priority list for the engineer.
           </p>
         </div>
       </li>
     </ol>
   </section>
 
-  <!-- ── Committing the output ──────────────────────────────── -->
+  <!-- ── Output format ──────────────────────────────────────── -->
   <section class="guide-section">
-    <h2 class="section-heading">Committing the output</h2>
-
-    <h3 class="sub-heading">Files created (if saving a report)</h3>
+    <h2 class="section-heading">Output format</h2>
+    <p class="guide-body">The Design QA report is output as a structured markdown document in chat — it is not committed to the repo as an Astro page. Copy it into a Notion doc, Jira ticket, or Slack message for the engineer. The format is:</p>
     <ul class="file-list">
-      <li><code>src/pages/reports/[slug].astro</code> — the QA report page</li>
-      <li><code>src/assets/reports/[slug]/*.png</code> — Figma and live screenshots for comparison</li>
+      <li>Header — page/frame name, Figma URL, live URL, Figma frame width, viewport tested, date</li>
+      <li>Visual discrepancies table — location, design spec, live implementation, severity (High / Medium / Low)</li>
+      <li>Interaction test results table — element, expected, actual, status</li>
+      <li>Summary — total counts, overall status, top priorities</li>
     </ul>
-
-    <h3 class="sub-heading">Git commands</h3>
-    <pre class="code-block">git add src/pages/reports/[slug].astro src/assets/reports/[slug]/
-git commit -m "Add design QA: [Feature/Page Name] ([date])"
-git push</pre>
-
-    <h3 class="sub-heading">Suggested commit message format</h3>
-    <pre class="code-block">Add design QA: PDP redesign v2 vs staging (2026-07-01)</pre>
-
-    <h3 class="sub-heading">Verifying the report is live</h3>
-    <p class="guide-body">
-      After pushing, visit <code>/reports/[slug]</code> on the deployed site once Vercel has
-      redeployed. Confirm that the Figma and live screenshots load side-by-side and the deviation
-      table is legible.
-    </p>
-  </section>
-
-  <!-- ── Example output ────────────────────────────────────── -->
-  <section class="guide-section">
-    <h2 class="section-heading">Example output</h2>
-    <p class="guide-body">
-      No Design QA reports have been committed to the site yet — this agent is new. The first
-      time you run it and save a report, it will appear at <code>/reports/[slug]</code> and you
-      can link to it here.
-    </p>
-    <div class="no-example">
-      No live example yet — run <code>/design-qa</code> to generate the first one.
-    </div>
   </section>
 
   <!-- ── Tips and common issues ────────────────────────────── -->
@@ -170,34 +155,33 @@ git push</pre>
     <h2 class="section-heading">Tips and common issues</h2>
     <ul class="tips-list">
       <li>
-        <strong>Figma MCP server isn't connected.</strong>
-        The agent will fail at step 1 if the Figma MCP server isn't available. Check that your
-        Claude Code session has the Figma plugin installed — run <code>/setup-cowork</code> if
-        you're not sure, or check <code>Settings → MCP Servers</code> in Claude Code.
+        <strong>Always link to a specific Figma frame, not the file root.</strong>
+        The agent reads <code>original_width</code> from the frame to set the correct viewport.
+        Without a specific frame URL the agent cannot determine the right size, and the entire
+        comparison will be at the wrong scale.
       </li>
       <li>
-        <strong>Figma frame is at a different scale to the live page.</strong>
-        Figma designs are often authored at 1x and the browser renders at device pixel ratio 2x.
-        The agent accounts for this automatically, but if you see unexpectedly large spacing
-        discrepancies, confirm whether your Figma frame uses 1x or 2x sizing conventions.
+        <strong>Anchor links need manual verification.</strong>
+        Clicking a <code>href="#section"</code> link via automation does not reliably trigger
+        native browser scroll in extension-controlled tabs. The agent marks these as
+        "⚠️ Verify manually" — test them yourself in a regular browser tab.
       </li>
       <li>
-        <strong>Live page is mid-deploy or caching a stale version.</strong>
-        If the build was deployed recently, the CDN may be serving a cached older version.
-        Hard-refresh the page (<code>Cmd+Shift+R</code> / <code>Ctrl+Shift+R</code>) and confirm
-        the latest deploy is live before asking the agent to QA it.
+        <strong>Price and review count differences are usually dynamic content.</strong>
+        A £39.99 in Figma vs £37.99 on the live page is not a design discrepancy — prices
+        change. These are flagged as Low severity rather than bugs.
       </li>
       <li>
-        <strong>Asking for an in-conversation summary vs a committed report.</strong>
-        If you just want a quick check during a design review, tell the agent "don't write a
-        report file, just summarise what you find in chat." This saves time when you're doing
-        iterative QA checks during an engineering sprint.
+        <strong>Extra elements not in the spec.</strong>
+        New badges, additional tabs, or extra content added since the design was created are
+        flagged but not automatically failed — they may be intentional additions. The agent
+        notes them and asks you to confirm.
       </li>
       <li>
-        <strong>Staged page has placeholder content that doesn't match Figma.</strong>
-        Staging environments sometimes use Lorem Ipsum or truncated product data. The agent
-        will flag content mismatches but mark them as likely-staging-only. Review these manually
-        before raising them with engineering.
+        <strong>Horizontal scroll containers are full-bleed by design.</strong>
+        If the Figma shows a tab label or card clipped at the screen edge, that's intentional
+        scroll-reveal design. Side margins on the live container that prevent full-bleed are a
+        bug — flag them as Medium or High depending on how broken the scroll feels.
       </li>
     </ul>
   </section>
@@ -386,17 +370,6 @@ git push</pre>
     font-size: 14px;
     line-height: 1.65;
     color: var(--color-text-body);
-  }
-
-  .no-example {
-    font-size: 14px;
-    color: var(--color-text-body);
-    background: var(--color-bg-muted);
-    border: var(--card-border);
-    border-radius: var(--radius-card);
-    padding: 16px 20px;
-    font-style: italic;
-    opacity: 0.8;
   }
 
   .tips-list {

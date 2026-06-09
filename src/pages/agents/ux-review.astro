@@ -9,11 +9,11 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <h1 class="agent-h1">UX Review</h1>
     <p class="agent-summary">
       The UX Review agent audits any live Myprotein page for UX, accessibility, and conversion
-      issues. Give it a myprotein.com URL and it navigates to the page, captures desktop and
-      mobile screenshots, and produces a structured report — every finding rated by severity,
-      with a specific recommendation and a screenshot showing the exact problem. Use it whenever
-      you want an objective, evidence-based read on a page before a redesign, after a release, or
-      as ongoing design debt tracking.
+      issues. Give it a myprotein.com URL and it captures screenshots via a dedicated script,
+      inspects the DOM and computed styles against the Myprotein design system, and produces a
+      structured report — every finding rated by severity, with a specific recommendation and
+      a screenshot showing the exact problem. Use it before a redesign, after a release, or as
+      ongoing design debt tracking.
     </p>
   </section>
 
@@ -22,9 +22,9 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <h2 class="section-heading">Before you start</h2>
     <ul class="checklist">
       <li>The full URL of the Myprotein page you want reviewed (e.g. <code>https://www.myprotein.com/sports-nutrition/impact-whey-protein/10530943.html</code>)</li>
-      <li>The page should be publicly accessible — the agent cannot log in or handle pages that require authentication</li>
-      <li>If the page is behind a VPN or on a staging environment, confirm the URL is reachable from the machine running Claude Code</li>
-      <li>You're running Claude Code inside this repo so the agent can commit the output files</li>
+      <li>The page must be publicly accessible — the agent cannot handle pages that require login</li>
+      <li>You're running Claude Code inside this repo — the screenshot script and report file both write to the local filesystem</li>
+      <li>Node.js is available on your machine (the screenshot script runs via <code>node scripts/screenshot.mjs</code>)</li>
     </ul>
   </section>
 
@@ -47,75 +47,85 @@ import ReportLayout from '@/components/ReportLayout.astro';
   <!-- ── Step-by-step walkthrough ───────────────────────────── -->
   <section class="guide-section">
     <h2 class="section-heading">Step-by-step walkthrough</h2>
-    <p class="guide-body">Here is exactly what happens after you trigger the agent:</p>
     <ol class="steps">
       <li class="step">
         <span class="step-number">1</span>
         <div class="step-body">
-          <h3 class="step-title">URL validation and slug generation</h3>
+          <h3 class="step-title">Screenshots via the screenshot script</h3>
           <p class="step-desc">
-            The agent extracts the URL from your message and confirms it is a myprotein.com URL.
-            It then derives a slug for the report — typically the page name and today's date, e.g.
-            <code>myprotein-impact-whey-2026-06-01</code>. If it cannot determine a good slug it will ask you to confirm one.
+            The agent runs the dedicated screenshot script — not the browser tool — which correctly
+            dismisses cookie banners, newsletter modals, and other overlays before capturing.
+            It auto-selects the right config based on the URL: PDP pages get above-fold, product
+            panel, accordion, FBT, reviews, and ATB crop; PLP pages get above-fold, filters, and
+            product grid; all other pages get above-fold, mid, and lower.
+            Screenshots are saved directly to <code>src/assets/reports/[report-slug]/</code>.
           </p>
+          <pre class="code-block">node scripts/screenshot.mjs "&lt;url&gt;" "&lt;report-slug&gt;"</pre>
         </div>
       </li>
       <li class="step">
         <span class="step-number">2</span>
         <div class="step-body">
-          <h3 class="step-title">Desktop and mobile screenshots</h3>
+          <h3 class="step-title">Page type is identified</h3>
           <p class="step-desc">
-            The agent opens the URL in a headless browser via the Claude Preview tool at 1440px (desktop)
-            and 390px (mobile) widths. It scrolls through the page and captures screenshots of every major
-            section — above the fold, key interactive elements, the product panel, any modals that can be
-            triggered. Screenshots are saved to
-            <code>src/assets/reports/[slug]/</code> as PNG files named descriptively
-            (e.g. <code>above-fold-desktop.png</code>, <code>add-to-basket-desktop.png</code>).
+            The agent checks <code>references/page-types.md</code> to understand what the page is
+            supposed to achieve and what the critical conversion path is. A PDP audit focuses
+            differently from a basket audit — this step ensures the right sections get the right
+            scrutiny.
           </p>
         </div>
       </li>
       <li class="step">
         <span class="step-number">3</span>
         <div class="step-body">
-          <h3 class="step-title">Inspection and analysis</h3>
+          <h3 class="step-title">Desktop and mobile audit</h3>
           <p class="step-desc">
-            The agent reads the page's DOM and CSS to inspect spacing, typography, colour, touch-target
-            sizes, and ARIA labels. It correlates what it sees in the screenshots with what it finds in
-            the markup. This stage produces a raw list of candidate issues.
+            Working through the page top to bottom using the screenshots as visual reference,
+            the agent uses the browser tool for DOM inspection only — not for additional screenshots.
+            It assesses above-the-fold clarity, CTA prominence, navigation, product/content
+            presentation, friction points, and form usability. Mobile is assessed by inspecting
+            responsive classes and hidden/shown elements — tap target sizes, CTA accessibility
+            without excessive scrolling, and text legibility.
           </p>
         </div>
       </li>
       <li class="step">
         <span class="step-number">4</span>
         <div class="step-body">
-          <h3 class="step-title">Findings are rated and written up</h3>
+          <h3 class="step-title">Design consistency check</h3>
           <p class="step-desc">
-            Each candidate issue is assessed for user impact and ranked High, Medium, or Low. The agent
-            writes a structured finding for each one: what the problem is, why it affects conversion or
-            usability, and a specific recommended fix. Low-confidence observations are discarded — the
-            agent only surfaces issues it can evidence with a screenshot or DOM reference.
+            The agent loads <code>references/design-tokens.md</code> — the exact hex codes,
+            spacing values, border radii, and type specs from the Myprotein design system — and
+            uses DevTools to compare computed styles against them. It checks: colours on CTAs,
+            headings, badges, and banners; spacing on cards and buttons (valid values: 4, 8, 12,
+            16, 20, 24, 32, 40, 48, 64px); border radii (cards: 12px, CTA: 32px, chips: 8px);
+            and the Figtree font family. Any hardcoded overrides or deviations are flagged.
           </p>
         </div>
       </li>
       <li class="step">
         <span class="step-number">5</span>
         <div class="step-body">
-          <h3 class="step-title">Report file is written</h3>
+          <h3 class="step-title">Findings are rated and written up</h3>
           <p class="step-desc">
-            The agent creates <code>src/pages/reports/[slug].astro</code> — a fully structured Astro
-            page using the <code>ReportLayout</code> wrapper and <code>FindingCard</code> components.
-            Each finding includes the screenshot imported directly from assets. The file is complete and
-            ready to commit with no manual edits needed.
+            Each issue is rated High, Medium, or Low based on conversion impact — a contrast
+            failure on the Add to Basket button is High; the same issue in the footer is Low.
+            The agent writes a structured finding for each: what the problem is, the conversion
+            or usability impact, and a specific recommended fix. Low-confidence observations
+            without screenshot or DOM evidence are discarded.
           </p>
         </div>
       </li>
       <li class="step">
         <span class="step-number">6</span>
         <div class="step-body">
-          <h3 class="step-title">Agent hands back to you</h3>
+          <h3 class="step-title">Report file is written and index updated</h3>
           <p class="step-desc">
-            The agent summarises what it found (e.g. "3 high, 2 medium, 1 low finding") and tells you
-            which files it created. It does not commit automatically — you commit in the next step.
+            The agent writes <code>src/pages/reports/[slug].astro</code> using the
+            <code>ReportLayout</code> and <code>FindingCard</code> components, with screenshots
+            referenced directly from assets. It also adds an entry to
+            <code>src/pages/reports/index.astro</code> so the report appears in the dashboard.
+            Both files are ready to commit with no manual edits needed.
           </p>
         </div>
       </li>
@@ -129,11 +139,13 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <h3 class="sub-heading">Files created</h3>
     <ul class="file-list">
       <li><code>src/pages/reports/[slug].astro</code> — the report page</li>
-      <li><code>src/assets/reports/[slug]/*.png</code> — all screenshots (typically 4–10 files)</li>
+      <li><code>src/assets/reports/[slug]/*.png</code> — screenshots (typically 4–10 files)</li>
+      <li><code>src/pages/reports/index.astro</code> — updated with the new report entry</li>
     </ul>
 
     <h3 class="sub-heading">Git commands</h3>
     <pre class="code-block">git add src/pages/reports/[slug].astro src/assets/reports/[slug]/
+git add src/pages/reports/index.astro
 git commit -m "Add UX review: [Page Name] ([date])"
 git push</pre>
 
@@ -142,23 +154,11 @@ git push</pre>
 
     <h3 class="sub-heading">Verifying the report is live</h3>
     <p class="guide-body">
-      After pushing, Vercel will redeploy the site automatically (usually under 2 minutes). Visit
-      <code>/reports/[slug]</code> on the deployed URL to confirm the page is live, images load,
-      and the report reads correctly. You can also check the Vercel dashboard for the deployment
-      status.
+      After pushing, Vercel will redeploy automatically (usually under 2 minutes). Visit
+      <code>/reports/[slug]</code> on the deployed site to confirm the page is live, screenshots
+      load, and finding cards render correctly. You can also check the dashboard at
+      <code>/reports</code> to confirm the new entry appears.
     </p>
-  </section>
-
-  <!-- ── Example output ────────────────────────────────────── -->
-  <section class="guide-section">
-    <h2 class="section-heading">Example output</h2>
-    <p class="guide-body">
-      The Protein PLP audit from 4 June 2026 is a good example of a finished report — 5 findings
-      across high and medium priority, with screenshots for each one:
-    </p>
-    <a href="/reports/myprotein-protein-plp-2026-06-04" class="example-link">
-      View: Protein Powder PLP audit →
-    </a>
   </section>
 
   <!-- ── Tips and common issues ────────────────────────────── -->
@@ -166,32 +166,33 @@ git push</pre>
     <h2 class="section-heading">Tips and common issues</h2>
     <ul class="tips-list">
       <li>
-        <strong>Page has a cookie consent banner that blocks the view.</strong>
-        The agent will attempt to dismiss it automatically. If it can't, it notes this in the report
-        and captures what it can. You can re-run after manually clearing cookies or with a direct
-        link that bypasses the banner.
+        <strong>Screenshot shows a half-loaded state.</strong>
+        Lazy-loaded images or components sometimes don't render in the screenshot script. If a
+        screenshot looks broken or empty, ask the agent to re-run with an explicit wait instruction
+        — <em>"wait for the product grid to load before screenshotting"</em>.
       </li>
       <li>
-        <strong>Page requires login (e.g. account pages, checkout).</strong>
-        The agent cannot authenticate. For these pages, review manually and provide the agent with
-        a screenshot or describe the elements you want it to assess — it can still write a structured
-        finding and recommendation.
+        <strong>Page requires login (account pages, checkout).</strong>
+        The agent cannot authenticate. For these pages, provide a screenshot directly and describe
+        the elements you want assessed — the agent can still write a structured finding card
+        from your description without navigating the page itself.
       </li>
       <li>
-        <strong>Screenshots show a half-loaded state.</strong>
-        Lazy-loaded images or lazy JavaScript components sometimes don't render in headless browsers.
-        If a screenshot looks broken, ask the agent to retry with an explicit wait
-        (<em>"wait for the product grid to load before screenshotting"</em>).
+        <strong>Cookie consent banner blocks the view.</strong>
+        The screenshot script attempts to dismiss banners automatically. If it can't, the agent
+        notes it in the report and captures what it can. You can re-run after manually clearing
+        cookies or with a direct link that bypasses the banner.
       </li>
       <li>
         <strong>Fewer findings than expected.</strong>
-        Zero or very few findings is a valid result — it means the page is in good shape. Don't
-        prompt the agent to "find more issues"; that leads to inflated, low-confidence findings.
+        Zero or very few findings is a valid result — it means the page is in good shape against
+        the design system and conversion checklist. Don't prompt the agent to find more issues;
+        that produces inflated, low-confidence findings that aren't useful.
       </li>
       <li>
         <strong>Report page has broken image paths after committing.</strong>
         Check that the PNG filenames in the <code>.astro</code> file exactly match the files in
-        <code>src/assets/reports/[slug]/</code>. Astro's image imports are case-sensitive.
+        <code>src/assets/reports/[slug]/</code>. Astro image imports are case-sensitive.
       </li>
     </ul>
   </section>
@@ -199,9 +200,7 @@ git push</pre>
 </ReportLayout>
 
 <style>
-  .agent-intro {
-    margin-bottom: 48px;
-  }
+  .agent-intro { margin-bottom: 48px; }
   .agent-eyebrow {
     font-size: 12px;
     font-weight: 700;
@@ -225,9 +224,7 @@ git push</pre>
     max-width: 680px;
   }
 
-  .guide-section {
-    margin-bottom: 52px;
-  }
+  .guide-section { margin-bottom: 52px; }
   .section-heading {
     font-size: 20px;
     font-weight: 800;
@@ -279,9 +276,7 @@ git push</pre>
     font-size: 13px;
   }
 
-  .trigger-block {
-    margin-bottom: 16px;
-  }
+  .trigger-block { margin-bottom: 16px; }
   .trigger-command {
     display: inline-block;
     font-size: 15px;
@@ -353,11 +348,7 @@ git push</pre>
     opacity: 0.4;
   }
 
-  .steps {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-  }
+  .steps { list-style: none; display: flex; flex-direction: column; }
   .step {
     display: flex;
     gap: 20px;
@@ -390,23 +381,6 @@ git push</pre>
     font-size: 14px;
     line-height: 1.65;
     color: var(--color-text-body);
-  }
-
-  .example-link {
-    display: inline-block;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-primary);
-    text-decoration: none;
-    border: var(--card-border);
-    border-radius: var(--radius-card);
-    padding: 14px 20px;
-    background: var(--color-bg-card);
-    transition: box-shadow 0.15s, transform 0.1s;
-  }
-  .example-link:hover {
-    box-shadow: var(--card-shadow);
-    transform: translateY(-1px);
   }
 
   .tips-list {

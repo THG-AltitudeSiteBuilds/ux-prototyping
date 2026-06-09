@@ -8,12 +8,11 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <p class="agent-eyebrow">Agent Guide</p>
     <h1 class="agent-h1">Project Prep</h1>
     <p class="agent-summary">
-      The Project Prep agent sets up a new design project before you start designing. Give it a
-      project name and page type and it runs competitor research, pulls UX review data for the
-      equivalent Myprotein page, creates a structured Figma file with the right frames and
-      component library linked, and drafts a project brief. The goal is to eliminate the setup
-      phase entirely — you should be designing, not gathering reference material and creating blank
-      Figma files.
+      The Project Prep agent sets up a new design project before you start designing. It runs
+      a structured intake, selects the right competitors for the page type, takes desktop and
+      mobile screenshots of their equivalent pages, creates a Figma file with a Brief &amp;
+      Requirements page, Competitor Research page, and blank Working canvas — then hands it
+      back ready to design. The goal is to eliminate setup overhead entirely.
     </p>
   </section>
 
@@ -21,10 +20,17 @@ import ReportLayout from '@/components/ReportLayout.astro';
   <section class="guide-section">
     <h2 class="section-heading">Before you start</h2>
     <ul class="checklist">
-      <li>A clear name for the project and the page type you're redesigning (e.g. "basket redesign", "PDP refresh", "new checkout flow")</li>
+      <li>A rough idea of what you're working on — even a one-line description is enough to start ("redesign the basket", "new mobile nav")</li>
       <li>Figma access: the agent creates and structures a Figma file, so the Figma MCP server must be connected in your Claude Code session</li>
-      <li>Know which Figma team or project the new file should live in — the agent will ask if you don't specify</li>
-      <li>Optional: any existing constraints or context you want baked into the brief (e.g. "mobile-first only", "must use existing component library", "targeting the supplement audience")</li>
+      <li>
+        <strong>You'll need to duplicate the Design System template manually first.</strong>
+        The Figma MCP can only create blank files — it can't duplicate an existing one. The agent
+        will ask you to duplicate the Myprotein Design System template (File → Duplicate) and share
+        the URL of your duplicate. This ensures brand styles and variables are already in the file.
+        It takes about 10 seconds.
+      </li>
+      <li>Optional: any constraints or context worth knowing upfront — "mobile-first only", "must use existing components", "targeting the supplement audience"</li>
+      <li>Optional: direct URLs to the competitor pages you want screenshotted. If you have them, share them — it's significantly faster than the agent navigating there itself</li>
     </ul>
   </section>
 
@@ -41,7 +47,7 @@ import ReportLayout from '@/components/ReportLayout.astro';
       <span class="trigger-chip">"I need to redesign the PDP"</span>
       <span class="trigger-chip">"start a new design project for the search page"</span>
     </div>
-    <p class="guide-body guide-body--tip">The more context you give up front — page type, audience, constraints — the less the agent needs to ask before it starts. A phrase like "prep for the basket redesign, mobile-first, existing component library" will kick off without any follow-up questions.</p>
+    <p class="guide-body guide-body--tip">The more context you give up front — page type, goal, constraints — the less the agent needs to ask. A phrase like "prep for the basket redesign, mobile-first, existing component library" will kick off with minimal follow-up questions.</p>
   </section>
 
   <!-- ── Step-by-step walkthrough ───────────────────────────── -->
@@ -51,106 +57,82 @@ import ReportLayout from '@/components/ReportLayout.astro';
       <li class="step">
         <span class="step-number">1</span>
         <div class="step-body">
-          <h3 class="step-title">Project scope is confirmed</h3>
+          <h3 class="step-title">Intake — all questions at once</h3>
           <p class="step-desc">
-            The agent confirms the page type and any constraints you've specified. If you haven't
-            told it which Figma project to use, it will list your available Figma projects and ask
-            you to pick one. Once confirmed, it proceeds without further questions.
+            The agent asks six questions in a single message — it doesn't drip-feed them one at a
+            time. It wants to know: what the task is, what the goal is, any constraints or context,
+            which pages to include in the Figma file (brief is always included; competitor research
+            and working canvas are optional), which competitors to focus on if any, and whether you
+            have direct page URLs to screenshot. Answer what you know and skip anything you don't
+            — the agent will make sensible assumptions and note them in the brief.
           </p>
         </div>
       </li>
       <li class="step">
         <span class="step-number">2</span>
         <div class="step-body">
-          <h3 class="step-title">Competitor research is run</h3>
+          <h3 class="step-title">Plan is confirmed before work begins</h3>
           <p class="step-desc">
-            The agent triggers a lightweight competitor sweep — it navigates to the equivalent page
-            on a set of key competitors (Gymshark, Bulk, TPW, Optimum Nutrition) and captures
-            above-the-fold screenshots. This is a faster, lighter version of the full Competitor
-            Analysis agent: it's enough to prime you for the design phase without producing a
-            complete comparative report. If a full competitor report already exists in this repo
-            for the same page type, the agent links to that instead of re-running.
+            Based on your answers, the agent summarises exactly what it's about to do — the Figma
+            file name, pages it'll create, and the specific competitor pages it'll screenshot — and
+            waits for your confirmation before starting. No surprises.
           </p>
         </div>
       </li>
       <li class="step">
         <span class="step-number">3</span>
         <div class="step-body">
-          <h3 class="step-title">Existing UX review data is gathered</h3>
+          <h3 class="step-title">Competitors are selected from the reference list</h3>
           <p class="step-desc">
-            The agent scans the reports in <code>src/pages/reports/</code> for any existing UX
-            reviews of the page type you're redesigning. If a recent review exists, it extracts
-            the key findings and includes them in the project brief as "known issues to address."
-            This connects your design work directly to the evidence already collected.
+            Based on the page type, the agent picks 3–5 competitors from
+            <code>references/competitor-brands.md</code> — prioritising brands with proven
+            strengths for this specific task. If you specified competitors in the intake, those
+            are used first, supplemented if needed. Maximum 5 — more becomes noise.
           </p>
         </div>
       </li>
       <li class="step">
         <span class="step-number">4</span>
         <div class="step-body">
-          <h3 class="step-title">Figma file is created and structured</h3>
+          <h3 class="step-title">Competitor screenshots are taken</h3>
           <p class="step-desc">
-            The agent creates a new Figma file in your specified project. It sets up the standard
-            frame structure — a Cover page, a Research page (with competitor screenshots and UX
-            findings imported), a Design page with desktop and mobile frames at the correct Astro
-            widths (1440px and 390px), and a Handoff page. The Myprotein component library is
-            linked so design tokens and components are available immediately.
+            If you provided direct URLs in the intake, the agent goes straight to screenshotting
+            — no navigation needed. If not, it navigates to each competitor's equivalent page.
+            Each competitor gets a desktop (1440px) and mobile (390px) full-page screenshot, plus
+            2–3 written observations about what they do well or differently for this page type.
+            Screenshots are saved to <code>/tmp/competitor-screenshots/</code> ready for upload.
           </p>
         </div>
       </li>
       <li class="step">
         <span class="step-number">5</span>
         <div class="step-body">
-          <h3 class="step-title">Project brief is drafted</h3>
+          <h3 class="step-title">Figma file is structured</h3>
           <p class="step-desc">
-            The agent writes a project brief as a text block on the Figma Cover page and also as a
-            summary in the chat. The brief covers: the problem the redesign is solving (from UX
-            review findings), what competitors do that we don't (from competitor research), key
-            design constraints, and a suggested success metric. The brief is a starting point —
-            edit it directly in Figma once the file is created.
+            Working in your duplicated Design System template, the agent creates three pages.
+            <strong>Brief &amp; Requirements</strong> — a clean document with project overview,
+            goal, constraints, must/should/nice-to-have requirements derived from your intake,
+            and suggested success metrics.
+            <strong>Competitor Research</strong> — a labelled section per competitor with desktop
+            and mobile frames (1440×900px and 390×844px) loaded with the screenshots from Step 4,
+            plus the observations text.
+            <strong>Working</strong> — a blank canvas ready for design.
           </p>
         </div>
       </li>
       <li class="step">
         <span class="step-number">6</span>
         <div class="step-body">
-          <h3 class="step-title">Agent hands back to you</h3>
+          <h3 class="step-title">File link is shared back</h3>
           <p class="step-desc">
-            The agent shares a direct link to the new Figma file and summarises what it created.
-            From here you go straight to Figma and start designing. There are no files to commit
-            to this repo from a Project Prep run — all output lives in Figma.
+            The agent sends back the Figma file URL with a summary of what's in it — which
+            competitors were researched and which pages are ready. If you're in Claude.ai rather
+            than Claude Code, competitor screenshots won't be auto-uploaded; the agent will
+            label each frame and tell you which files to drop in manually.
           </p>
         </div>
       </li>
     </ol>
-  </section>
-
-  <!-- ── Committing the output ──────────────────────────────── -->
-  <section class="guide-section">
-    <h2 class="section-heading">Committing the output</h2>
-    <p class="guide-body">
-      Project Prep does not produce files that need to be committed to this repo. All output lives
-      in the Figma file the agent creates. There is nothing to <code>git add</code> or
-      <code>git push</code> after a Project Prep run.
-    </p>
-    <p class="guide-body">
-      If the agent also triggered a competitor analysis as part of setup and saved a report page,
-      that file would be committed separately — the agent will tell you if this happened and give
-      you the exact commands to use.
-    </p>
-  </section>
-
-  <!-- ── Example output ────────────────────────────────────── -->
-  <section class="guide-section">
-    <h2 class="section-heading">Example output</h2>
-    <p class="guide-body">
-      No Project Prep runs have been logged on this site yet — because the output is a Figma file,
-      not a report page. The first time you run the agent, the Figma file link will be shared in
-      chat. You can record it here manually if you want a reference.
-    </p>
-    <div class="no-example">
-      No live example yet — run <code>/myprotein-prep-agent</code> to generate the first one.
-    </div>
   </section>
 
   <!-- ── Tips and common issues ────────────────────────────── -->
@@ -158,37 +140,36 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <h2 class="section-heading">Tips and common issues</h2>
     <ul class="tips-list">
       <li>
-        <strong>Figma MCP server isn't connected.</strong>
-        The agent will fail at step 4 if the Figma MCP server isn't available. Run
-        <code>/setup-cowork</code> to check your MCP connections, or go to
-        <code>Settings → MCP Servers</code> in Claude Code and confirm the Figma server is listed
-        and connected.
+        <strong>Always duplicate the template yourself first.</strong>
+        The Figma MCP <code>create_new_file</code> tool creates a blank file with no brand styles
+        or variables. Duplicating the Myprotein Design System template takes 10 seconds and means
+        your project file has everything linked from the start — no manual style imports needed.
       </li>
       <li>
-        <strong>Agent creates the Figma file in the wrong project.</strong>
-        If you have multiple Figma projects, always specify the target project in your trigger
-        message (e.g. "set up a Figma file in the Myprotein Design project for the basket redesign").
-        If the file ends up in the wrong place, it's easier to move it in Figma manually than to
-        re-run the agent.
+        <strong>Provide direct competitor URLs when you have them.</strong>
+        Basket and cart pages require adding a product before the competitor page is visible —
+        which involves navigation, cookie banners, and potential bot detection. Providing the
+        direct URL skips all of this and makes the screenshotting significantly faster and more
+        reliable.
       </li>
       <li>
-        <strong>Competitor research step takes longer than expected.</strong>
-        The competitor sweep visits 4–5 URLs in sequence. This typically takes 2–4 minutes. If
-        a competitor site is slow or blocking the headless browser, the agent will skip it and note
-        that it was skipped — the rest of the setup continues normally.
+        <strong>Competitor page is blocked or inaccessible.</strong>
+        If a domain is blocked by the browser tool, the agent creates a placeholder frame with
+        written observations based on its knowledge of the site. It will note which frames need
+        to be filled manually. This still gives you the Figma structure and the brief — just
+        without the screenshot for that one brand.
       </li>
       <li>
-        <strong>No existing UX review for the page type you're redesigning.</strong>
-        If there's no UX review in the repo for your target page, the agent will note this in the
-        brief and suggest running a <code>/myprotein-ux-review</code> first. You can do this before
-        starting the redesign, or run the prep agent now and do the review separately — either order
-        works.
+        <strong>Keep competitors to five or fewer.</strong>
+        More than five competitors on a research page becomes overwhelming to work from. If you
+        have a long list, the agent will pick the most relevant based on the page type. You can
+        always run the agent again later for a second pass.
       </li>
       <li>
-        <strong>Brief doesn't reflect your actual constraints.</strong>
-        The drafted brief is a starting point, not a final document. Edit it directly in Figma on
-        the Cover page. The most important thing is that the competitor screenshots and UX findings
-        are already in place — the brief text is the easiest part to adjust yourself.
+        <strong>The brief derives requirements from what you tell it.</strong>
+        If you give it very little in the intake, the brief will be generic. The more specific
+        you are about the goal and constraints, the more useful the must/should/nice-to-have
+        breakdown will be as a working reference during design.
       </li>
     </ul>
   </section>
@@ -323,6 +304,27 @@ import ReportLayout from '@/components/ReportLayout.astro';
     white-space: pre;
   }
 
+  .file-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .file-list li {
+    font-size: 14px;
+    color: var(--color-text-body);
+    padding-left: 16px;
+    position: relative;
+  }
+  .file-list li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: var(--color-primary);
+    opacity: 0.4;
+  }
+
   .steps { list-style: none; display: flex; flex-direction: column; }
   .step {
     display: flex;
@@ -356,17 +358,6 @@ import ReportLayout from '@/components/ReportLayout.astro';
     font-size: 14px;
     line-height: 1.65;
     color: var(--color-text-body);
-  }
-
-  .no-example {
-    font-size: 14px;
-    color: var(--color-text-body);
-    background: var(--color-bg-muted);
-    border: var(--card-border);
-    border-radius: var(--radius-card);
-    padding: 16px 20px;
-    font-style: italic;
-    opacity: 0.8;
   }
 
   .tips-list {

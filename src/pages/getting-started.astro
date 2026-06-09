@@ -278,12 +278,13 @@ import ReportLayout from '@/components/ReportLayout.astro';
   <section class="gs-section">
     <h2 class="gs-section-heading">
       <span class="gs-step-badge">7</span>
-      Activate the agent skills
+      Install the agent skills
     </h2>
     <p class="gs-body">
       The UX Intelligence agents are packaged as <em>skills</em> — reusable, named workflows
-      that Claude knows how to run. They need to be installed into your Claude Code session
-      before the slash commands become available.
+      that Claude runs when you type a slash command. Skills are stored in a folder on your
+      machine, not inside the repo itself. You need to copy the skill files from the repo into
+      that folder once, and Claude Code will pick them up automatically from then on.
     </p>
 
     <div class="gs-substeps">
@@ -291,25 +292,34 @@ import ReportLayout from '@/components/ReportLayout.astro';
       <div class="gs-substep">
         <span class="gs-substep-label">7a</span>
         <div>
-          <p class="gs-substep-title">Run the cowork setup command</p>
+          <p class="gs-substep-title">Paste this prompt into Claude Code</p>
           <p class="gs-substep-body">
-            With the repo open in Claude Code, type this command and press Enter:
+            With the repo open in Claude Code, copy and paste the prompt below and press
+            Enter. Claude will find the right folder, copy the skills in, and confirm what
+            it installed.
           </p>
-          <pre class="gs-code">/setup-cowork</pre>
-          <p class="gs-substep-body">
-            This command scans the repo for available skills and installs them into your session.
-            Follow any prompts it shows — it may ask you to confirm which skills to enable.
-          </p>
+          <pre class="gs-code">Please install the UX Intelligence agent skills from this repo into my Claude skills folder. The skills are in `src/skills/user/` — find my Claude skills directory at `~/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/` and copy each skill folder from the repo into it. If you find multiple skills subfolders, copy into all of them. Confirm which skills were installed and where.</pre>
         </div>
       </div>
 
       <div class="gs-substep">
         <span class="gs-substep-label">7b</span>
         <div>
+          <p class="gs-substep-title">Restart Claude Desktop</p>
+          <p class="gs-substep-body">
+            Quit the Claude desktop app completely and reopen it. Skills are loaded at
+            startup — a restart is required for the new ones to appear.
+          </p>
+        </div>
+      </div>
+
+      <div class="gs-substep">
+        <span class="gs-substep-label">7c</span>
+        <div>
           <p class="gs-substep-title">Confirm all four agents are available</p>
           <p class="gs-substep-body">
-            Type <code>/</code> to open the slash command picker. You should see all four
-            agent commands in the list:
+            With the repo open in Claude Code, type <code>/</code> to open the slash command
+            picker. You should see all four agent commands in the list:
           </p>
           <div class="gs-skill-list">
             <div class="gs-skill-row">
@@ -330,9 +340,7 @@ import ReportLayout from '@/components/ReportLayout.astro';
             </div>
           </div>
           <p class="gs-substep-body" style="margin-top: 12px;">
-            If any are missing, run <code>/setup-cowork</code> again. If they still don't
-            appear, check that you opened the correct folder in step 5 — the skills are read
-            from the repo's <code>.claude/</code> directory.
+            If any are missing, see the troubleshooting section below.
           </p>
         </div>
       </div>
@@ -413,10 +421,12 @@ import ReportLayout from '@/components/ReportLayout.astro';
         sign out, and sign back in. Then try the push again.
       </li>
       <li>
-        <strong>The skills aren't appearing after running <code>/setup-cowork</code>.</strong>
-        Try closing and reopening Claude Code with the repo folder selected, then run
-        <code>/setup-cowork</code> again. Skills are loaded from the <code>.claude/</code>
-        folder in the repo root — if you opened the wrong folder, they won't be found.
+        <strong>The skills aren't appearing after following step 7.</strong>
+        First, make sure you fully quit and restarted Claude Desktop after running the install
+        prompt — skills are only loaded at startup. If they're still missing, run the install
+        prompt again and check that Claude confirms the files were copied. If Claude says it
+        can't find the skills folder, it may not have been created yet — make sure you've
+        opened Claude Desktop and used Claude Code at least once before running the prompt.
       </li>
       <li>
         <strong>Can I use Claude.ai in a browser tab instead of the desktop app?</strong>

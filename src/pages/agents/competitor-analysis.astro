@@ -26,6 +26,12 @@ import ReportLayout from '@/components/ReportLayout.astro';
       <li>Both URLs should be publicly accessible — no login required</li>
       <li>Have a clear page type in mind (PDP, PLP, basket, checkout) — the agent compares like-for-like, not across different page types</li>
       <li>You're running Claude Code inside this repo so the agent can commit the output files</li>
+      <li>
+        <strong>One-time Chrome setup:</strong> in Chrome, go to
+        <strong>View → Developer → Allow JavaScript from Apple Events</strong> and make sure it is
+        ticked. This lets the agent read page content from Chrome tabs via AppleScript. You only
+        need to do this once — Chrome remembers the setting across restarts.
+      </li>
     </ul>
   </section>
 
@@ -64,14 +70,12 @@ import ReportLayout from '@/components/ReportLayout.astro';
       <li class="step">
         <span class="step-number">2</span>
         <div class="step-body">
-          <h3 class="step-title">Screenshot both pages</h3>
+          <h3 class="step-title">Review both pages</h3>
           <p class="step-desc">
-            The agent opens both URLs in a headless browser at 1440px desktop width and scrolls
-            through each page systematically, capturing screenshots of every major section.
-            Screenshots of the competitor page are saved to
-            <code>src/assets/reports/competitors/[slug]/</code>. Myprotein screenshots are captured
-            inline for comparison but the agent uses existing Myprotein report assets where they're
-            already available.
+            The agent opens each URL in Chrome and reads the page content via AppleScript —
+            this works on most competitor sites that block traditional browser automation.
+            Where possible it takes targeted screenshots of specific patterns worth calling out.
+            Screenshots are saved to <code>src/assets/reports/competitors/[slug]/</code>.
           </p>
         </div>
       </li>
@@ -157,9 +161,9 @@ git push</pre>
   <section class="guide-section">
     <h2 class="section-heading">Example output</h2>
     <p class="guide-body">
-      The PDP competitor analysis from 8 June 2026 covers 6 brands — Gymshark, Bulk, TPW,
-      Optimum Nutrition, MyVegan, and Naked Nutrition — and surfaces 14 opportunities across
-      trust signals, content, and conversion mechanics:
+      The PDP competitor analysis from 8 June 2026 covers 6 brands — The Protein Works,
+      Optimum Nutrition, Healf, Huel, Bulk, and Naked Nutrition — and surfaces 14 opportunities
+      across trust signals, content, and conversion mechanics:
     </p>
     <a href="/reports/competitors/pdp-competitor-analysis-2026-06-08" class="example-link">
       View: PDP Competitor Analysis (June 2026) →
@@ -177,10 +181,12 @@ git push</pre>
         page is competitive and your design energy should go elsewhere.
       </li>
       <li>
-        <strong>Competitor page is behind a login or bot detection.</strong>
-        Some competitor sites (especially checkout pages) block headless browsers. The agent will
-        flag this in the report. For these pages, manually capture screenshots and describe the
-        pattern to the agent — it can write a structured opportunity card from a description.
+        <strong>Competitor page content isn't loading.</strong>
+        The Claude browser tool is blocked on most external domains. The agent uses AppleScript
+        to read page content directly from Chrome instead — this works on the vast majority of
+        competitor sites. If a page is behind a login or uses heavy bot detection that blocks
+        even this, the agent will flag it. For those cases, describe the pattern in plain English
+        and the agent can write a structured opportunity card from your description.
       </li>
       <li>
         <strong>Only compare equivalent page types.</strong>

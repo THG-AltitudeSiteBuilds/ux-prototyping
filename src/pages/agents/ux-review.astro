@@ -143,35 +143,30 @@ import ReportLayout from '@/components/ReportLayout.astro';
 
   <!-- ── Committing the output ──────────────────────────────── -->
   <section class="guide-section">
-    <h2 class="section-heading">Committing and publishing the output</h2>
+    <h2 class="section-heading">Publishing the output</h2>
 
-    <h3 class="sub-heading">Files created</h3>
+    <p class="guide-body">
+      You don't need to do anything here — the agent handles it automatically. Once the report
+      is written, Claude commits the files and pushes them to GitHub. Vercel picks up the push
+      and redeploys the site. The whole thing takes about 2 minutes.
+    </p>
+    <p class="guide-body">
+      When the agent finishes, it will tell you the report is live and give you the direct URL.
+      Just click the link to open it.
+    </p>
+
+    <h3 class="sub-heading">What gets saved</h3>
     <ul class="file-list">
       <li><code>src/pages/reports/[slug].astro</code> — the report page</li>
-      <li><code>src/assets/reports/[slug]/*.png</code> — screenshots (typically 4–10 files)</li>
-      <li><code>src/pages/reports/index.astro</code> — updated with the new report entry</li>
+      <li><code>src/assets/reports/[slug]/*.png</code> — screenshots</li>
+      <li><code>src/pages/reports/index.astro</code> — updated so the report appears in the listing</li>
     </ul>
 
-    <h3 class="sub-heading">Step 1 — Commit in GitHub Desktop</h3>
+    <h3 class="sub-heading">If the push fails</h3>
     <p class="guide-body">
-      Open GitHub Desktop. The new report file and screenshots will appear as uncommitted
-      changes in the left panel. Select all of them, write a short commit message in the
-      summary field, and click <strong>Commit to main</strong>.
-    </p>
-    <p class="guide-body">Suggested commit message format:</p>
-    <pre class="code-block">Add UX review: Impact Whey PDP (2026-06-01)</pre>
-
-    <h3 class="sub-heading">Step 2 — Push to GitHub</h3>
-    <p class="guide-body">
-      Click <strong>Push origin</strong> in GitHub Desktop. This sends your commit to GitHub
-      and triggers an automatic Vercel redeploy — the report is usually live within 2 minutes.
-    </p>
-
-    <h3 class="sub-heading">Step 3 — Verify the report is live</h3>
-    <p class="guide-body">
-      Visit <code>/reports/[slug]</code> on the deployed site to confirm the page is live,
-      screenshots load, and finding cards render correctly. Check <code>/reports</code> to
-      confirm the new entry appears in the index.
+      This can happen if your GitHub authentication has lapsed. Open GitHub Desktop — if it
+      shows a banner asking you to sign in or re-authenticate, do that and then ask Claude to
+      run <code>git push</code> again.
     </p>
   </section>
 

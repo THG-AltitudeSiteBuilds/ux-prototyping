@@ -316,7 +316,7 @@ This skill works in both Claude.ai and Claude Code. Behaviour differs based on e
 
 ### Running in Claude Code (filesystem access available)
 
-If you have access to the filesystem and the repo is checked out locally, **do not output files as text** — save them directly:
+If you have access to the filesystem and the repo is checked out locally, **do not output files as text** — save them directly and handle the full git workflow so the user doesn't have to:
 
 1. **Screenshots** — save each screenshot as a `.png` file directly to:
    `src/assets/reports/[report-slug]/[filename].png`
@@ -325,15 +325,25 @@ If you have access to the filesystem and the repo is checked out locally, **do n
 2. **Report file** — write the complete `.astro` file directly to:
    `src/pages/reports/[report-slug].astro`
 
-3. **Commit** — once all files are saved, run:
+3. **Update the reports index** — add an entry for the new report to the `reports` array in
+   `src/pages/reports/index.astro` so it appears on the reports listing page.
+
+4. **Commit and push** — run the following, substituting real values for the placeholders:
    ```bash
    git add src/pages/reports/[report-slug].astro
    git add src/assets/reports/[report-slug]/
-   git commit -m "Add UX audit report: [Product Name] [Date]"
+   git add src/pages/reports/index.astro
+   git commit -m "Add UX review: [Product Name] ([YYYY-MM-DD])"
    git push
    ```
 
-4. **Confirm** — tell the user the files saved, the commit message used, and that it's ready to deploy from the Altitude dashboard.
+5. **Confirm** — end with a clear, friendly summary for the user. Tell them:
+   - Which report was created and what files were saved
+   - That it's been committed and pushed to GitHub
+   - That the site will redeploy automatically and the report will be live at its URL within about 2 minutes
+   - The full URL of the report on the deployed site (e.g. `https://5d38e669.thgaltitude.com/reports/[slug]`)
+
+   Keep this message plain and jargon-free — most users won't know what a commit or push is.
 
 ### Running in Claude.ai (no filesystem access)
 

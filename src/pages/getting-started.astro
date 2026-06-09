@@ -366,34 +366,10 @@ import ReportLayout from '@/components/ReportLayout.astro';
     </p>
     <pre class="gs-code">/myprotein-ux-review https://www.myprotein.com/sports-nutrition/impact-whey-protein/10530943.html</pre>
     <p class="gs-body">
-      Claude Code will navigate to the page in Chrome, take screenshots, analyse the UX, and
-      write a report file into the repo. When it finishes, it will tell you which files it
-      created. Commit and push using GitHub Desktop:
+      Claude Code will navigate to the page in Chrome, take screenshots, analyse the UX, write
+      the report file, and commit and push it to GitHub — all automatically. When it's done,
+      it will give you a direct link to the live report. You don't need to touch GitHub Desktop.
     </p>
-
-    <div class="gs-substeps">
-      <div class="gs-substep">
-        <span class="gs-substep-label">→</span>
-        <div>
-          <p class="gs-substep-title">Commit in GitHub Desktop</p>
-          <p class="gs-substep-body">
-            Open GitHub Desktop. The new report file and screenshots will appear as
-            uncommitted changes in the left panel. Select all of them, write a commit message
-            (e.g. <em>"Add UX review: Impact Whey PDP"</em>), and click <strong>Commit to main</strong>.
-          </p>
-        </div>
-      </div>
-      <div class="gs-substep">
-        <span class="gs-substep-label">→</span>
-        <div>
-          <p class="gs-substep-title">Push to GitHub</p>
-          <p class="gs-substep-body">
-            Click <strong>Push origin</strong> in GitHub Desktop. Vercel picks up the push
-            and redeploys the site automatically — the report is live within about 2 minutes.
-          </p>
-        </div>
-      </div>
-    </div>
 
     <p class="gs-body" style="margin-top: 8px;">
       See the <a href="/agents/ux-review" class="gs-inline-link">agent guides</a> for a

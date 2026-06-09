@@ -1,5 +1,5 @@
 ---
-import '@/styles/design-system.css';
+import ReportLayout from '@/components/ReportLayout.astro';
 
 const reports = [
   {
@@ -85,88 +85,27 @@ const reports = [
 ];
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>UX Audit Reports</title>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  </head>
-  <body>
-    <header class="page-header">
-      <div class="header-inner">
-        <span class="logo">UX Audit</span>
-      </div>
-    </header>
-    <main class="page-main">
-      <div class="page-content">
-        <h1 class="page-title">Reports</h1>
-        <ul class="report-list">
-          {reports.map((r) => (
-            <li class="report-card">
-              <a href={`/reports/${r.slug}`} class="report-link">
-                <div class="report-info">
-                  <span class="report-name">{r.name}</span>
-                  <span class="report-date">{r.date}</span>
-                </div>
-                <div class="report-right">
-                  <span class={`health-pill health-pill--${r.health.toLowerCase()}`}>{r.healthLabel}</span>
-                  <span class="report-arrow">→</span>
-                </div>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </main>
-  </body>
-</html>
+<ReportLayout title="UX Reviews">
+  <h1 class="page-title">UX Reviews</h1>
+  <ul class="report-list">
+    {reports.map((r) => (
+      <li class="report-card">
+        <a href={`/reports/${r.slug}`} class="report-link">
+          <div class="report-info">
+            <span class="report-name">{r.name}</span>
+            <span class="report-date">{r.date}</span>
+          </div>
+          <div class="report-right">
+            <span class={`health-pill health-pill--${r.health.toLowerCase()}`}>{r.healthLabel}</span>
+            <span class="report-arrow">→</span>
+          </div>
+        </a>
+      </li>
+    ))}
+  </ul>
+</ReportLayout>
 
 <style>
-  *, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-
-  body {
-    font-family: var(--font-body);
-    background-color: var(--color-bg-page);
-    color: var(--color-text-body);
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  .page-header {
-    background-color: var(--color-primary);
-    padding: 14px 24px;
-  }
-
-  .header-inner {
-    max-width: 860px;
-    margin: 0 auto;
-  }
-
-  .logo {
-    color: var(--color-mint);
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  .page-main {
-    padding: 36px 24px 80px;
-  }
-
-  .page-content {
-    max-width: 860px;
-    margin: 0 auto;
-  }
-
   .page-title {
     font-size: 28px;
     font-weight: 800;

@@ -142,7 +142,7 @@ import ReportLayout from '@/components/ReportLayout.astro';
 
   <!-- ── Committing the output ──────────────────────────────── -->
   <section class="guide-section">
-    <h2 class="section-heading">Committing the output</h2>
+    <h2 class="section-heading">Committing and publishing the output</h2>
 
     <h3 class="sub-heading">Files created</h3>
     <ul class="file-list">
@@ -150,19 +150,25 @@ import ReportLayout from '@/components/ReportLayout.astro';
       <li><code>src/assets/reports/competitors/[slug]/*.png</code> — competitor screenshots</li>
     </ul>
 
-    <h3 class="sub-heading">Git commands</h3>
-    <pre class="code-block">git add src/pages/reports/competitors/[slug].astro src/assets/reports/competitors/[slug]/
-git commit -m "Add competitor analysis: [Page Type] — [Brand(s)] ([date])"
-git push</pre>
-
-    <h3 class="sub-heading">Suggested commit message format</h3>
+    <h3 class="sub-heading">Step 1 — Commit in GitHub Desktop</h3>
+    <p class="guide-body">
+      Open GitHub Desktop. The new report file and screenshots will appear as uncommitted
+      changes in the left panel. Select all of them, write a short commit message in the
+      summary field, and click <strong>Commit to main</strong>.
+    </p>
+    <p class="guide-body">Suggested commit message format:</p>
     <pre class="code-block">Add competitor analysis: PDP — Gymshark, Bulk, TPW (2026-06-08)</pre>
 
-    <h3 class="sub-heading">Verifying the report is live</h3>
+    <h3 class="sub-heading">Step 2 — Push to GitHub</h3>
     <p class="guide-body">
-      After pushing, visit <code>/reports/competitors/[slug]</code> on the deployed site once
-      Vercel has redeployed (typically under 2 minutes). Check that all competitor screenshots
-      load and the opportunity cards render correctly.
+      Click <strong>Push origin</strong> in GitHub Desktop. This sends your commit to GitHub
+      and triggers an automatic Vercel redeploy — the report is usually live within 2 minutes.
+    </p>
+
+    <h3 class="sub-heading">Step 3 — Verify the report is live</h3>
+    <p class="guide-body">
+      Visit <code>/reports/competitors/[slug]</code> on the deployed site to confirm the page
+      is live and all competitor screenshots load correctly.
     </p>
   </section>
 

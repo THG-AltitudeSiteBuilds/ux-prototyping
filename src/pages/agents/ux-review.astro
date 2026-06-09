@@ -143,7 +143,7 @@ import ReportLayout from '@/components/ReportLayout.astro';
 
   <!-- ── Committing the output ──────────────────────────────── -->
   <section class="guide-section">
-    <h2 class="section-heading">Committing the output</h2>
+    <h2 class="section-heading">Committing and publishing the output</h2>
 
     <h3 class="sub-heading">Files created</h3>
     <ul class="file-list">
@@ -152,21 +152,26 @@ import ReportLayout from '@/components/ReportLayout.astro';
       <li><code>src/pages/reports/index.astro</code> — updated with the new report entry</li>
     </ul>
 
-    <h3 class="sub-heading">Git commands</h3>
-    <pre class="code-block">git add src/pages/reports/[slug].astro src/assets/reports/[slug]/
-git add src/pages/reports/index.astro
-git commit -m "Add UX review: [Page Name] ([date])"
-git push</pre>
-
-    <h3 class="sub-heading">Suggested commit message format</h3>
+    <h3 class="sub-heading">Step 1 — Commit in GitHub Desktop</h3>
+    <p class="guide-body">
+      Open GitHub Desktop. The new report file and screenshots will appear as uncommitted
+      changes in the left panel. Select all of them, write a short commit message in the
+      summary field, and click <strong>Commit to main</strong>.
+    </p>
+    <p class="guide-body">Suggested commit message format:</p>
     <pre class="code-block">Add UX review: Impact Whey PDP (2026-06-01)</pre>
 
-    <h3 class="sub-heading">Verifying the report is live</h3>
+    <h3 class="sub-heading">Step 2 — Push to GitHub</h3>
     <p class="guide-body">
-      After pushing, Vercel will redeploy automatically (usually under 2 minutes). Visit
-      <code>/reports/[slug]</code> on the deployed site to confirm the page is live, screenshots
-      load, and finding cards render correctly. You can also check the dashboard at
-      <code>/reports</code> to confirm the new entry appears.
+      Click <strong>Push origin</strong> in GitHub Desktop. This sends your commit to GitHub
+      and triggers an automatic Vercel redeploy — the report is usually live within 2 minutes.
+    </p>
+
+    <h3 class="sub-heading">Step 3 — Verify the report is live</h3>
+    <p class="guide-body">
+      Visit <code>/reports/[slug]</code> on the deployed site to confirm the page is live,
+      screenshots load, and finding cards render correctly. Check <code>/reports</code> to
+      confirm the new entry appears in the index.
     </p>
   </section>
 

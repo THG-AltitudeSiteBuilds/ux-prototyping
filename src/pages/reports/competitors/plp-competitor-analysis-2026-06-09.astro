@@ -1,0 +1,528 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+import OpportunityCard from '@/components/OpportunityCard.astro';
+---
+
+<ReportLayout title="PLP Competitor Analysis — June 2026">
+
+  <section class="report-intro">
+    <h1 class="report-h1">PLP Competitor Analysis</h1>
+    <p class="report-meta">Product Listing Page &mdash; Analysed 9 June 2026</p>
+    <p class="report-summary">
+      Six competitor product listing pages were reviewed against Myprotein's protein category
+      (<a href="https://www.myprotein.com/c/nutrition/protein/" target="_blank">myprotein.com/c/nutrition/protein/</a>):
+      Huel (uk.huel.com/collections/bestsellers), The Protein Works (theproteinworks.com/products/shakes),
+      Optimum Nutrition (optimumnutrition.com/en-gb/collections/all-products),
+      Healf (healf.com/collections/performance), Bulk (bulk.com/uk/protein/whey-protein),
+      and Naked Nutrition (nakednutrition.com/collections/protein-powder).
+      Fourteen opportunities were identified across all six brands. The strongest cross-competitor
+      signal — appearing in three of six brands — is a product finder quiz surfaced on or near the
+      listing page. The most distinctive single pattern is Healf's AI advisor embedded directly
+      within the product grid. Myprotein already leads on full star ratings with review counts,
+      Quick Buy, collaboration product badges, and filtering depth.
+    </p>
+  </section>
+
+  <!-- ─── Huel ───────────────────────────────────────────────────────────── -->
+
+  <section class="competitor-section">
+    <div class="competitor-header">
+      <h2 class="competitor-name">Huel</h2>
+      <p class="competitor-url">uk.huel.com &mdash; Bestsellers collection</p>
+    </div>
+
+    <OpportunityCard
+      title="Nutritional callouts on product cards"
+      competitor="Huel"
+      viewport="Both"
+      categories="conversion,discovery"
+      opportunityId="huel-nutritional-callouts-on-cards"
+    >
+      <p slot="what">
+        Every Huel product card displays protein grams and kcal directly below the product name,
+        using small iconographic labels — a protein icon alongside "40g protein" and a kcal badge
+        alongside "400 kcal per meal". These are core card layout elements, not hover states or
+        tooltip content. The Daily Greens card adapts the same pattern to its own key stat:
+        "91 vitamins, minerals &amp; nutrients".
+      </p>
+      <p slot="why">
+        On a protein category page, protein content per serving is the primary purchase criterion
+        for most shoppers. Surfacing it at browse level removes the need to click into a PDP just
+        to answer that single question — reducing bounce and qualifying intent earlier in the funnel.
+      </p>
+      <p slot="opportunity">
+        Myprotein's protein PLP cards show name, rating, price, and discount — but not protein per
+        serving. Adding a single nutritional callout ("25g protein per serving") to each card would
+        let users compare products at browse speed. This is especially high value when comparing
+        Impact Whey vs Clear Whey vs Vegan Blend, where the name alone doesn't communicate the
+        nutritional difference.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="Per-serving cost alongside headline price"
+      competitor="Huel"
+      viewport="Both"
+      categories="conversion"
+      opportunityId="huel-per-serving-unit-pricing"
+    >
+      <p slot="what">
+        Huel prices every card in the format "From £30.50 / £1.79 per meal" — the consumable unit
+        cost sits immediately after the headline price, adapted to the right unit per product type
+        (per meal, per bottle, per serving).
+      </p>
+      <p slot="why">
+        A total pack price requires mental arithmetic to compare value across different sizes and
+        formats. Per-serving cost maps to daily habits ("less than a coffee") and makes cross-product
+        comparison effortless — which drives confidence at the point of decision.
+      </p>
+      <p slot="opportunity">
+        Myprotein shows £/kg on cards, which serves bulk comparison but is opaque for new shoppers.
+        Showing "£X per serving" as a secondary price line — alongside the existing format — would
+        serve both audiences: experienced buyers who think in £/kg, and new users who think in
+        cost per use.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="Benefit-led product subtitle on every card"
+      competitor="Huel"
+      viewport="Both"
+      categories="discovery,content"
+      opportunityId="huel-benefit-subtitle-on-cards"
+    >
+      <p slot="what">
+        Every Huel card carries a one-line benefit or format descriptor in a muted secondary style
+        beneath the product name — "Complete high-protein powder meal", "High-protein meal shakes",
+        "Supergreens powder". These are plain-language descriptors, not marketing taglines.
+      </p>
+      <p slot="why">
+        Product names alone assume prior knowledge. A one-line descriptor helps browse-mode users
+        understand what a product is and does without clicking into the PDP — reducing pogo-sticking
+        and time-to-decision.
+      </p>
+      <p slot="opportunity">
+        Myprotein's protein PLP shows product names only. Adding a short benefit subtitle
+        ("Fast-absorbing post-workout whey", "Light, refreshing alternative to shakes") to each card
+        would help the significant segment of shoppers who don't yet understand the difference between
+        Impact Whey, Clear Whey, and Vegan Protein from name alone — critical given 53 products on
+        this category.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="Bundle surfaced as a product card within the listing grid"
+      competitor="Huel"
+      viewport="Both"
+      categories="conversion"
+      opportunityId="huel-bundle-in-plp-grid"
+    >
+      <p slot="what">
+        Huel's "Bestseller Bundle — All our favourite products, 15 items" appears as a standard
+        product card within the bestsellers grid, with sub-items listed directly on the card
+        ("Meals, drinks &amp; bars", "Free T-shirt, shaker and pot"). It is browsable alongside
+        individual products, not siloed to a separate bundles page.
+      </p>
+      <p slot="why">
+        New-to-brand shoppers who are unsure what to try are the ideal bundle buyer — but they
+        won't find a bundle if it only lives in a separate section they have to actively navigate to.
+        Intercepting them in the main listing grid captures the right user at the right moment.
+      </p>
+      <p slot="opportunity">
+        Myprotein bundles and stacks are not currently surfaced within the protein PLP itself.
+        Inserting a "Protein Starter Bundle" or "Most popular stack" card into the listing — positioned
+        after the first few individual products — would expose bundle options to browse-mode shoppers
+        who would otherwise never reach the bundles section, with a meaningful AOV uplift potential.
+      </p>
+    </OpportunityCard>
+
+  </section>
+
+  <!-- ─── The Protein Works ─────────────────────────────────────────────── -->
+
+  <section class="competitor-section">
+    <div class="competitor-header">
+      <h2 class="competitor-name">The Protein Works</h2>
+      <p class="competitor-url">theproteinworks.com &mdash; Products / Shakes</p>
+    </div>
+
+    <OpportunityCard
+      title="Product tier hierarchy labelled on cards"
+      competitor="The Protein Works"
+      viewport="Both"
+      categories="conversion,discovery"
+      opportunityId="tpw-tier-hierarchy-on-cards"
+    >
+      <p slot="what">
+        TPW labels every card with its tier: PLATINUM, GOLD, or BLACK — displayed as a prominent
+        badge alongside the product name. Users understand the range hierarchy at a glance without
+        needing to navigate a separate comparison page.
+      </p>
+      <p slot="why">
+        Brands with multiple tiers of the same product type risk confusing shoppers who can't tell
+        why one product costs more than another. Labelling the tier on the card removes that friction
+        and creates a natural upsell path — a user who picks up a GOLD product is already aware a
+        PLATINUM tier exists.
+      </p>
+      <p slot="opportunity">
+        Myprotein sells Impact Whey, Impact Whey Advanced, and THE Whey as a de facto tier stack,
+        but the PLP does not label these as tiers. A shopper browsing the protein category has no
+        signal that THE Whey is the premium option without reading every product description.
+        A lightweight tier label (e.g. "Core / Advanced / Premium") applied at card level would
+        make the range architecture legible at browse speed.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="Goal-based and timing-based filtering"
+      competitor="The Protein Works"
+      viewport="Both"
+      categories="discovery,personalisation"
+      opportunityId="tpw-goal-based-filtering"
+    >
+      <p slot="what">
+        TPW's filter sidebar includes "Body Goal" (Weight Loss, Lean Muscle, Muscle Mass) and
+        "When to Take" (Morning, Post-Workout, Bedtime) alongside the expected ingredient and
+        diet filters. Users can filter the listing to products suited to their specific
+        goal and timing.
+      </p>
+      <p slot="why">
+        Most shoppers browse protein by goal or routine, not by protein source or ingredient.
+        Offering goal and timing filters meets users at their actual mental model — "I want
+        something for after training" — rather than asking them to translate that into
+        ingredient knowledge first.
+      </p>
+      <p slot="opportunity">
+        Myprotein's protein filters cover Protein type, Flavour, Diet, and price. Adding a
+        "Goal" dimension (Build Muscle, Weight Loss, Recovery, Meal Replacement) and optionally
+        a "When to take" filter would meaningfully reduce time-to-decision for goal-oriented
+        shoppers, who likely represent the majority of protein buyers.
+      </p>
+    </OpportunityCard>
+
+  </section>
+
+  <!-- ─── Optimum Nutrition ─────────────────────────────────────────────── -->
+
+  <section class="competitor-section">
+    <div class="competitor-header">
+      <h2 class="competitor-name">Optimum Nutrition</h2>
+      <p class="competitor-url">optimumnutrition.com &mdash; Collections / All Products</p>
+    </div>
+
+    <OpportunityCard
+      title="Expert tool integrated at category level"
+      competitor="Optimum Nutrition"
+      viewport="Desktop"
+      categories="discovery,personalisation,content"
+      opportunityId="on-expert-tool-at-category"
+    >
+      <p slot="what">
+        Optimum Nutrition surfaces both a Protein Calculator tool and an "Ask Coach Optimum"
+        branded expert resource linked from the category level. The calculator helps users determine
+        how much protein they need based on their stats; the coach resource provides personalised
+        guidance within the product context.
+      </p>
+      <p slot="why">
+        Users who know how much protein they need are better positioned to choose the right product
+        and size. An expert tool in the category context addresses purchase uncertainty before it
+        causes a bounce — and positions the brand as a knowledgeable partner, not just a retailer.
+      </p>
+      <p slot="opportunity">
+        Myprotein has a "Fuel Coach" entry in the main nav but does not surface a nutritional
+        calculator or personalised advice entry point within the protein category itself. A
+        "How much protein do you need?" calculator embedded in the category page — or a "Get a
+        personalised recommendation" CTA prominently placed — would serve undecided shoppers and
+        drive both conversion and appropriate size selection.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="Bundle savings displayed within the listing"
+      competitor="Optimum Nutrition"
+      viewport="Both"
+      categories="conversion"
+      opportunityId="on-bundle-savings-on-plp"
+    >
+      <p slot="what">
+        A featured bundle with "Save £24.50" is displayed directly within ON's product listing,
+        not relegated to a separate bundles section. The saving is the lead message on the bundle
+        card, making the value proposition immediately legible.
+      </p>
+      <p slot="why">
+        Bundle visibility in the listing intercepts the shoppers who are most likely to buy them —
+        those still in browse mode and open to suggestion — rather than requiring deliberate
+        navigation to a bundles page they may never visit.
+      </p>
+      <p slot="opportunity">
+        See also the same pattern from Huel above — this appears across two competitors and is a
+        consistent signal worth prioritising.
+      </p>
+    </OpportunityCard>
+
+  </section>
+
+  <!-- ─── Healf ─────────────────────────────────────────────────────────── -->
+
+  <section class="competitor-section">
+    <div class="competitor-header">
+      <h2 class="competitor-name">Healf</h2>
+      <p class="competitor-url">healf.com &mdash; Collections / Performance</p>
+    </div>
+
+    <OpportunityCard
+      title="AI advisor embedded within the product grid"
+      competitor="Healf"
+      viewport="Both"
+      categories="discovery,personalisation"
+      opportunityId="healf-ai-advisor-in-grid"
+    >
+      <p slot="what">
+        "Ask Helix" — Healf's AI advisor — appears as an inline element within the product grid
+        itself, not on a separate page or as a widget behind a click. It presents pre-populated
+        contextual questions mid-scroll through the listing: "Which supplements help boost workout
+        performance?", "How do I choose between powders, gels, and capsules?", "What ingredients
+        support muscle growth and recovery?", "Which options are suitable for a plant-based diet?".
+        Users can tap a question and get an immediate AI response without leaving the listing.
+      </p>
+      <p slot="why">
+        Decision paralysis is highest mid-browse, when a shopper has seen multiple products but
+        hasn't committed. An AI advisor at that exact point — contextualised to the category, with
+        pre-suggested questions that mirror real shopper uncertainty — addresses the uncertainty
+        in the moment, rather than asking the user to navigate away to find help.
+      </p>
+      <p slot="opportunity">
+        Myprotein's protein category has 53 products and no in-listing decision support. An embedded
+        AI advisor or contextual Q&amp;A panel — with pre-populated questions specific to protein
+        ("What's the difference between whey and isolate?", "Which protein is best for weight loss?")
+        — would address the most common reasons shoppers abandon the category without buying.
+        Given Myprotein already has Fuel Coach, this could be a surface integration rather than
+        a net-new build.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="Personalised 'Picked for you' section above the main grid"
+      competitor="Healf"
+      viewport="Both"
+      categories="personalisation,discovery"
+      opportunityId="healf-picked-for-you"
+    >
+      <p slot="what">
+        Healf shows a "Picked for you" section above the main product grid, surfacing products
+        curated to the individual user's profile and browsing history. Alongside this, a
+        "Wearable connect" feature lets users sync devices (Whoop, Garmin, etc.) for
+        body-data-driven recommendations — with the prompt appearing in the listing itself.
+      </p>
+      <p slot="why">
+        A personalised section at the top of a category page shortens the path to a relevant
+        product for returning users and reduces the cognitive load of browsing 53+ items. It
+        also signals that the brand understands the individual, increasing trust and affinity.
+      </p>
+      <p slot="opportunity">
+        Myprotein has significant purchase history data across its user base. A "Based on your
+        previous orders" or "Recommended for you" rail at the top of the protein category —
+        visible only to logged-in users — would make the category page feel personalised for
+        repeat buyers and reduce time-to-reorder for those returning to replenish.
+      </p>
+    </OpportunityCard>
+
+  </section>
+
+  <!-- ─── Bulk ──────────────────────────────────────────────────────────── -->
+
+  <section class="competitor-section">
+    <div class="competitor-header">
+      <h2 class="competitor-name">Bulk</h2>
+      <p class="competitor-url">bulk.com &mdash; Protein / Whey Protein</p>
+    </div>
+
+    <OpportunityCard
+      title="Default SKU (flavour and size) shown on the card"
+      competitor="Bulk"
+      viewport="Both"
+      categories="conversion,discovery"
+      opportunityId="bulk-default-sku-on-card"
+    >
+      <p slot="what">
+        Every Bulk product card displays the default flavour and size beneath the product name —
+        "Vanilla 1kg", "Cola 400g", "Peach Iced Tea 500g". The listed price corresponds to that
+        specific SKU, so users know exactly what they're getting at that price point without
+        clicking in.
+      </p>
+      <p slot="why">
+        A card that shows a price without clarifying which size or flavour it applies to creates
+        ambiguity — shoppers may click in only to find the default is not the size they wanted,
+        or that the price changes on selection. Showing the default SKU on the card removes that
+        uncertainty and reduces unnecessary PDP visits from curious rather than committed shoppers.
+      </p>
+      <p slot="opportunity">
+        Myprotein's protein cards show a price and Quick Buy without indicating which flavour
+        or size the price refers to. Adding a default SKU line (e.g., "Chocolate / 1kg") beneath
+        the product name would make the listing more transparent and reduce frustrated PDP
+        click-throughs where the shopper finds the price was for a different size.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="Per-card deal messaging with 'no code required' reassurance"
+      competitor="Bulk"
+      viewport="Both"
+      categories="conversion,trust"
+      opportunityId="bulk-per-card-deal-label"
+    >
+      <p slot="what">
+        Bulk attaches a specific deal label to each product card — "Summer Deals: Up to 75% off
+        — no code required". Individual products with different deal mechanics get different labels:
+        one card reads "Clearance Sale: Now or never", signalling scarcity specific to that product.
+        The "no code required" phrase appears directly on the card.
+      </p>
+      <p slot="why">
+        Shoppers who see a discounted price often wonder if there's a code they're missing that
+        would get them an even better deal. "No code required" eliminates that doubt and prevents
+        the cart-abandonment behaviour of opening a new tab to search for a discount code.
+        Per-card urgency labels (vs. a single site banner) are also more believable and specific.
+      </p>
+      <p slot="opportunity">
+        Myprotein currently repeats the same banner message on every card — "UP TO 50% OFF | UK
+        &amp; EUROPE'S NO. 1 SPORTS NUTRITION BRAND" — which becomes visual noise after the
+        first few cards and doesn't provide the "no code needed" reassurance. A card-level label
+        that clarifies the deal is automatic and code-free would reduce checkout abandonment driven
+        by code-searching behaviour.
+      </p>
+    </OpportunityCard>
+
+  </section>
+
+  <!-- ─── Naked Nutrition ───────────────────────────────────────────────── -->
+
+  <section class="competitor-section">
+    <div class="competitor-header">
+      <h2 class="competitor-name">Naked Nutrition</h2>
+      <p class="competitor-url">nakednutrition.com &mdash; Collections / Protein Powder</p>
+    </div>
+
+    <OpportunityCard
+      title="Subscription option surfaced directly on PLP cards"
+      competitor="Naked Nutrition"
+      viewport="Both"
+      categories="conversion,personalisation"
+      opportunityId="naked-subscription-on-card"
+    >
+      <p slot="what">
+        Every Naked Nutrition product card shows a one-time vs. Autoship toggle, a "Save 20%"
+        subscription saving, and a delivery schedule selector (Every 4 weeks / Every 6 weeks /
+        Every 8 weeks) — all visible on the card in the listing, before the user clicks into a
+        PDP. The "Recommended" label appears next to the most popular delivery frequency.
+      </p>
+      <p slot="why">
+        Subscription converts best when surfaced early — before the user has committed to a
+        one-time purchase mindset. Showing the subscription option at browse level, with the
+        saving made explicit and the delivery flexibility demonstrated, makes subscribing feel
+        like the natural default rather than an upsell discovered at checkout.
+      </p>
+      <p slot="opportunity">
+        Myprotein's subscribe-and-save is primarily a PDP and checkout mechanic. Surfacing even
+        a lightweight "Subscribe &amp; Save X%" label on protein category cards — for logged-in
+        users or as a universal indicator — would expose the subscription option at the moment
+        of product consideration, which is when the decision is most open.
+      </p>
+    </OpportunityCard>
+
+    <OpportunityCard
+      title="Ingredient count as a transparency badge on cards"
+      competitor="Naked Nutrition"
+      viewport="Both"
+      categories="trust,conversion"
+      opportunityId="naked-ingredient-count-badge"
+    >
+      <p slot="what">
+        Naked Nutrition cards carry a prominent purity badge — "Only 1 Ingredient", "Only 2
+        Ingredients", "Only 3 Ingredients" — displayed alongside the product name. This is
+        their primary brand differentiator and it is communicated at browse level, on every
+        relevant card.
+      </p>
+      <p slot="why">
+        Clean-label shoppers — a growing segment — want to know immediately that a product
+        doesn't contain unnecessary additives. Surfacing ingredient count at card level means
+        these shoppers don't need to read the ingredient list on every PDP; it's a browse-level
+        filter they can apply visually.
+      </p>
+      <p slot="opportunity">
+        Myprotein has Informed Choice certified products and Informed Sport certified products,
+        but these certifications are not surfaced on PLP cards. A badge communicating "Informed
+        Choice Certified" or a simpler quality signal at card level would serve the trust-driven
+        shopper segment without requiring a PDP visit to find that information.
+      </p>
+    </OpportunityCard>
+
+  </section>
+
+  <!-- ─── Cross-competitor patterns ────────────────────────────────────── -->
+
+  <section class="prose-section">
+    <h2 class="section-heading">Cross-Competitor Patterns</h2>
+    <p>
+      Three patterns appeared across multiple competitors and represent the strongest signals
+      from this review.
+    </p>
+    <p>
+      <strong>Product finder quiz on or near the PLP (Huel, The Protein Works, Naked Nutrition — 3/6 brands).</strong>
+      Huel has "Which Huel is right for you?" persistently in the nav; The Protein Works has
+      "Unsure where to start? Take our quiz" in the listing sidebar; Naked Nutrition has
+      "Take The Quiz — Get up to 20% off" embedded in the listing navigation. Over half the
+      competitor set surface a quiz entry point at or near the category page. Myprotein has
+      no equivalent on the protein PLP despite having 53 products in the category — a range
+      scale that makes a decision-support tool more valuable here than on any of the
+      competitors' smaller ranges.
+    </p>
+    <p>
+      <strong>Nutritional callouts at card level (Huel, The Protein Works — 2/6 brands).</strong>
+      Both brands surface protein per serving on product cards. Neither Myprotein nor the other
+      four competitors do this on their listing pages. Given that protein content is the primary
+      purchase criterion on a protein category page, this represents an easy lift with meaningful
+      conversion impact — users can qualify products at browse speed rather than clicking into
+      every PDP.
+    </p>
+    <p>
+      <strong>Bundle or starter pack surfaced within the listing grid (Huel, Optimum Nutrition — 2/6 brands).</strong>
+      Both brands feature bundle products as cards within the main product grid, not siloed to
+      a separate bundles page. New-to-brand shoppers — the most likely bundle buyers — find
+      the bundle without having to know it exists. Myprotein's bundles are not currently
+      surfaced within the protein category listing.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Areas Where Myprotein Already Leads</h2>
+    <p>
+      Myprotein's protein PLP is ahead of the competitor field in several meaningful areas.
+      Full star ratings with numerical review counts appear on every card — four of the six
+      competitors reviewed either show count only (Healf, Bulk) or no rating at all (Optimum
+      Nutrition). The Quick Buy mechanic is matched by Bulk and Naked Nutrition but absent
+      from Huel, The Protein Works, and Optimum Nutrition. Collaboration product badges
+      (MARS®, Vimto®, Jimmy's Iced Coffee) are unique to Myprotein in this competitive set
+      and serve as a discovery signal for existing fans of those brands. The Trustpilot score
+      ("Over 210k reviews, 4.4 rated") in the navigation provides brand-level social proof
+      that none of the six competitors match at that scale. Sub-category tabs (Whey / Isolate
+      / Blends / Collagen / Vegan) give Myprotein a quick-navigation layer above the filter
+      panel that most competitors lack.
+    </p>
+  </section>
+
+</ReportLayout>
+
+<style>
+  .report-intro { margin-bottom: 40px; }
+  .report-h1 { font-size: 26px; font-weight: 800; color: var(--color-text-heading); line-height: 1.25; margin-bottom: 6px; }
+  .report-meta { font-size: 13px; color: var(--color-text-body); opacity: 0.65; margin-bottom: 14px; }
+  .report-summary { font-size: 15px; line-height: 1.7; color: var(--color-text-body); max-width: 680px; }
+  .competitor-section { margin-bottom: 56px; padding-bottom: 40px; border-bottom: 1px solid rgba(0, 57, 66, 0.1); }
+  .competitor-header { margin-bottom: 24px; }
+  .competitor-name { font-size: 20px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 2px; }
+  .competitor-url { font-size: 13px; color: var(--color-text-body); opacity: 0.6; }
+  .section-heading { font-size: 18px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(0, 57, 66, 0.1); }
+  .prose-section { margin-bottom: 36px; }
+  .prose-section p { font-size: 15px; line-height: 1.7; color: var(--color-text-body); margin-bottom: 16px; }
+  .prose-section p:last-child { margin-bottom: 0; }
+</style>

@@ -16,6 +16,15 @@ import ReportLayout from '@/components/ReportLayout.astro';
     </p>
   </section>
 
+  <!-- ── Setup callout ─────────────────────────────────────── -->
+  <a href="/getting-started" class="setup-callout">
+    <span class="setup-callout-icon">⚙</span>
+    <div>
+      <p class="setup-callout-title">First time? Complete the setup guide first</p>
+      <p class="setup-callout-sub">You'll need GitHub Desktop, the Claude Code desktop app, the Chrome extension, and the agent skills installed before any agent will work. →</p>
+    </div>
+  </a>
+
   <!-- ── Before you start ────────────────────────────────────── -->
   <section class="guide-section">
     <h2 class="section-heading">Before you start</h2>
@@ -177,6 +186,25 @@ import ReportLayout from '@/components/ReportLayout.astro';
 </ReportLayout>
 
 <style>
+  .setup-callout {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: #EEF6F7;
+    border: 1px solid rgba(0, 57, 66, 0.18);
+    border-left: 4px solid var(--color-primary);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    text-decoration: none;
+    transition: background 0.15s;
+    max-width: 680px;
+  }
+  .setup-callout:hover { background: #E4F0F2; }
+  .setup-callout-icon { font-size: 18px; color: var(--color-primary); opacity: 0.6; flex-shrink: 0; margin-top: 1px; }
+  .setup-callout-title { font-size: 14px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 4px; }
+  .setup-callout-sub { font-size: 13px; line-height: 1.6; color: var(--color-text-body); }
+
   .agent-intro { margin-bottom: 48px; }
   .agent-eyebrow {
     font-size: 12px;

@@ -298,7 +298,14 @@ import ReportLayout from '@/components/ReportLayout.astro';
             Enter. Claude will find the right folder, copy the skills in, and confirm what
             it installed.
           </p>
-          <pre class="gs-code">Please install the UX Intelligence agent skills from this repo into my Claude skills folder. The skills are in `src/skills/user/` — find my Claude skills directory at `~/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/` and copy each skill folder from the repo into it. If you find multiple skills subfolders, copy into all of them. Confirm which skills were installed and where.</pre>
+          <div class="gs-copyblock">
+            <pre class="gs-code gs-code--wrap" id="install-prompt">Please install the UX Intelligence agent skills from this repo into my Claude skills folder. The skills are in `src/skills/user/` — find my Claude skills directory at `~/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/` and copy each skill folder from the repo into it. If you find multiple skills subfolders, copy into all of them. Confirm which skills were installed and where.</pre>
+            <button class="gs-copy-btn" onclick="
+              navigator.clipboard.writeText(document.getElementById('install-prompt').innerText);
+              this.textContent = 'Copied!';
+              setTimeout(() => this.textContent = 'Copy', 2000);
+            ">Copy</button>
+          </div>
         </div>
       </div>
 
@@ -669,6 +676,39 @@ import ReportLayout from '@/components/ReportLayout.astro';
     margin: 10px 0 12px;
     white-space: pre;
     max-width: 680px;
+  }
+  .gs-code--wrap {
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+    border-radius: 10px 10px 0 0;
+  }
+  .gs-copyblock {
+    max-width: 680px;
+    margin: 10px 0 12px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .gs-copy-btn {
+    display: block;
+    width: 100%;
+    padding: 10px 20px;
+    background: rgba(0, 57, 66, 0.85);
+    color: var(--color-mint);
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.15s;
+  }
+  .gs-copy-btn:hover {
+    background: rgba(0, 57, 66, 1);
   }
 
   /* ── External link pill ─────────────────────────────────── */

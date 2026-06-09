@@ -372,8 +372,9 @@ Handle the full git workflow so the user doesn't have to do anything after the r
 4. **Confirm** — end with a clear, friendly summary for the user. Tell them:
    - Which report was created and what files were saved
    - That it's been committed and pushed to GitHub
-   - That the site will redeploy automatically and the report will be live within about 2 minutes
-   - The full URL of the report on the deployed site (e.g. `https://5d38e669.thgaltitude.com/reports/competitors/[slug]`)
+   - That the report has been committed and pushed to GitHub successfully
+   - That they now need to trigger a deploy manually in the Altitude dashboard to make it live
+   - The full URL the report will be available at once deployed (e.g. `https://5d38e669.thgaltitude.com/reports/competitors/[slug]`)
 
    Keep this message plain and jargon-free — most users won't know what a commit or push is.
 

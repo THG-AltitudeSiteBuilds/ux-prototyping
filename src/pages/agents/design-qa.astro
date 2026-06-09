@@ -27,13 +27,82 @@ import ReportLayout from '@/components/ReportLayout.astro';
     </div>
   </a>
 
+  <!-- ── Connecting Figma MCP ───────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Connecting Figma to Claude Desktop</h2>
+    <p class="guide-body">
+      The Design QA agent reads design specs directly from Figma using the Figma MCP server.
+      This is a one-time setup — once connected, it persists across all Claude Code sessions.
+    </p>
+
+    <div class="figma-steps">
+
+      <div class="figma-step">
+        <span class="figma-step-num">1</span>
+        <div>
+          <p class="figma-step-title">Install the Figma plugin</p>
+          <p class="figma-step-body">
+            Open Claude Desktop and start a Claude Code session with the repo open. In the
+            Claude Code prompt, run:
+          </p>
+          <pre class="code-block">claude plugin install figma@claude-plugins-official</pre>
+          <p class="figma-step-body">Press Enter and wait for the installation to complete.</p>
+        </div>
+      </div>
+
+      <div class="figma-step">
+        <span class="figma-step-num">2</span>
+        <div>
+          <p class="figma-step-title">Restart Claude Desktop</p>
+          <p class="figma-step-body">
+            Quit the app completely and reopen it. Plugins are loaded at startup.
+          </p>
+        </div>
+      </div>
+
+      <div class="figma-step">
+        <span class="figma-step-num">3</span>
+        <div>
+          <p class="figma-step-title">Authenticate with Figma</p>
+          <p class="figma-step-body">
+            In the Claude Code prompt, type <code>/plugin</code> and press Enter. Use the
+            arrow keys to navigate to the <strong>Installed</strong> tab, select
+            <strong>figma</strong>, and press Enter. Press Enter again to begin
+            authentication — a browser tab will open asking you to allow access. Click
+            <strong>Allow access</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="figma-step">
+        <span class="figma-step-num">4</span>
+        <div>
+          <p class="figma-step-title">Confirm it's connected</p>
+          <p class="figma-step-body">
+            Run <code>/plugin</code> again — the Figma server should now show as connected.
+            You're ready to use the Design QA agent.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="figma-note">
+      <strong>Already have the Figma desktop app?</strong>
+      There's also a desktop server option that connects directly through the Figma app
+      instead of via a plugin. It's mainly for organisation and enterprise setups — for most
+      users, the plugin route above is simpler and recommended.
+    </div>
+
+  </section>
+
   <!-- ── Before you start ────────────────────────────────────── -->
   <section class="guide-section">
     <h2 class="section-heading">Before you start</h2>
     <ul class="checklist">
       <li>The Figma URL for the design frame you want QA'd — link to a specific frame with a <code>node-id</code>, not the root file</li>
       <li>The live or staging URL of the built page</li>
-      <li>Figma MCP is connected in your Claude Code session — the agent reads design specs directly from Figma</li>
+      <li>Figma MCP is connected in your Claude Code session (see setup above)</li>
       <li>Confirm which viewport(s) to check. If you don't specify, the agent will match the Figma frame's <code>original_width</code> exactly — it never assumes desktop for a mobile frame</li>
       <li>If the build is on a staging URL behind a VPN or basic auth, confirm it's reachable from your machine before starting</li>
     </ul>
@@ -398,6 +467,69 @@ import ReportLayout from '@/components/ReportLayout.astro';
     font-size: 14px;
     line-height: 1.65;
     color: var(--color-text-body);
+  }
+
+  .figma-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 680px;
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    background: var(--color-bg-card);
+    margin-bottom: 16px;
+  }
+  .figma-step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(0,57,66,0.07);
+  }
+  .figma-step:last-child { border-bottom: none; }
+  .figma-step-num {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-mint);
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+  .figma-step-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 5px;
+  }
+  .figma-step-body {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+    margin-bottom: 8px;
+  }
+  .figma-step-body:last-child { margin-bottom: 0; }
+  .figma-note {
+    max-width: 680px;
+    background: var(--color-bg-muted);
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    padding: 13px 16px;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+  }
+  .figma-note strong {
+    display: block;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 3px;
   }
 
   .tips-list {

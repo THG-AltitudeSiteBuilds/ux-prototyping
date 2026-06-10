@@ -140,27 +140,6 @@ import ReportLayout from '@/components/ReportLayout.astro';
         </div>
       </div>
 
-      <div class="gs-substep">
-        <span class="gs-substep-label">3d</span>
-        <div>
-          <p class="gs-substep-title">Make sure Git is installed</p>
-          <p class="gs-substep-body">
-            Claude Code needs the <code>git</code> command line tool, which doesn't come with
-            GitHub Desktop. You don't need to use the terminal yourself — once you've completed
-            step 5 and opened the repo in Claude Code, paste this prompt and Claude will check
-            and install it for you, prompting you to click through any install dialogs that appear:
-          </p>
-          <div class="gs-copyblock">
-            <pre class="gs-code gs-code--wrap" id="git-check-prompt">Please check whether the git command line tool is installed on my machine. If it isn't, install it for me — on a Mac this usually means running a command that triggers the Xcode Command Line Tools installer popup. Talk me through any dialog boxes that appear, but I don't need to use the terminal myself. Confirm once git is working.</pre>
-            <button class="gs-copy-btn" onclick="
-              navigator.clipboard.writeText(document.getElementById('git-check-prompt').innerText);
-              this.textContent = 'Copied!';
-              setTimeout(() => this.textContent = 'Copy', 2000);
-            ">Copy</button>
-          </div>
-        </div>
-      </div>
-
     </div>
   </section>
 
@@ -243,6 +222,27 @@ import ReportLayout from '@/components/ReportLayout.astro';
             slash commands. If you can see the list, the session is running correctly inside
             the repo.
           </p>
+        </div>
+      </div>
+
+      <div class="gs-substep">
+        <span class="gs-substep-label">5d</span>
+        <div>
+          <p class="gs-substep-title">Make sure Git is installed</p>
+          <p class="gs-substep-body">
+            Claude Code needs the <code>git</code> command line tool, which doesn't come with
+            GitHub Desktop. You don't need to use the terminal yourself — paste this prompt
+            and Claude will check and install it for you, prompting you to click through any
+            install dialogs that appear:
+          </p>
+          <div class="gs-copyblock">
+            <pre class="gs-code gs-code--wrap" id="git-check-prompt">Please check whether the git command line tool is installed on my machine. If it isn't, install it for me — on a Mac this usually means running a command that triggers the Xcode Command Line Tools installer popup. Talk me through any dialog boxes that appear, but I don't need to use the terminal myself. Confirm once git is working.</pre>
+            <button class="gs-copy-btn" onclick="
+              navigator.clipboard.writeText(document.getElementById('git-check-prompt').innerText);
+              this.textContent = 'Copied!';
+              setTimeout(() => this.textContent = 'Copy', 2000);
+            ">Copy</button>
+          </div>
         </div>
       </div>
 

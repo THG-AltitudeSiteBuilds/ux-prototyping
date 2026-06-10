@@ -78,6 +78,14 @@ import ReportLayout from '@/components/ReportLayout.astro';
       Write access is required — not just read access. This is what allows Claude Code to commit
       new report files and push them to the site on your behalf.
     </p>
+    <div class="gs-tip">
+      <strong>One more thing — authorise for SSO</strong>
+      The <code>THG-AltitudeSiteBuilds</code> organisation uses single sign-on. After accepting
+      the invite, go to <a href="https://github.com/settings/organizations" target="_blank" rel="noopener" class="gs-inline-link">github.com/settings/organizations</a>
+      and click <strong>Authorize</strong> next to <code>THG-AltitudeSiteBuilds</code>. If you skip
+      this, GitHub Desktop will look like it's working but pushes will silently fail with a
+      permissions error.
+    </div>
   </section>
 
   <!-- ── Step 3: Clone the repo ────────────────────────────── -->
@@ -132,6 +140,27 @@ import ReportLayout from '@/components/ReportLayout.astro';
         </div>
       </div>
 
+      <div class="gs-substep">
+        <span class="gs-substep-label">3d</span>
+        <div>
+          <p class="gs-substep-title">Make sure Git is installed</p>
+          <p class="gs-substep-body">
+            Claude Code needs the <code>git</code> command line tool, which doesn't come with
+            GitHub Desktop. You don't need to use the terminal yourself — once you've completed
+            step 5 and opened the repo in Claude Code, paste this prompt and Claude will check
+            and install it for you, prompting you to click through any install dialogs that appear:
+          </p>
+          <div class="gs-copyblock">
+            <pre class="gs-code gs-code--wrap" id="git-check-prompt">Please check whether the git command line tool is installed on my machine. If it isn't, install it for me — on a Mac this usually means running a command that triggers the Xcode Command Line Tools installer popup. Talk me through any dialog boxes that appear, but I don't need to use the terminal myself. Confirm once git is working.</pre>
+            <button class="gs-copy-btn" onclick="
+              navigator.clipboard.writeText(document.getElementById('git-check-prompt').innerText);
+              this.textContent = 'Copied!';
+              setTimeout(() => this.textContent = 'Copy', 2000);
+            ">Copy</button>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -145,6 +174,10 @@ import ReportLayout from '@/components/ReportLayout.astro';
       Claude Code is built into the Claude desktop app. Download it from Anthropic and sign in
       with your Anthropic account. If you don't have one, a Claude Pro plan ($20/month) is
       sufficient for running the agents.
+    </p>
+    <p class="gs-body gs-body--note">
+      <strong>Who pays for this?</strong> Check with your team lead before signing up — THG may
+      already have Claude seats or an expense process for this rather than you paying personally.
     </p>
     <a href="https://claude.ai/download" target="_blank" rel="noopener" class="gs-external-link">
       <span class="gs-external-icon">↗</span>
@@ -179,9 +212,11 @@ import ReportLayout from '@/components/ReportLayout.astro';
         <div>
           <p class="gs-substep-title">Open a new project</p>
           <p class="gs-substep-body">
-            In the Claude desktop app, look for <strong>Claude Code</strong> or the
-            <strong>terminal/project icon</strong> — it's usually in the left sidebar or
-            accessible via the menu. Click it to open the Claude Code panel.
+            Open the Claude desktop app. In the top-left corner, click the
+            <strong>Claude</strong> menu (or the dropdown next to your workspace name) and
+            look for <strong>Claude Code</strong> in the list — click it to switch into the
+            Claude Code view. Don't worry if it looks different to a normal chat — it's still
+            just a chat window, with extra access to files on your computer.
           </p>
         </div>
       </div>
@@ -260,15 +295,16 @@ import ReportLayout from '@/components/ReportLayout.astro';
         run git commands locally but won't have full GitHub context.
       </p>
       <div class="gs-plugin-steps">
-        <p class="gs-plugin-step"><span class="gs-plugin-step-num">1</span> In the Claude desktop app, go to <strong>Settings → Extensions</strong> (or <strong>Integrations</strong> depending on your version) and search for <strong>GitHub</strong>.</p>
-        <p class="gs-plugin-step"><span class="gs-plugin-step-num">2</span> Click <strong>Connect</strong> and authorise Claude to access your GitHub account. This will open a GitHub OAuth page — approve the access for the <code>THG-AltitudeSiteBuilds</code> organisation.</p>
-        <p class="gs-plugin-step"><span class="gs-plugin-step-num">3</span> Once connected, GitHub will appear as an available tool in Claude Code sessions. You only need to do this once — it persists across sessions.</p>
+        <p class="gs-plugin-step"><span class="gs-plugin-step-num">1</span> In the Claude desktop app, click the <strong>+</strong> button at the bottom of the chat box, then select <strong>Plugins</strong>.</p>
+        <p class="gs-plugin-step"><span class="gs-plugin-step-num">2</span> Find <strong>GitHub</strong> in the plugin list and click the <strong>+</strong> next to it to add it.</p>
+        <p class="gs-plugin-step"><span class="gs-plugin-step-num">3</span> If prompted, authorise Claude to access your GitHub account — approve access for the <code>THG-AltitudeSiteBuilds</code> organisation.</p>
+        <p class="gs-plugin-step"><span class="gs-plugin-step-num">4</span> Once added, GitHub will appear as an available tool in Claude Code sessions. You only need to do this once — it persists across sessions.</p>
       </div>
       <p class="gs-body gs-body--note" style="margin-top: 12px; margin-bottom: 0;">
-        If you can't see the GitHub integration in Settings, it may not be available on your
-        Claude plan. Basic git operations (commit, push, pull) still work without it — the
-        agents use your local git credentials directly. GitHub Desktop handles authentication
-        automatically so pushes should work even without the MCP connector.
+        If GitHub doesn't appear in the plugin list, it may not be available on your Claude
+        plan. Basic git operations (commit, push, pull) still work without it — the agents use
+        your local git credentials directly. GitHub Desktop handles authentication automatically
+        so pushes should work even without this plugin.
       </p>
     </div>
 
@@ -371,6 +407,13 @@ import ReportLayout from '@/components/ReportLayout.astro';
       you'll need to trigger a deploy in the <strong>Altitude dashboard</strong> to make it
       live on the site. The agent will remind you of this when it finishes.
     </p>
+    <div class="gs-tip">
+      <strong>What is Altitude?</strong>
+      Altitude is THG's internal hosting platform — it's where this site is deployed from.
+      Pushing to GitHub doesn't automatically publish your changes; someone with Altitude
+      access needs to log in and trigger a manual deploy. If you don't have access, ask
+      Richard Gill to either set you up with an account or deploy on your behalf after you push.
+    </div>
 
     <p class="gs-body" style="margin-top: 8px;">
       See the <a href="/agents/ux-review" class="gs-inline-link">agent guides</a> for a

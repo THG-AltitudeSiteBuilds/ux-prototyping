@@ -1,0 +1,205 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+---
+
+<ReportLayout title="Connecting Tokens Studio">
+
+  <section class="guide-intro">
+    <p class="guide-eyebrow">For the Myprotein design team</p>
+    <h1 class="guide-h1">Connecting Tokens Studio</h1>
+    <p class="guide-lead">
+      Tokens Studio is the plugin that links Figma to the design system's token values —
+      colour, spacing, border radius — which live in a GitHub repository. It's the bridge
+      between "a value changed in the repo" and "that change shows up in your Figma library".
+    </p>
+    <p class="guide-lead">
+      Most designers will never need to run a sync. This page is here for when you do, or
+      when you just want to understand what's happening behind the scenes.
+    </p>
+  </section>
+
+  <!-- ── Section 1 ─────────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Installing the plugin</h2>
+    <p class="guide-body">
+      Tokens Studio for Figma is a community plugin. In Figma, open the
+      <strong>Plugins</strong> menu, search for <strong>"Tokens Studio for Figma"</strong>,
+      and install it. It only needs to be installed once per machine — it's then available
+      from the plugins menu in any file.
+    </p>
+    <div class="takeaway">
+      <p class="takeaway-label">What to do instead</p>
+      <p>
+        Install it on the design system file specifically — that's the only file where syncing
+        should happen. You shouldn't need it open in your own working files.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Section 2 ─────────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Connecting to the repo</h2>
+    <p class="guide-body">
+      Inside the plugin, go to <strong>Settings → Sync</strong> and add a GitHub provider
+      pointing at <code>THG-AltitudeSiteBuilds/ux-prototyping</code> — the same repo this site
+      lives in — on the <code>main</code> branch. This also needs a personal access token with
+      access to the repo.
+    </p>
+    <div class="takeaway">
+      <p class="takeaway-label">What to do instead</p>
+      <p>
+        If you don't have a token for this, ask the team before setting this up — don't
+        generate one against a different repo or account. Getting this wrong can connect the
+        library to the wrong source of truth.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Section 3 ─────────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Pulling updates</h2>
+    <p class="guide-body">
+      Once connected, the plugin shows a <strong>Pull</strong> option whenever the repo has
+      changes that haven't been brought into Figma yet. Pulling updates the token values
+      inside the plugin — colours, spacing, radius — to match what's in the repo.
+    </p>
+    <p class="guide-body">
+      Pulling on its own doesn't update anyone's files. It just brings the latest values into
+      this Figma file, ready to be applied.
+    </p>
+    <div class="takeaway">
+      <p class="takeaway-label">What to do instead</p>
+      <p>
+        After pulling, quickly check what changed before moving on — the plugin shows a diff
+        of old vs new values. If something looks unexpected, flag it before going further.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Section 4 ─────────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Publishing the library</h2>
+    <p class="guide-body">
+      Pulled values need to be applied to Figma's variables and then published as a library
+      update — that's what makes the change visible to every connected working file. Once
+      published, anyone with the library switched on will see the new values flow into their
+      files automatically.
+    </p>
+    <div class="takeaway">
+      <p class="takeaway-label">What to do instead</p>
+      <p>
+        If you're the one publishing, post in the team channel afterwards. A library update
+        can shift things across multiple files at once — people should know it happened, even
+        if nothing looks different to them.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Closing ────────────────────────────────────────────── -->
+  <section class="guide-closing">
+    <p>
+      If you hit a permissions error, an unfamiliar repo, or a sync that looks like it's
+      pulling the wrong values — stop and ask, rather than reconfiguring it yourself. This
+      connection is shared infrastructure: a wrong setting here doesn't just affect your file,
+      it affects everyone's.
+    </p>
+  </section>
+
+</ReportLayout>
+
+<style>
+  .guide-intro { margin-bottom: 48px; }
+  .guide-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+    opacity: 0.5;
+    margin-bottom: 10px;
+  }
+  .guide-h1 {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 800;
+    color: var(--color-text-heading);
+    margin-bottom: 20px;
+    line-height: 1.15;
+  }
+  .guide-lead {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--color-text-body);
+    max-width: 680px;
+    margin-bottom: 16px;
+  }
+  .guide-lead:last-child { margin-bottom: 0; }
+
+  .guide-section {
+    margin-bottom: 44px;
+    max-width: 680px;
+  }
+  .section-heading {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--color-text-heading);
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+  .guide-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--color-text-body);
+    margin-bottom: 14px;
+  }
+  .guide-body:last-of-type { margin-bottom: 16px; }
+
+  .takeaway {
+    background: var(--color-bg-muted);
+    border-left: 3px solid var(--color-mint);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+  }
+  .takeaway-label {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-primary);
+    opacity: 0.55;
+    margin-bottom: 6px;
+  }
+  .takeaway p:not(.takeaway-label) {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--color-text-body);
+  }
+
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.9em;
+    background: var(--color-bg-muted);
+    color: var(--color-primary);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .takeaway code {
+    background: rgba(255,255,255,0.6);
+  }
+
+  .guide-closing {
+    max-width: 680px;
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 2px solid rgba(0,57,66,0.08);
+  }
+  .guide-closing p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--color-text-body);
+  }
+
+  @media (max-width: 600px) {
+    .guide-h1 { font-size: 28px; }
+    .section-heading { font-size: 18px; }
+  }
+</style>

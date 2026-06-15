@@ -1,0 +1,233 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+---
+
+<ReportLayout title="How to work in Figma">
+
+  <section class="guide-intro">
+    <p class="guide-eyebrow">For the Myprotein design team</p>
+    <h1 class="guide-h1">How to work in Figma</h1>
+    <p class="guide-lead">
+      The reason designs come back slightly wrong from engineering is rarely that anyone made
+      a mistake — it's that Figma files can look perfect on screen while quietly containing
+      values that don't match the design system. Spacing eyeballed to 14px instead of
+      <code>sp-3</code> (12px). A font that looks medium weight but is technically regular.
+      A button colour that's close to primary but is actually a one-off hex.
+    </p>
+    <p class="guide-lead">
+      Engineers — and AI tools — ship what the file says, not what you meant. So the way we
+      build in Figma directly affects what gets built.
+    </p>
+  </section>
+
+  <!-- ── Section 1 ─────────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Use variables for colour, spacing, and corner radius</h2>
+    <p class="guide-body">
+      When a colour or spacing value isn't connected to a variable, it becomes invisible to
+      anyone reading the file — it's just a number. Engineers can't tell if 14px is intentional
+      or a rounding error. They can't tell if that teal is primary or a one-off.
+    </p>
+    <p class="guide-body">
+      This matters most for spacing. The most common handoff error on the team is gaps and
+      padding coming back wrong — and it's almost always because spacing was set by eye rather
+      than pulled from <code>sp-</code> tokens.
+    </p>
+    <div class="takeaway">
+      <p class="takeaway-label">What to do instead</p>
+      <p>
+        Whenever you apply a colour fill, a gap, padding, or a corner radius, use a variable
+        from the design system — they're in the right panel under variables. If the value you
+        need isn't there, flag it. Don't hardcode a workaround.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Section 2 ─────────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Use text styles for typography</h2>
+    <p class="guide-body">
+      Font size and weight are the second most common thing to drift in builds. A
+      <code>text-base/Medium</code> applied as a text style travels perfectly into a build.
+      A 16px Inter Medium set manually looks identical on screen — but it has no name, no
+      system connection, and nothing stopping it from being interpreted as Regular.
+    </p>
+    <div class="takeaway">
+      <p class="takeaway-label">What to do instead</p>
+      <p>
+        Every piece of text in a design should have a named text style applied from the right
+        panel. Label, heading, body copy — apply the style. Don't set type properties manually.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Section 3 ─────────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Don't copy frames, use components</h2>
+    <p class="guide-body">
+      When you need a button or a card that already exists somewhere in the file, it's tempting
+      to copy and paste the frame. The problem is that a copied frame and the original are now
+      completely unrelated — change one, the other stays put.
+    </p>
+    <p class="guide-body">
+      More importantly for handoff, a copied frame no longer carries any information about what
+      component it is. As far as the file is concerned, it's just shapes.
+    </p>
+    <div class="takeaway">
+      <p class="takeaway-label">What to do instead</p>
+      <p>
+        Use instances. Find the component in the assets panel and drag it in, or right-click
+        an existing instance and duplicate it. If you need a variation that doesn't exist yet,
+        raise it — don't detach and customise a one-off.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Section 4 ─────────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Auto-layout instead of fixed frames</h2>
+    <p class="guide-body">
+      Fixed frames with elements positioned by eye look fine until the content changes — then
+      everything overlaps or gaps appear. Auto-layout is also how spacing intent gets
+      communicated to engineers: a gap of <code>sp-4</code> set in auto-layout is explicit and
+      unambiguous. An element sitting 16px from another one by chance is just that — a chance.
+    </p>
+    <div class="takeaway">
+      <p class="takeaway-label">What to do instead</p>
+      <p>
+        Build components and layout sections with auto-layout from the start. Set gaps and
+        padding using spacing variables, not manual nudges. If you're ever lining things up
+        with the arrow keys, that's a signal to use auto-layout instead.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Section 5 ─────────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Name your layers</h2>
+    <p class="guide-body">
+      This one's less about handoff accuracy and more about working well together.
+      <em>Frame 47</em> and <em>Group 23</em> make it hard for anyone else — or your future
+      self — to navigate a file. It also makes it harder for AI tools to help, since layer
+      names are how they understand structure.
+    </p>
+    <div class="takeaway">
+      <p class="takeaway-label">What to do instead</p>
+      <p>
+        Name frames and groups for what they are — <code>ProductCard</code>,
+        <code>SizeSelector</code>, <code>Nav/Mobile</code>. You don't need to name every single
+        layer, but anything that represents a real UI element or section should have a
+        meaningful name. Use <code>/</code> to show hierarchy: <code>Button/Primary</code>,
+        <code>Modal/AddToCart</code>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Closing ────────────────────────────────────────────── -->
+  <section class="guide-closing">
+    <p>
+      The point isn't perfection — it's consistency. A file built on variables, text styles,
+      and real components doesn't just hand off better, it's also faster to work with and
+      easier for the whole team to pick up. These habits take about a week to feel natural,
+      and after that you'll wonder why you ever worked any other way.
+    </p>
+  </section>
+
+</ReportLayout>
+
+<style>
+  .guide-intro { margin-bottom: 48px; }
+  .guide-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+    opacity: 0.5;
+    margin-bottom: 10px;
+  }
+  .guide-h1 {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 800;
+    color: var(--color-text-heading);
+    margin-bottom: 20px;
+    line-height: 1.15;
+  }
+  .guide-lead {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--color-text-body);
+    max-width: 680px;
+    margin-bottom: 16px;
+  }
+  .guide-lead:last-child { margin-bottom: 0; }
+
+  .guide-section {
+    margin-bottom: 44px;
+    max-width: 680px;
+  }
+  .section-heading {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--color-text-heading);
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+  .guide-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--color-text-body);
+    margin-bottom: 14px;
+  }
+  .guide-body:last-of-type { margin-bottom: 16px; }
+
+  .takeaway {
+    background: var(--color-bg-muted);
+    border-left: 3px solid var(--color-mint);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+  }
+  .takeaway-label {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-primary);
+    opacity: 0.55;
+    margin-bottom: 6px;
+  }
+  .takeaway p:not(.takeaway-label) {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--color-text-body);
+  }
+
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.9em;
+    background: var(--color-bg-muted);
+    color: var(--color-primary);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .takeaway code {
+    background: rgba(255,255,255,0.6);
+  }
+
+  .guide-closing {
+    max-width: 680px;
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 2px solid rgba(0,57,66,0.08);
+  }
+  .guide-closing p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--color-text-body);
+  }
+
+  @media (max-width: 600px) {
+    .guide-h1 { font-size: 28px; }
+    .section-heading { font-size: 18px; }
+  }
+</style>

@@ -1,0 +1,253 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+---
+
+<ReportLayout title="The design system file">
+
+  <section class="guide-intro">
+    <p class="guide-eyebrow">For the Myprotein design team</p>
+    <h1 class="guide-h1">The design system file</h1>
+    <p class="guide-lead">
+      The design system file is where our design decisions live. Colours, type styles,
+      spacing — all of it is defined here and connected to your working files as a Figma
+      library. Using it means your designs are always built on the right foundations, and
+      when values change, your files update automatically.
+    </p>
+  </section>
+
+  <!-- ── Section 1 ─────────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Connecting the library</h2>
+    <p class="guide-body">
+      The design system is published as a Figma library. To use it in a working file, open the
+      assets panel, click the book icon, find the Myprotein design system, and switch it on.
+    </p>
+    <p class="guide-body">
+      Once connected, all the variables — colours, spacing, border radius — are available in
+      the right panel whenever you're designing. It's a one-time step per file.
+    </p>
+    <div class="takeaway">
+      <p class="takeaway-label">What to do instead</p>
+      <p>
+        Before you start a new file, connect the library first. Working without it means
+        anything you build will need to be reconnected and corrected later.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Section 2 ─────────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">What's in it</h2>
+    <p class="guide-body">
+      Right now the file covers the foundations — colour, typography, spacing, border radius,
+      and elevation. Here's what's available:
+    </p>
+
+    <div class="spec-list">
+      <div class="spec-item">
+        <h3 class="spec-title">Colour</h3>
+        <p class="spec-desc">
+          The full palette organised into Primary, Secondary, Accent, Monochrome, and Platform
+          messaging (success, error, attention). Every colour is available as a variable, so
+          when you apply a fill you're applying a named colour, not a hex code.
+        </p>
+      </div>
+      <div class="spec-item">
+        <h3 class="spec-title">Typography</h3>
+        <p class="spec-desc">
+          The full type scale from <code>text-xs</code> through to <code>text-4xl</code>, each
+          available in Regular, Medium, and Bold where applicable. Applied as named text styles
+          so font size, weight, and line height are all captured in one click.
+        </p>
+      </div>
+      <div class="spec-item">
+        <h3 class="spec-title">Spacing</h3>
+        <p class="spec-desc">
+          A set of spacing tokens from <code>sp-1</code> (4px) through to <code>sp-16</code>
+          (64px), covering everything from tight component gaps to page gutters. Use these for
+          padding and gap values in auto-layout rather than typing in numbers manually.
+        </p>
+      </div>
+      <div class="spec-item">
+        <h3 class="spec-title">Border radius</h3>
+        <p class="spec-desc">
+          A scale from <code>r-xs</code> (4px, for things like tags) through to
+          <code>r-full</code> (9999px, for badges and steppers), with named stops for common
+          use cases like cards (<code>r-md</code>, 12px) and primary CTAs
+          (<code>r-2xl</code>, 32px).
+        </p>
+      </div>
+      <div class="spec-item">
+        <h3 class="spec-title">Elevation</h3>
+        <p class="spec-desc">
+          Three shadow levels: <code>shadow-1</code> for tiles and CTAs, <code>shadow-2</code>
+          for hover states, <code>shadow-3</code> for modals.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Section 3 ─────────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">How updates work</h2>
+    <p class="guide-body">
+      The token values — colours, spacing, border radius — are stored in a GitHub repository.
+      When a change is needed (a colour value is corrected, a new spacing token is added), it
+      gets updated in the repo.
+    </p>
+    <p class="guide-body">
+      Any designer on the team can then pull those changes into Figma using the Tokens Studio
+      plugin. Once synced, the library updates and those changes flow through automatically to
+      any working file that's connected to it.
+    </p>
+    <div class="takeaway">
+      <p class="takeaway-label">What to do instead</p>
+      <p>
+        You don't need to do anything to receive updates once your file is connected. But if
+        you're the one running the sync, let the team know so everyone's aware the library has
+        changed.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Section 4 ─────────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">What's coming</h2>
+    <p class="guide-body">
+      Components are being built out and will be added to the library progressively. When
+      they're ready they'll appear in the assets panel alongside the variables. In the
+      meantime, the foundations are stable and ready to use.
+    </p>
+  </section>
+
+  <!-- ── Closing ────────────────────────────────────────────── -->
+  <section class="guide-closing">
+    <p>
+      If something looks wrong — a colour value that doesn't match the site, a spacing token
+      that seems off — don't work around it. Flag it. The whole point of a shared system is
+      that fixing it once fixes it everywhere.
+    </p>
+  </section>
+
+</ReportLayout>
+
+<style>
+  .guide-intro { margin-bottom: 48px; }
+  .guide-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+    opacity: 0.5;
+    margin-bottom: 10px;
+  }
+  .guide-h1 {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 800;
+    color: var(--color-text-heading);
+    margin-bottom: 20px;
+    line-height: 1.15;
+  }
+  .guide-lead {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--color-text-body);
+    max-width: 680px;
+    margin-bottom: 16px;
+  }
+  .guide-lead:last-child { margin-bottom: 0; }
+
+  .guide-section {
+    margin-bottom: 44px;
+    max-width: 680px;
+  }
+  .section-heading {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--color-text-heading);
+    margin-bottom: 14px;
+    line-height: 1.3;
+  }
+  .guide-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--color-text-body);
+    margin-bottom: 14px;
+  }
+  .guide-body:last-of-type { margin-bottom: 16px; }
+
+  .takeaway {
+    background: var(--color-bg-muted);
+    border-left: 3px solid var(--color-mint);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+  }
+  .takeaway-label {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-primary);
+    opacity: 0.55;
+    margin-bottom: 6px;
+  }
+  .takeaway p:not(.takeaway-label) {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--color-text-body);
+  }
+
+  .spec-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .spec-item {
+    background: var(--color-bg-card);
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    padding: 16px 18px;
+  }
+  .spec-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 6px;
+  }
+  .spec-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--color-text-body);
+  }
+
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.9em;
+    background: var(--color-bg-muted);
+    color: var(--color-primary);
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+  .takeaway code {
+    background: rgba(255,255,255,0.6);
+  }
+
+  .guide-closing {
+    max-width: 680px;
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 2px solid rgba(0,57,66,0.08);
+  }
+  .guide-closing p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--color-text-body);
+  }
+
+  @media (max-width: 600px) {
+    .guide-h1 { font-size: 28px; }
+    .section-heading { font-size: 18px; }
+  }
+</style>

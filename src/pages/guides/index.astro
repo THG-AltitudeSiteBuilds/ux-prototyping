@@ -1,0 +1,102 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+
+const guides = [
+  {
+    title: 'How to work in Figma',
+    desc: 'Building files that say exactly what you mean — variables, text styles, components, auto-layout, and naming.',
+    slug: 'how-to-work-in-figma',
+  },
+  {
+    title: 'The design system file',
+    desc: 'What’s in the Myprotein design system, how to connect to it, and how updates flow through to your files.',
+    slug: 'the-design-system-file',
+  },
+];
+---
+
+<ReportLayout title="Resources">
+
+  <section class="guide-intro">
+    <p class="guide-eyebrow">For the Myprotein design team</p>
+    <h1 class="guide-h1">Resources</h1>
+    <p class="guide-lead">
+      Practical guides for working in Figma and using the Myprotein design system.
+    </p>
+  </section>
+
+  <div class="resource-list">
+    {guides.map((guide) => (
+      <a href={`/guides/${guide.slug}`} class="resource-card">
+        <h2 class="resource-title">{guide.title}</h2>
+        <p class="resource-desc">{guide.desc}</p>
+        <span class="resource-cta">Read guide →</span>
+      </a>
+    ))}
+  </div>
+
+</ReportLayout>
+
+<style>
+  .guide-intro { margin-bottom: 40px; }
+  .guide-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+    opacity: 0.5;
+    margin-bottom: 10px;
+  }
+  .guide-h1 {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 800;
+    color: var(--color-text-heading);
+    margin-bottom: 16px;
+    line-height: 1.15;
+  }
+  .guide-lead {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--color-text-body);
+    max-width: 680px;
+  }
+
+  .resource-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 680px;
+  }
+  .resource-card {
+    display: block;
+    background: var(--color-bg-card);
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    padding: 20px 22px;
+    text-decoration: none;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+  }
+  .resource-card:hover {
+    border-color: rgba(0,57,66,0.3);
+    box-shadow: var(--card-shadow);
+    transform: translateY(-1px);
+  }
+  .resource-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 6px;
+  }
+  .resource-desc {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+    margin-bottom: 10px;
+  }
+  .resource-cta {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+</style>

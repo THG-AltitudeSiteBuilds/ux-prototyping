@@ -1,0 +1,494 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+---
+
+<ReportLayout title="Figma Engineering Handover Agent">
+
+  <section class="agent-intro">
+    <p class="agent-eyebrow">Agent Guide</p>
+    <h1 class="agent-h1">Figma Engineering Handover</h1>
+    <p class="agent-summary">
+      The Engineering Handover agent reads a Figma frame and produces a structured spec for the
+      engineering team — covering every element in the component tree with its Tailwind classes,
+      spacing, typography, colours, and assets to export. Because engineers have view-only Figma
+      access (no Dev Mode), all values are explicitly documented so nothing needs to be looked up.
+      The agent maps values directly to classes from the project's Tailwind config, and flags
+      anything that has no token or needs a design decision before build.
+    </p>
+  </section>
+
+  <!-- ── Output mode callout ────────────────────────────────── -->
+  <section class="output-modes">
+    <h2 class="section-heading">Two output modes</h2>
+    <div class="mode-cards">
+
+      <div class="mode-card">
+        <div class="mode-icon">✦</div>
+        <div class="mode-body">
+          <h3 class="mode-title">Text report</h3>
+          <p class="mode-desc">
+            A structured markdown document you can copy and paste into Slack, Notion, Linear, or
+            wherever your team manages handovers. Organised element-by-element — each section of the
+            component lists all its Tailwind classes together, so the engineer can build top-down
+            without cross-referencing multiple tables.
+          </p>
+          <p class="mode-trigger">Say: <em>"give me a handover for this Figma frame"</em></p>
+        </div>
+      </div>
+
+      <div class="mode-card">
+        <div class="mode-icon">◈</div>
+        <div class="mode-body">
+          <h3 class="mode-title">Figma annotations</h3>
+          <p class="mode-desc">
+            The agent writes the spec directly into your Figma file as an annotation panel next to
+            the component. Each element has its own card showing the property label and its Tailwind
+            class — warnings in orange for anything untokenised or needing clarification. The design
+            stays untouched; the annotations live alongside it on the same page.
+          </p>
+          <p class="mode-trigger">Say: <em>"add the handover annotations to the Figma file"</em></p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Before you start ────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Before you start</h2>
+    <ul class="checklist">
+      <li>
+        The Figma URL of the specific frame you want documented — make sure it includes a
+        <code>node-id</code> parameter (right-click a frame in Figma → Copy link to selection)
+      </li>
+      <li>
+        The Figma MCP must be connected — check that the Figma plugin is running in Claude Code
+        before triggering the agent
+      </li>
+      <li>
+        For the most accurate class name mapping, the Tailwind config reference should be up to date
+        at <code>skills/figma-engineering-handover/references/tailwind.config.md</code>. Without it,
+        the agent falls back to Tailwind defaults and flags the caveat at the top of the output
+      </li>
+      <li>
+        If you want Figma annotations, make sure you have edit access to the file — the agent
+        needs to write to it
+      </li>
+    </ul>
+  </section>
+
+  <!-- ── How to trigger ──────────────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">How to trigger it</h2>
+    <p class="guide-body">Paste the Figma URL and describe what you want:</p>
+    <div class="trigger-examples">
+      <span class="trigger-chip">"give me a handover for this frame [URL]"</span>
+      <span class="trigger-chip">"write this up for the engineers [URL]"</span>
+      <span class="trigger-chip">"prep the handover for this component [URL]"</span>
+      <span class="trigger-chip">"add the handover annotations to the Figma file [URL]"</span>
+      <span class="trigger-chip">"what do the engineers need to build this? [URL]"</span>
+    </div>
+    <p class="guide-body guide-body--tip">
+      The agent will produce a text report by default. If you want Figma annotations instead —
+      or as well — say so explicitly in your message.
+    </p>
+  </section>
+
+  <!-- ── Step-by-step walkthrough ───────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Step-by-step walkthrough</h2>
+    <ol class="steps">
+      <li class="step">
+        <span class="step-number">1</span>
+        <div class="step-body">
+          <h3 class="step-title">Load the Tailwind config reference</h3>
+          <p class="step-desc">
+            The agent reads the stored Tailwind config reference to understand what classes exist
+            in the project. This is what lets it output <code>bg-surface</code> rather than
+            <code>#f2f2f2</code>, and <code>text-primary-500</code> rather than
+            <code>#003942</code>. If the reference file is missing, it continues with Tailwind
+            defaults and notes the caveat at the top of the output.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">2</span>
+        <div class="step-body">
+          <h3 class="step-title">Read the Figma frame</h3>
+          <p class="step-desc">
+            The agent pulls three things from Figma in parallel: a screenshot of the frame for
+            visual reference, the design context (layout, spacing, typography, colour values), and
+            the variable definitions — the token names actually applied to elements in the file.
+            This is how it knows which Figma token corresponds to which resolved hex value.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">3</span>
+        <div class="step-body">
+          <h3 class="step-title">Map tokens to classes</h3>
+          <p class="step-desc">
+            Every Figma token is matched against the Tailwind config. Colours, spacing, border
+            radius, and typography are all mapped to their real class names. Anything without a
+            match — colours applied as raw hex, values that fall between Tailwind scale steps,
+            untokenised backgrounds — is flagged with a ⚠️ and a note explaining what needs
+            resolving before build.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">4</span>
+        <div class="step-body">
+          <h3 class="step-title">Write the handover</h3>
+          <p class="step-desc">
+            The output is organised element-by-element, walking the component tree top-down. Each
+            element — container, sub-container, text node, badge, button — gets its own section
+            listing all its properties together: display, gap, padding, background, border radius,
+            overflow, font size, weight, colour, and line height. No cross-referencing separate
+            tables. The assets section lists every SVG and image that needs exporting from Figma,
+            with format and size. Open questions are collected at the bottom for the designer or
+            engineer to resolve.
+          </p>
+        </div>
+      </li>
+      <li class="step">
+        <span class="step-number">5</span>
+        <div class="step-body">
+          <h3 class="step-title">Optionally write Figma annotations</h3>
+          <p class="step-desc">
+            If you asked for Figma annotations, the agent creates an annotation panel to the right
+            of your component on the same page. It builds one card per major section —
+            Product Card, Top Container, Image Container, Product Container, Price &amp; CTA — each
+            showing the property label in grey and the Tailwind class in teal. Warnings appear in
+            orange. The design frame itself is not touched.
+          </p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ── What the output looks like ────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">What the output looks like</h2>
+
+    <h3 class="sub-heading">Text report structure</h3>
+    <p class="guide-body">Every report follows this structure:</p>
+    <ul class="file-list">
+      <li><strong>Token → class reference</strong> — a lookup table of every Figma variable token and its Tailwind class, for the engineer to verify against their config</li>
+      <li><strong>Component structure</strong> — a plain-text tree showing how the component divides into sections</li>
+      <li><strong>Component breakdown</strong> — one section per element, each listing all its Tailwind classes together in a property/class table</li>
+      <li><strong>Assets to export</strong> — every SVG, icon, and image with format and intrinsic size</li>
+      <li><strong>Open questions</strong> — specific items that need a designer or engineering decision before build can start</li>
+    </ul>
+
+    <h3 class="sub-heading">How values are expressed</h3>
+    <p class="guide-body">
+      All values use Tailwind class names from the project config — never raw pixel values.
+      Font sizes use the named scale (<code>text-xs</code>, <code>text-sm</code>,
+      <code>text-base</code>). Spacing uses the numeric scale (<code>gap-2</code>,
+      <code>px-4</code>). Colours use the project's semantic classes (<code>bg-surface</code>,
+      <code>text-primary-500</code>, <code>bg-accent-100/40</code>). Where a value has no token,
+      it's written as an arbitrary value (<code>rounded-[32px]</code>) and flagged for review.
+    </p>
+
+    <h3 class="sub-heading">Figma annotation panel</h3>
+    <p class="guide-body">
+      The Figma annotation panel sits to the right of the component on the same page. It uses the
+      same element-by-element structure as the text report — one card per major section, each with
+      a bold teal header and a two-column layout of property labels and class values. Warnings
+      appear in orange so they're immediately visible. The panel is a grouped Figma frame — it can
+      be moved, hidden, or deleted without affecting the design.
+    </p>
+  </section>
+
+  <!-- ── Keeping the config up to date ─────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Keeping the Tailwind config up to date</h2>
+    <p class="guide-body">
+      The agent's accuracy depends on the stored Tailwind config reference. When the engineering
+      team updates their config — adding new tokens, changing colour values, extending the spacing
+      scale — the reference file should be updated to match.
+    </p>
+    <h3 class="sub-heading">Where the reference lives</h3>
+    <p class="guide-body">
+      <code>skills/figma-engineering-handover/references/tailwind.config.md</code>
+    </p>
+    <p class="guide-body">
+      The file contains the colour token map (Figma token → hex → Tailwind class), font size
+      scale, spacing scale, border radius scale, and breakpoints. Ask the engineering team for
+      their latest <code>tailwind.config.js</code> and <code>themes/index.js</code> whenever
+      the config changes, then paste the updated values into this file.
+    </p>
+    <p class="guide-body guide-body--tip">
+      The themes file matters as much as the config — colours are defined as oklch CSS variables
+      in the theme, not as hex values in the config. Without the theme file, colour class names
+      can't be verified against their resolved hex values.
+    </p>
+  </section>
+
+  <!-- ── Tips and common issues ────────────────────────────── -->
+  <section class="guide-section">
+    <h2 class="section-heading">Tips and common issues</h2>
+    <ul class="tips-list">
+      <li>
+        <strong>Use a node-specific Figma URL.</strong>
+        The URL must include a <code>node-id</code> parameter pointing to the specific frame.
+        A file-level URL (no node-id) will return the whole file, not the component you want.
+        Right-click the frame in Figma → Copy link to selection to get the right URL.
+      </li>
+      <li>
+        <strong>Warnings are expected — they're part of the output.</strong>
+        ⚠️ flags in the report don't mean the agent has failed. They mean something needs a
+        decision before build: a missing token, an untokenised colour, a non-standard line height.
+        Treat the open questions section as a checklist to work through with the designer before
+        handing off to engineering.
+      </li>
+      <li>
+        <strong>Line heights often need an arbitrary value.</strong>
+        Tailwind's font size scale pairs each size with a default line height, but designs
+        frequently use a different line height than the pair (e.g. 14px text with 18px line
+        height). The agent flags these and uses <code>leading-[18px]</code>. Ask the engineering
+        team whether to add a named token to the config or use the arbitrary value throughout.
+      </li>
+      <li>
+        <strong>Figma annotations don't update automatically.</strong>
+        If the design changes after annotations have been added, the annotation panel won't update
+        on its own. Delete the old panel and ask the agent to re-run the annotation step with the
+        updated frame URL.
+      </li>
+      <li>
+        <strong>The Figma plugin must be running for annotations.</strong>
+        Figma write operations require the Figma MCP plugin to be active. If the agent says it
+        can't write to Figma, check that the plugin is running in the Figma desktop app and that
+        you have edit access to the file.
+      </li>
+    </ul>
+  </section>
+
+</ReportLayout>
+
+<style>
+  .agent-intro { margin-bottom: 48px; }
+  .agent-eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-primary);
+    opacity: 0.5;
+    margin-bottom: 10px;
+  }
+  .agent-h1 {
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 800;
+    color: var(--color-text-heading);
+    margin-bottom: 16px;
+    line-height: 1.15;
+  }
+  .agent-summary {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-text-body);
+    max-width: 680px;
+  }
+
+  .output-modes { margin-bottom: 52px; }
+  .mode-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 20px;
+  }
+  @media (max-width: 640px) { .mode-cards { grid-template-columns: 1fr; } }
+  .mode-card {
+    display: flex;
+    gap: 16px;
+    background: var(--color-bg-card);
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    padding: 20px;
+  }
+  .mode-icon {
+    font-size: 20px;
+    color: var(--color-primary);
+    opacity: 0.4;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .mode-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 8px;
+  }
+  .mode-desc {
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+    margin-bottom: 10px;
+  }
+  .mode-trigger {
+    font-size: 12px;
+    color: var(--color-text-body);
+    background: var(--color-bg-muted);
+    border-radius: 6px;
+    padding: 6px 10px;
+  }
+  .mode-trigger em { color: var(--color-primary); font-style: normal; font-weight: 500; }
+
+  .guide-section { margin-bottom: 52px; }
+  .section-heading {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--color-text-heading);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(0,57,66,0.08);
+  }
+  .sub-heading {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin: 20px 0 8px;
+  }
+
+  .guide-body {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+    margin-bottom: 16px;
+  }
+  .guide-body--tip {
+    background: var(--color-bg-muted);
+    border-left: 3px solid var(--color-mint);
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    margin-top: 12px;
+  }
+
+  .checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .checklist li {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-text-body);
+    padding-left: 22px;
+    position: relative;
+  }
+  .checklist li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    opacity: 0.4;
+    font-size: 13px;
+  }
+
+  .trigger-examples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .trigger-chip {
+    font-size: 13px;
+    background: var(--color-bg-muted);
+    border: var(--card-border);
+    border-radius: var(--radius-chip);
+    padding: 5px 12px;
+    color: var(--color-text-body);
+    font-style: italic;
+  }
+
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 12.5px;
+    background: var(--color-bg-muted);
+    color: var(--color-primary);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .file-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .file-list li {
+    font-size: 14px;
+    color: var(--color-text-body);
+    line-height: 1.6;
+    padding-left: 16px;
+    position: relative;
+  }
+  .file-list li::before {
+    content: '·';
+    position: absolute;
+    left: 4px;
+    color: var(--color-primary);
+    opacity: 0.4;
+  }
+
+  .steps { list-style: none; display: flex; flex-direction: column; }
+  .step {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(0,57,66,0.08);
+  }
+  .step:last-child { border-bottom: none; }
+  .step-number {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: var(--color-mint);
+    font-size: 13px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+  }
+  .step-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 6px;
+  }
+  .step-desc {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+  }
+
+  .tips-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .tips-list li {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+    background: var(--color-bg-card);
+    border: var(--card-border);
+    border-radius: var(--radius-card);
+    padding: 16px 18px;
+  }
+  .tips-list strong {
+    display: block;
+    font-weight: 700;
+    color: var(--color-text-heading);
+    margin-bottom: 4px;
+  }
+</style>

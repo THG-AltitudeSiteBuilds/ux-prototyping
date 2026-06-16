@@ -143,10 +143,79 @@ import ReportLayout from '@/components/ReportLayout.astro';
     </div>
   </section>
 
-  <!-- ── Step 4: Install Claude Code desktop app ───────────── -->
+  <!-- ── Step 4: Install Git ───────────────────────────────── -->
   <section class="gs-section">
     <h2 class="gs-section-heading">
       <span class="gs-step-badge">4</span>
+      Install Git
+    </h2>
+    <p class="gs-body">
+      Claude Code needs the <code>git</code> command-line tool to write files, commit changes,
+      and push reports to the site. <strong>GitHub Desktop doesn't include it</strong> — you
+      need to install it separately before Claude Code will work with the repo.
+    </p>
+
+    <div class="gs-substeps">
+
+      <div class="gs-substep">
+        <span class="gs-substep-label">Mac</span>
+        <div>
+          <p class="gs-substep-title">Install via Xcode Command Line Tools (recommended)</p>
+          <p class="gs-substep-body">
+            Open the <strong>Terminal</strong> app (search Spotlight for "Terminal") and paste
+            this command, then press Enter:
+          </p>
+          <div class="gs-copyblock">
+            <pre class="gs-code gs-code--wrap" id="git-install-mac">xcode-select --install</pre>
+            <button class="gs-copy-btn" onclick="
+              navigator.clipboard.writeText(document.getElementById('git-install-mac').innerText);
+              this.textContent = 'Copied!';
+              setTimeout(() => this.textContent = 'Copy', 2000);
+            ">Copy</button>
+          </div>
+          <p class="gs-substep-body">
+            A dialog will appear in the background asking to install the Command Line Tools —
+            <strong>minimise or move any open windows</strong> so you can see it, then click
+            <strong>Install</strong>. It can take 5–10 minutes to complete. Once done, run
+            <code>git --version</code> in Terminal to confirm it worked — you should see
+            something like <code>git version 2.x.x</code>.
+          </p>
+        </div>
+      </div>
+
+      <div class="gs-substep">
+        <span class="gs-substep-label">Win</span>
+        <div>
+          <p class="gs-substep-title">Download Git for Windows</p>
+          <p class="gs-substep-body">
+            Download and run the installer from the official Git site. Accept all the defaults
+            during installation.
+          </p>
+          <a href="https://git-scm.com/download/win" target="_blank" rel="noopener" class="gs-external-link">
+            <span class="gs-external-icon">↗</span>
+            git-scm.com/download/win
+          </a>
+          <p class="gs-substep-body">
+            Once installed, open <strong>Command Prompt</strong> or <strong>PowerShell</strong>
+            and run <code>git --version</code> to confirm it worked.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="gs-tip" style="margin-top: 14px;">
+      <strong>Why can't Claude Code install Git for me?</strong>
+      It can — but only once it's already running. If you try to open the repo in Claude Code
+      without Git installed, it won't work at all. Installing Git first means you only have
+      to do this once, and everything else works smoothly from step 5 onwards.
+    </div>
+  </section>
+
+  <!-- ── Step 5: Install Claude Code desktop app ───────────── -->
+  <section class="gs-section">
+    <h2 class="gs-section-heading">
+      <span class="gs-step-badge">5</span>
       Install the Claude Code desktop app
     </h2>
     <p class="gs-body">
@@ -173,10 +242,10 @@ import ReportLayout from '@/components/ReportLayout.astro';
     </div>
   </section>
 
-  <!-- ── Step 5: Open the repo ─────────────────────────────── -->
+  <!-- ── Step 6: Open the repo ─────────────────────────────── -->
   <section class="gs-section">
     <h2 class="gs-section-heading">
-      <span class="gs-step-badge">5</span>
+      <span class="gs-step-badge">6</span>
       Open the repository in Claude Code
     </h2>
     <p class="gs-body">
@@ -187,7 +256,7 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <div class="gs-substeps">
 
       <div class="gs-substep">
-        <span class="gs-substep-label">5a</span>
+        <span class="gs-substep-label">6a</span>
         <div>
           <p class="gs-substep-title">Open a new project</p>
           <p class="gs-substep-body">
@@ -201,7 +270,7 @@ import ReportLayout from '@/components/ReportLayout.astro';
       </div>
 
       <div class="gs-substep">
-        <span class="gs-substep-label">5b</span>
+        <span class="gs-substep-label">6b</span>
         <div>
           <p class="gs-substep-title">Select the repo folder</p>
           <p class="gs-substep-body">
@@ -214,7 +283,7 @@ import ReportLayout from '@/components/ReportLayout.astro';
       </div>
 
       <div class="gs-substep">
-        <span class="gs-substep-label">5c</span>
+        <span class="gs-substep-label">6c</span>
         <div>
           <p class="gs-substep-title">Confirm it's working</p>
           <p class="gs-substep-body">
@@ -225,34 +294,13 @@ import ReportLayout from '@/components/ReportLayout.astro';
         </div>
       </div>
 
-      <div class="gs-substep">
-        <span class="gs-substep-label">5d</span>
-        <div>
-          <p class="gs-substep-title">Make sure Git is installed</p>
-          <p class="gs-substep-body">
-            Claude Code needs the <code>git</code> command line tool, which doesn't come with
-            GitHub Desktop. You don't need to use the terminal yourself — paste this prompt
-            and Claude will check and install it for you, prompting you to click through any
-            install dialogs that appear:
-          </p>
-          <div class="gs-copyblock">
-            <pre class="gs-code gs-code--wrap" id="git-check-prompt">Please check whether the git command line tool is installed on my machine. If it isn't, install it for me — on a Mac this usually means running a command that triggers the Xcode Command Line Tools installer popup. Talk me through any dialog boxes that appear, but I don't need to use the terminal myself. Confirm once git is working.</pre>
-            <button class="gs-copy-btn" onclick="
-              navigator.clipboard.writeText(document.getElementById('git-check-prompt').innerText);
-              this.textContent = 'Copied!';
-              setTimeout(() => this.textContent = 'Copy', 2000);
-            ">Copy</button>
-          </div>
-        </div>
-      </div>
-
     </div>
   </section>
 
-  <!-- ── Step 6: Plugins ────────────────────────────────────── -->
+  <!-- ── Step 7: Plugins ────────────────────────────────────── -->
   <section class="gs-section">
     <h2 class="gs-section-heading">
-      <span class="gs-step-badge">6</span>
+      <span class="gs-step-badge">7</span>
       Install required plugins
     </h2>
     <p class="gs-body">
@@ -310,10 +358,10 @@ import ReportLayout from '@/components/ReportLayout.astro';
 
   </section>
 
-  <!-- ── Step 7: Install skills ────────────────────────────── -->
+  <!-- ── Step 8: Install skills ────────────────────────────── -->
   <section class="gs-section">
     <h2 class="gs-section-heading">
-      <span class="gs-step-badge">7</span>
+      <span class="gs-step-badge">8</span>
       Install the agent skills
     </h2>
     <p class="gs-body">
@@ -326,7 +374,7 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <div class="gs-substeps">
 
       <div class="gs-substep">
-        <span class="gs-substep-label">7a</span>
+        <span class="gs-substep-label">8a</span>
         <div>
           <p class="gs-substep-title">Paste this prompt into Claude Code</p>
           <p class="gs-substep-body">
@@ -335,7 +383,11 @@ import ReportLayout from '@/components/ReportLayout.astro';
             it installed.
           </p>
           <div class="gs-copyblock">
-            <pre class="gs-code gs-code--wrap" id="install-prompt">Please install the UX Intelligence agent skills from this repo into my Claude skills folder. The skills are in `src/skills/user/` — find my Claude skills directory at `~/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/` and copy each skill folder from the repo into it. If you find multiple skills subfolders, copy into all of them. Confirm which skills were installed and where.</pre>
+            <pre class="gs-code gs-code--wrap" id="install-prompt">Please install the UX Intelligence agent skills from this repo. Do the following exactly:
+1. List all skill folders inside `src/skills/user/` in this repo.
+2. Find my Claude skills directory — it will be somewhere inside `~/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/` on Mac, or `%APPDATA%\Claude\local-agent-mode-sessions\skills-plugin\` on Windows. List all subfolders inside `skills-plugin/` to find it — there may be one or more UUID-named folders, each containing a `skills/` subfolder.
+3. Copy every skill folder from `src/skills/user/` into every `skills/` subfolder you found.
+4. Confirm exactly which skills were copied and where.</pre>
             <button class="gs-copy-btn" onclick="
               navigator.clipboard.writeText(document.getElementById('install-prompt').innerText);
               this.textContent = 'Copied!';
@@ -346,7 +398,7 @@ import ReportLayout from '@/components/ReportLayout.astro';
       </div>
 
       <div class="gs-substep">
-        <span class="gs-substep-label">7b</span>
+        <span class="gs-substep-label">8b</span>
         <div>
           <p class="gs-substep-title">Restart Claude Desktop</p>
           <p class="gs-substep-body">
@@ -357,7 +409,7 @@ import ReportLayout from '@/components/ReportLayout.astro';
       </div>
 
       <div class="gs-substep">
-        <span class="gs-substep-label">7c</span>
+        <span class="gs-substep-label">8c</span>
         <div>
           <p class="gs-substep-title">Confirm all four agents are available</p>
           <p class="gs-substep-body">
@@ -383,7 +435,7 @@ import ReportLayout from '@/components/ReportLayout.astro';
             </div>
           </div>
           <p class="gs-substep-body" style="margin-top: 12px;">
-            If any are missing, see the troubleshooting section below.
+            If any are missing, run the install prompt again, then restart Claude Desktop once more.
           </p>
         </div>
       </div>
@@ -391,10 +443,10 @@ import ReportLayout from '@/components/ReportLayout.astro';
     </div>
   </section>
 
-  <!-- ── Step 8: First report ───────────────────────────────── -->
+  <!-- ── Step 9: First report ───────────────────────────────── -->
   <section class="gs-section">
     <h2 class="gs-section-heading">
-      <span class="gs-step-badge">8</span>
+      <span class="gs-step-badge">9</span>
       Run your first report
     </h2>
     <p class="gs-body">
@@ -448,12 +500,12 @@ import ReportLayout from '@/components/ReportLayout.astro';
         sign out, and sign back in. Then try the push again.
       </li>
       <li>
-        <strong>The skills aren't appearing after following step 7.</strong>
-        First, make sure you fully quit and restarted Claude Desktop after running the install
-        prompt — skills are only loaded at startup. If they're still missing, run the install
-        prompt again and check that Claude confirms the files were copied. If Claude says it
-        can't find the skills folder, it may not have been created yet — make sure you've
-        opened Claude Desktop and used Claude Code at least once before running the prompt.
+        <strong>The skills aren't appearing after following step 8.</strong>
+        Make sure you fully quit and restarted Claude Desktop after running the install prompt —
+        skills are only loaded at startup. If they're still missing, run the install prompt
+        again (it's safe to run more than once) and check that Claude confirms the files were
+        copied. If Claude says it can't find the skills folder, make sure you've opened Claude
+        Code at least once first — the folder is only created on first launch.
       </li>
       <li>
         <strong>Can I use Claude.ai in a browser tab instead of the desktop app?</strong>

@@ -366,45 +366,117 @@ import ReportLayout from '@/components/ReportLayout.astro';
     </h2>
     <p class="gs-body">
       The UX Intelligence agents are packaged as <em>skills</em> — reusable, named workflows
-      that Claude runs when you type a slash command. Skills are stored in a folder on your
-      machine, not inside the repo itself. You need to copy the skill files from the repo into
-      that folder once, and Claude Code will pick them up automatically from then on.
+      that Claude runs when you type a slash command. Each skill must be registered through
+      Claude's built-in <code>/skill-creator</code> tool. This takes about 2 minutes per skill
+      and only needs to be done once — skills persist across sessions and app restarts.
     </p>
+    <div class="gs-callout gs-callout--info">
+      <strong>Why not just copy the files?</strong> Skills are registered in a local manifest
+      that Claude manages. Copying files directly bypasses that registration, so Claude won't
+      see them. Using <code>/skill-creator</code> handles the registration automatically.
+    </div>
 
     <div class="gs-substeps">
 
       <div class="gs-substep">
         <span class="gs-substep-label">8a</span>
         <div>
-          <p class="gs-substep-title">Paste this prompt into Claude Code</p>
+          <p class="gs-substep-title">Open a new Claude Code session with the repo</p>
           <p class="gs-substep-body">
-            With the repo open in Claude Code, copy and paste the prompt below and press
-            Enter. Claude will find the right folder, copy the skills in, and confirm what
-            it installed.
+            Make sure the ux-prototyping repo is open as your project folder in Claude Code.
+            You'll be running <code>/skill-creator</code> five times — once per skill.
           </p>
-          <div class="gs-copyblock">
-            <pre class="gs-code gs-code--wrap" id="install-prompt">Please install the UX Intelligence agent skills from this repo. Do the following exactly:
-1. List all skill folders inside `src/skills/user/` in this repo.
-2. Find my Claude skills directory — it will be somewhere inside `~/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/` on Mac, or `%APPDATA%\Claude\local-agent-mode-sessions\skills-plugin\` on Windows. List all subfolders inside `skills-plugin/` to find it — there may be one or more UUID-named folders, each containing a `skills/` subfolder.
-3. Copy every skill folder from `src/skills/user/` into every `skills/` subfolder you found.
-4. Confirm exactly which skills were copied and where.</pre>
-            <button class="gs-copy-btn" onclick="
-              navigator.clipboard.writeText(document.getElementById('install-prompt').innerText);
-              this.textContent = 'Copied!';
-              setTimeout(() => this.textContent = 'Copy', 2000);
-            ">Copy</button>
-          </div>
         </div>
       </div>
 
       <div class="gs-substep">
         <span class="gs-substep-label">8b</span>
         <div>
-          <p class="gs-substep-title">Restart Claude Desktop</p>
+          <p class="gs-substep-title">Install each skill using /skill-creator</p>
           <p class="gs-substep-body">
-            Quit the Claude desktop app completely and reopen it. Skills are loaded at
-            startup — a restart is required for the new ones to appear.
+            For each skill below, type <code>/skill-creator</code> in Claude Code and paste
+            the corresponding prompt. Claude will read the SKILL.md from the repo and register
+            it. Install them one at a time — wait for each to finish before starting the next.
           </p>
+
+          <div class="gs-skill-install-list">
+
+            <div class="gs-skill-install-item">
+              <div class="gs-skill-install-header">
+                <code class="gs-skill-cmd">/myprotein-ux-review</code>
+                <span class="gs-skill-label">UX Review agent</span>
+              </div>
+              <div class="gs-copyblock">
+                <pre class="gs-code gs-code--wrap" id="skill-prompt-1">Please create a new skill using the content from this file: src/skills/user/myprotein-ux-review/SKILL.md</pre>
+                <button class="gs-copy-btn" onclick="
+                  navigator.clipboard.writeText(document.getElementById('skill-prompt-1').innerText);
+                  this.textContent = 'Copied!';
+                  setTimeout(() => this.textContent = 'Copy', 2000);
+                ">Copy</button>
+              </div>
+            </div>
+
+            <div class="gs-skill-install-item">
+              <div class="gs-skill-install-header">
+                <code class="gs-skill-cmd">/competitor-analysis</code>
+                <span class="gs-skill-label">Competitor Analysis agent</span>
+              </div>
+              <div class="gs-copyblock">
+                <pre class="gs-code gs-code--wrap" id="skill-prompt-2">Please create a new skill using the content from this file: src/skills/user/competitor-analysis/SKILL.md</pre>
+                <button class="gs-copy-btn" onclick="
+                  navigator.clipboard.writeText(document.getElementById('skill-prompt-2').innerText);
+                  this.textContent = 'Copied!';
+                  setTimeout(() => this.textContent = 'Copy', 2000);
+                ">Copy</button>
+              </div>
+            </div>
+
+            <div class="gs-skill-install-item">
+              <div class="gs-skill-install-header">
+                <code class="gs-skill-cmd">/design-qa</code>
+                <span class="gs-skill-label">Design QA agent</span>
+              </div>
+              <div class="gs-copyblock">
+                <pre class="gs-code gs-code--wrap" id="skill-prompt-3">Please create a new skill using the content from this file: src/skills/user/design-qa/SKILL.md</pre>
+                <button class="gs-copy-btn" onclick="
+                  navigator.clipboard.writeText(document.getElementById('skill-prompt-3').innerText);
+                  this.textContent = 'Copied!';
+                  setTimeout(() => this.textContent = 'Copy', 2000);
+                ">Copy</button>
+              </div>
+            </div>
+
+            <div class="gs-skill-install-item">
+              <div class="gs-skill-install-header">
+                <code class="gs-skill-cmd">/myprotein-prep-agent</code>
+                <span class="gs-skill-label">Project Prep agent</span>
+              </div>
+              <div class="gs-copyblock">
+                <pre class="gs-code gs-code--wrap" id="skill-prompt-4">Please create a new skill using the content from this file: src/skills/user/myprotein-prep-agent/SKILL.md</pre>
+                <button class="gs-copy-btn" onclick="
+                  navigator.clipboard.writeText(document.getElementById('skill-prompt-4').innerText);
+                  this.textContent = 'Copied!';
+                  setTimeout(() => this.textContent = 'Copy', 2000);
+                ">Copy</button>
+              </div>
+            </div>
+
+            <div class="gs-skill-install-item">
+              <div class="gs-skill-install-header">
+                <code class="gs-skill-cmd">/figma-engineering-handover</code>
+                <span class="gs-skill-label">Engineering Handover agent</span>
+              </div>
+              <div class="gs-copyblock">
+                <pre class="gs-code gs-code--wrap" id="skill-prompt-5">Please create a new skill using the content from this file: src/skills/user/figma-engineering-handover/SKILL.md</pre>
+                <button class="gs-copy-btn" onclick="
+                  navigator.clipboard.writeText(document.getElementById('skill-prompt-5').innerText);
+                  this.textContent = 'Copied!';
+                  setTimeout(() => this.textContent = 'Copy', 2000);
+                ">Copy</button>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
 
@@ -413,8 +485,8 @@ import ReportLayout from '@/components/ReportLayout.astro';
         <div>
           <p class="gs-substep-title">Confirm all five agents are available</p>
           <p class="gs-substep-body">
-            With the repo open in Claude Code, type <code>/</code> to open the slash command
-            picker. You should see all five agent commands in the list:
+            Type <code>/</code> in Claude Code to open the slash command picker. You should
+            see all five agent commands in the list:
           </p>
           <div class="gs-skill-list">
             <div class="gs-skill-row">
@@ -439,7 +511,7 @@ import ReportLayout from '@/components/ReportLayout.astro';
             </div>
           </div>
           <p class="gs-substep-body" style="margin-top: 12px;">
-            If any are missing, run the install prompt again, then restart Claude Desktop once more.
+            If a skill is missing, re-run the <code>/skill-creator</code> step for that skill only.
           </p>
         </div>
       </div>
@@ -938,6 +1010,43 @@ import ReportLayout from '@/components/ReportLayout.astro';
   .gs-skill-label {
     font-size: 13px;
     color: var(--color-text-body);
+  }
+
+  /* ── Callout box ────────────────────────────────────────── */
+  .gs-callout {
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 12px 0 0;
+  }
+  .gs-callout--info {
+    background: rgba(0, 57, 66, 0.06);
+    border-left: 3px solid var(--color-primary);
+    color: var(--color-text-body);
+  }
+  .gs-callout strong {
+    color: var(--color-text-heading);
+  }
+
+  /* ── Skill install list ─────────────────────────────────── */
+  .gs-skill-install-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .gs-skill-install-item {
+    border: var(--card-border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    background: var(--color-bg-card);
+  }
+  .gs-skill-install-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
   }
 
   /* ── Tips list ──────────────────────────────────────────── */

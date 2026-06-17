@@ -8,23 +8,21 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <p class="gs-eyebrow">Setup Guide</p>
     <h1 class="gs-h1">Getting started</h1>
     <p class="gs-summary">
-      The UX Intelligence agents run inside <strong>Claude Code</strong> — available as a desktop
-      app that connects Claude directly to a local copy of this repository on your machine.
-      There are four things to set up: GitHub access and cloning the repo, the Git command-line
-      tool, the Claude Code desktop app with its connectors, and the agent skills. This guide
-      walks you through each in order.
+      The UX Intelligence tools let you ask Claude to review a page, analyse a competitor, or
+      produce a design spec — and have the output automatically saved to this site. Everything
+      runs through the <strong>Claude Code desktop app</strong>, which you'll set up in this guide.
+      Setup takes around 30–45 minutes and only needs to be done once.
     </p>
     <div class="gs-notice">
-      <strong>Why Claude Code, not Claude.ai?</strong>
-      Claude.ai can chat and analyse pages, but it can't write files to this repository or push
-      commits — so reports won't be saved and screenshots won't appear on the site. Claude Code
-      runs in the context of the repo on your machine, which is what gives it permission to
-      create report files, commit screenshots, and push everything live.
+      <strong>Why can't I just use Claude in my browser?</strong>
+      The browser version of Claude can chat and analyse things, but it can't save files or
+      publish anything to this site. The desktop app is what gives Claude permission to
+      write reports, save screenshots, and send them live — which is the whole point.
     </div>
     <p class="gs-terminal-note">
-      <strong>Prefer the terminal?</strong> If you're already comfortable with git and npm,
+      <strong>Developer?</strong> If you're comfortable with git and npm,
       <code>npm install -g @anthropic-ai/claude-code</code> then <code>claude</code> from
-      inside the repo is all you need. The rest of this guide focuses on the desktop app.
+      inside the repo folder is all you need. The rest of this guide covers the desktop app route.
     </p>
   </section>
 
@@ -35,7 +33,7 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <div class="gs-part-header">
       <span class="gs-part-badge">Part 1</span>
       <h2 class="gs-part-title">GitHub</h2>
-      <p class="gs-part-desc">Create an account, get repo access, install GitHub Desktop, and clone the repo to your machine.</p>
+      <p class="gs-part-desc">GitHub is where the project files are stored online. You'll create an account, get access to the team's project, then download a copy to your computer.</p>
     </div>
 
     <!-- Account -->
@@ -45,16 +43,17 @@ import ReportLayout from '@/components/ReportLayout.astro';
         Create a GitHub account
       </h3>
       <p class="gs-body">
-        If you don't already have one, sign up for a free GitHub account. You'll need this to
-        request access to the private repository.
+        GitHub is a platform for storing and sharing project files — think of it like a shared
+        Google Drive, but for code and documents. The UX Intelligence site and all its reports
+        live there. You'll need a free account to get access.
       </p>
       <a href="https://github.com/signup" target="_blank" rel="noopener" class="gs-external-link">
         <span class="gs-external-icon">↗</span>
         github.com/signup — create a free account
       </a>
       <p class="gs-body gs-body--note">
-        Use your THG work email address so it's easy for the repo admin to verify who you are
-        when granting access.
+        Use your THG work email address — it makes it easy for the team admin to confirm who you
+        are when they grant you access.
       </p>
     </section>
 
@@ -62,12 +61,13 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <section class="gs-section">
       <h3 class="gs-section-heading">
         <span class="gs-step-badge">2</span>
-        Request access to the repository
+        Request access to the project
       </h3>
       <p class="gs-body">
-        The repository is private. Once you have a GitHub account, contact Richard Gill and
-        share your GitHub username — he'll add you as a collaborator and GitHub will send you
-        an email invite. Accept the invite to gain write access.
+        The project is private, so you'll need to be invited. Once you have your GitHub account,
+        message <strong>Richard Gill</strong> and share your GitHub username (the name you chose
+        when signing up). He'll add you to the project and GitHub will send you an email invite —
+        open that email and click <strong>Accept invitation</strong>.
       </p>
       <div class="gs-repo-card">
         <div class="gs-repo-header">
@@ -78,23 +78,18 @@ import ReportLayout from '@/components/ReportLayout.astro';
           </div>
         </div>
         <p class="gs-repo-desc">
-          The UX Intelligence site and all agent-generated reports. Private — requires an invite.
+          The UX Intelligence site and all its reports. Private — requires an invite from Richard Gill.
         </p>
         <a href="https://github.com/THG-AltitudeSiteBuilds/ux-prototyping" target="_blank" rel="noopener" class="gs-repo-link">
           View on GitHub →
         </a>
       </div>
-      <p class="gs-body gs-body--note">
-        Write access is required — not just read access. This is what allows Claude Code to commit
-        new report files and push them to the site on your behalf.
-      </p>
       <div class="gs-tip">
-        <strong>Authorise for SSO</strong>
-        The <code>THG-AltitudeSiteBuilds</code> organisation uses single sign-on. After accepting
-        the invite, go to <a href="https://github.com/settings/organizations" target="_blank" rel="noopener" class="gs-inline-link">github.com/settings/organizations</a>
-        and click <strong>Authorize</strong> next to <code>THG-AltitudeSiteBuilds</code>. If you skip
-        this, GitHub Desktop will look like it's working but pushes will silently fail with a
-        permissions error.
+        <strong>One extra step after accepting — don't skip this</strong>
+        After you accept the invite, you need to authorise your account for the THG organisation.
+        Go to <a href="https://github.com/settings/organizations" target="_blank" rel="noopener" class="gs-inline-link">github.com/settings/organizations</a>,
+        find <strong>THG-AltitudeSiteBuilds</strong> in the list, and click <strong>Authorize</strong>.
+        If you skip this, things will appear to work but saving reports will silently fail.
       </div>
     </section>
 
@@ -102,13 +97,13 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <section class="gs-section">
       <h3 class="gs-section-heading">
         <span class="gs-step-badge">3</span>
-        Install GitHub Desktop and clone the repo
+        Download the project to your computer
       </h3>
       <p class="gs-body">
-        The agents write report files directly into the local repo folder on your machine.
-        <strong>GitHub Desktop</strong> is the easiest way to clone the repo and push changes
-        back to GitHub — it handles authentication so you don't need to set up SSH keys or
-        use the terminal.
+        Claude needs a copy of the project folder on your computer so it can save reports into it.
+        <strong>GitHub Desktop</strong> is a free app that downloads the project for you and keeps
+        it in sync with GitHub. You only need to do this once — after that, Claude handles
+        everything automatically.
       </p>
 
       <div class="gs-substeps">
@@ -116,11 +111,15 @@ import ReportLayout from '@/components/ReportLayout.astro';
         <div class="gs-substep">
           <span class="gs-substep-label">3a</span>
           <div>
-            <p class="gs-substep-title">Download GitHub Desktop</p>
-            <p class="gs-substep-body">Install GitHub Desktop and sign in with your GitHub account.</p>
+            <p class="gs-substep-title">Download and install GitHub Desktop</p>
+            <p class="gs-substep-body">
+              Download GitHub Desktop from the link below, open the installer, and follow the prompts.
+              When it opens, click <strong>Sign in to GitHub.com</strong> and use the GitHub account
+              you created in step 1.
+            </p>
             <a href="https://desktop.github.com" target="_blank" rel="noopener" class="gs-external-link">
               <span class="gs-external-icon">↗</span>
-              desktop.github.com
+              desktop.github.com — download GitHub Desktop
             </a>
           </div>
         </div>
@@ -128,12 +127,16 @@ import ReportLayout from '@/components/ReportLayout.astro';
         <div class="gs-substep">
           <span class="gs-substep-label">3b</span>
           <div>
-            <p class="gs-substep-title">Clone the repository</p>
+            <p class="gs-substep-title">Download the project folder</p>
             <p class="gs-substep-body">
-              In GitHub Desktop: <strong>File → Clone Repository</strong>, then search for
-              <code>THG-AltitudeSiteBuilds/ux-prototyping</code>. Choose a local path you'll
-              remember — for example <code>~/Documents/GitHub/ux-prototyping</code>. Click
-              <strong>Clone</strong>.
+              In GitHub Desktop, click <strong>File → Clone Repository</strong>. You'll see a list
+              of projects you have access to — find <strong>ux-prototyping</strong> and click it.
+              Under <strong>Local Path</strong>, choose somewhere easy to find — your
+              <strong>Documents</strong> folder is a good option. Then click <strong>Clone</strong>.
+            </p>
+            <p class="gs-substep-body">
+              This downloads a copy of the project to your computer. You'll see a folder called
+              <strong>ux-prototyping</strong> appear in the location you chose.
             </p>
           </div>
         </div>
@@ -141,11 +144,12 @@ import ReportLayout from '@/components/ReportLayout.astro';
         <div class="gs-substep">
           <span class="gs-substep-label">3c</span>
           <div>
-            <p class="gs-substep-title">Note the local path</p>
+            <p class="gs-substep-title">Find the folder on your computer</p>
             <p class="gs-substep-body">
               In GitHub Desktop, go to <strong>Repository → Show in Finder</strong> (Mac) or
-              <strong>Show in Explorer</strong> (Windows). Note the full folder path — you'll
-              need to point Claude Code at this folder in Part 3.
+              <strong>Show in Explorer</strong> (Windows). This opens the project folder — keep
+              this window open or note where it is, because you'll need to point Claude Code at
+              this folder in Part 3.
             </p>
           </div>
         </div>
@@ -161,7 +165,7 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <div class="gs-part-header">
       <span class="gs-part-badge">Part 2</span>
       <h2 class="gs-part-title">Git</h2>
-      <p class="gs-part-desc">Install the Git command-line tool that Claude Code needs to commit and push files.</p>
+      <p class="gs-part-desc">Git is a background tool that Claude uses to save and sync reports automatically. It needs to be installed separately — this only takes a few minutes.</p>
     </div>
 
     <section class="gs-section">
@@ -170,9 +174,14 @@ import ReportLayout from '@/components/ReportLayout.astro';
         Install Git
       </h3>
       <p class="gs-body">
-        Claude Code needs the <code>git</code> command-line tool to commit changes and push
-        reports to the site. <strong>GitHub Desktop doesn't include it</strong> — you need to
-        install it separately.
+        Git is a tool that tracks changes to files and handles syncing them with GitHub. Claude
+        uses it behind the scenes every time it saves a report — you won't interact with it
+        directly, but it needs to be installed on your computer before Claude can do its job.
+      </p>
+      <p class="gs-body gs-body--note">
+        <strong>Not sure if you already have it?</strong> If you've used a developer tool or
+        the terminal before, Git may already be installed. Either way, following the steps below
+        won't cause any problems.
       </p>
 
       <div class="gs-substeps">
@@ -180,10 +189,11 @@ import ReportLayout from '@/components/ReportLayout.astro';
         <div class="gs-substep">
           <span class="gs-substep-label">Mac</span>
           <div>
-            <p class="gs-substep-title">Install via Xcode Command Line Tools</p>
+            <p class="gs-substep-title">Mac — install Git</p>
             <p class="gs-substep-body">
-              Open the <strong>Terminal</strong> app (search Spotlight for "Terminal") and paste
-              this command, then press Enter:
+              Open the <strong>Terminal</strong> app — press <strong>⌘ Space</strong>, type
+              <em>Terminal</em>, and press Enter. Then copy and paste the command below into
+              the Terminal window and press Enter:
             </p>
             <div class="gs-copyblock">
               <pre class="gs-code gs-code--wrap" id="git-install-mac">xcode-select --install</pre>
@@ -194,9 +204,9 @@ import ReportLayout from '@/components/ReportLayout.astro';
               ">Copy</button>
             </div>
             <p class="gs-substep-body">
-              A dialog will appear asking to install the Command Line Tools — minimise any open
-              windows so you can see it, then click <strong>Install</strong>. It takes 5–10 minutes.
-              Once done, run <code>git --version</code> in Terminal to confirm.
+              A pop-up window will appear in the background — minimise any open windows so you
+              can see it, then click <strong>Install</strong>. It takes 5–10 minutes. Once it
+              finishes, you're done — you can close Terminal.
             </p>
           </div>
         </div>
@@ -204,17 +214,17 @@ import ReportLayout from '@/components/ReportLayout.astro';
         <div class="gs-substep">
           <span class="gs-substep-label">Win</span>
           <div>
-            <p class="gs-substep-title">Download Git for Windows</p>
+            <p class="gs-substep-title">Windows — install Git</p>
             <p class="gs-substep-body">
-              Download and run the installer from the official Git site. Accept all the defaults.
+              Download the Git installer from the link below, open it, and click through the
+              installer accepting all the default options.
             </p>
             <a href="https://git-scm.com/download/win" target="_blank" rel="noopener" class="gs-external-link">
               <span class="gs-external-icon">↗</span>
-              git-scm.com/download/win
+              git-scm.com/download/win — Git for Windows
             </a>
             <p class="gs-substep-body">
-              Once installed, open <strong>Command Prompt</strong> or <strong>PowerShell</strong>
-              and run <code>git --version</code> to confirm it worked.
+              Once the installer finishes, Git is ready. You don't need to open or configure anything further.
             </p>
           </div>
         </div>
@@ -230,30 +240,33 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <div class="gs-part-header">
       <span class="gs-part-badge">Part 3</span>
       <h2 class="gs-part-title">Claude Desktop</h2>
-      <p class="gs-part-desc">Install the Claude Code desktop app, open the repo as a project, and connect the Chrome and GitHub plugins.</p>
+      <p class="gs-part-desc">Install the Claude desktop app, point it at the project folder you downloaded, then connect it to Chrome and GitHub so it can browse pages and save reports.</p>
     </div>
 
     <!-- Install app -->
     <section class="gs-section">
       <h3 class="gs-section-heading">
         <span class="gs-step-badge">5</span>
-        Install the Claude Code desktop app
+        Install the Claude desktop app
       </h3>
       <p class="gs-body">
-        Claude Code is built into the Claude desktop app. Download it from Anthropic and sign in
-        with your Anthropic account. A Claude Pro plan ($20/month) is sufficient for running the agents.
+        Claude is made by a company called Anthropic. The desktop app is a more powerful version
+        of Claude that can access files on your computer — which is what lets it save reports to
+        the project folder. Download it from the link below and sign in or create an account.
       </p>
       <p class="gs-body gs-body--note">
-        <strong>Who pays for this?</strong> Check with your team lead before signing up — THG may
-        already have Claude seats or an expense process for this.
+        <strong>Who pays for this?</strong> You'll need a Claude Pro subscription ($20/month)
+        to use Claude Code. Check with your team lead first — THG may have team seats or an
+        expenses process so you don't need to pay personally.
       </p>
       <a href="https://claude.ai/download" target="_blank" rel="noopener" class="gs-external-link">
         <span class="gs-external-icon">↗</span>
         claude.ai/download — download the desktop app
       </a>
       <div class="gs-tip">
-        <strong>Already use Claude.ai?</strong>
-        Use the same credentials to log in to the desktop app — it's the same account.
+        <strong>Already use Claude.ai in your browser?</strong>
+        You already have an account — just use the same email and password to sign in to the
+        desktop app. No need to create anything new.
       </div>
     </section>
 
@@ -261,11 +274,11 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <section class="gs-section">
       <h3 class="gs-section-heading">
         <span class="gs-step-badge">6</span>
-        Open the repository in Claude Code
+        Point Claude at the project folder
       </h3>
       <p class="gs-body">
-        This connects Claude Code to the local repo folder — without this, the agents can't
-        write report files or commit screenshots.
+        Once the app is open, you need to tell Claude where the project folder is on your
+        computer. This is what gives it permission to read and save files inside it.
       </p>
 
       <div class="gs-substeps">
@@ -273,12 +286,11 @@ import ReportLayout from '@/components/ReportLayout.astro';
         <div class="gs-substep">
           <span class="gs-substep-label">6a</span>
           <div>
-            <p class="gs-substep-title">Switch to Claude Code</p>
+            <p class="gs-substep-title">Switch to Claude Code mode</p>
             <p class="gs-substep-body">
-              Open the Claude desktop app. In the top-left, click the <strong>Claude</strong>
-              menu (or the dropdown next to your workspace name) and select
-              <strong>Claude Code</strong>. It's still just a chat window — but with access to
-              files on your machine.
+              Open the Claude desktop app. At the top of the window, look for a dropdown or
+              menu that says <strong>Claude Code</strong> — click it to switch into that mode.
+              It looks similar to a normal chat, but now Claude has access to files on your machine.
             </p>
           </div>
         </div>
@@ -286,11 +298,12 @@ import ReportLayout from '@/components/ReportLayout.astro';
         <div class="gs-substep">
           <span class="gs-substep-label">6b</span>
           <div>
-            <p class="gs-substep-title">Select the repo folder</p>
+            <p class="gs-substep-title">Select the project folder</p>
             <p class="gs-substep-body">
-              Claude Code will prompt you to select a project folder. Navigate to the
-              <code>ux-prototyping</code> folder you cloned in step 3 and select it. Claude
-              Code now has access to all the repo files and can write new ones.
+              Claude Code will ask you to choose a project folder. Navigate to the
+              <strong>ux-prototyping</strong> folder you downloaded in step 3 — it'll be
+              wherever you saved it (for example, inside your Documents folder). Select it
+              and click <strong>Open</strong>.
             </p>
           </div>
         </div>
@@ -298,10 +311,11 @@ import ReportLayout from '@/components/ReportLayout.astro';
         <div class="gs-substep">
           <span class="gs-substep-label">6c</span>
           <div>
-            <p class="gs-substep-title">Confirm it's working</p>
+            <p class="gs-substep-title">Check it's working</p>
             <p class="gs-substep-body">
-              Type <code>/</code> in the prompt. You should see a list of available slash commands.
-              If the list appears, the session is running correctly inside the repo.
+              In the chat box, type a forward slash: <strong>/</strong>
+              A list of commands should appear. If you can see it, Claude Code is connected
+              to the project folder and ready to use.
             </p>
           </div>
         </div>
@@ -313,21 +327,23 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <section class="gs-section">
       <h3 class="gs-section-heading">
         <span class="gs-step-badge">7</span>
-        Connect the Chrome and GitHub plugins
+        Connect Chrome and GitHub
       </h3>
       <p class="gs-body">
-        Two plugins are needed: a Chrome browser extension so Claude can navigate to pages and
-        take screenshots, and a GitHub connector for deeper repo integration.
+        Two add-ons extend what Claude can do: a Chrome extension lets Claude open and read
+        web pages, and a GitHub connection lets Claude save reports directly to the project.
+        Both install in a couple of minutes.
       </p>
 
       <div class="gs-plugin-card">
         <div class="gs-plugin-header">
           <span class="gs-plugin-badge gs-plugin-badge--chrome">Chrome</span>
-          <h3 class="gs-plugin-name">Claude in Chrome extension</h3>
+          <h3 class="gs-plugin-name">Claude browser extension</h3>
         </div>
         <p class="gs-plugin-desc">
-          Connects Claude Code to your Chrome browser. Without it, the UX Review and Competitor
-          Analysis agents can't open URLs, scroll pages, or take screenshots.
+          This connects Claude to your Chrome browser so it can open web pages, scroll through
+          them, and take screenshots. Without it, the UX Review and Competitor Analysis tools
+          won't work — they need to actually visit the pages they're reviewing.
         </p>
         <div class="gs-plugin-steps">
           <p class="gs-plugin-step"><span class="gs-plugin-step-num">1</span> Install the extension from the Chrome Web Store:</p>
@@ -335,29 +351,30 @@ import ReportLayout from '@/components/ReportLayout.astro';
             <span class="gs-external-icon">↗</span>
             Claude extension — Chrome Web Store
           </a>
-          <p class="gs-plugin-step"><span class="gs-plugin-step-num">2</span> Once installed, click the extension icon in Chrome and sign in with the same account you use in the desktop app.</p>
-          <p class="gs-plugin-step"><span class="gs-plugin-step-num">3</span> In Claude Code, type <code>/</code> and look for Chrome-related tools in the list to confirm it's connected.</p>
+          <p class="gs-plugin-step"><span class="gs-plugin-step-num">2</span> After installing, click the Claude icon that appears in your Chrome toolbar (top right of the browser). Sign in using the same email and password you use for the Claude desktop app.</p>
+          <p class="gs-plugin-step"><span class="gs-plugin-step-num">3</span> Keep Chrome open whenever you're using Claude Code — the connection only works while Chrome is running.</p>
         </div>
       </div>
 
       <div class="gs-plugin-card">
         <div class="gs-plugin-header">
           <span class="gs-plugin-badge gs-plugin-badge--github">GitHub</span>
-          <h3 class="gs-plugin-name">GitHub MCP connector</h3>
+          <h3 class="gs-plugin-name">GitHub connection</h3>
         </div>
         <p class="gs-plugin-desc">
-          Gives Claude Code deeper GitHub integration — it can read repository structure, check
-          commit history, and authenticate pushes more reliably.
+          This lets Claude save and upload reports to GitHub automatically, so they appear on
+          the site. Without it, Claude can still write files locally but won't be able to
+          publish them.
         </p>
         <div class="gs-plugin-steps">
-          <p class="gs-plugin-step"><span class="gs-plugin-step-num">1</span> In the Claude desktop app, click the <strong>+</strong> button at the bottom of the chat box and select <strong>Plugins</strong>.</p>
-          <p class="gs-plugin-step"><span class="gs-plugin-step-num">2</span> Find <strong>GitHub</strong> in the plugin list and click <strong>+</strong> to add it.</p>
-          <p class="gs-plugin-step"><span class="gs-plugin-step-num">3</span> If prompted, authorise Claude to access your GitHub account and approve access for the <code>THG-AltitudeSiteBuilds</code> organisation.</p>
-          <p class="gs-plugin-step"><span class="gs-plugin-step-num">4</span> Once added, it persists across sessions — you only need to do this once.</p>
+          <p class="gs-plugin-step"><span class="gs-plugin-step-num">1</span> In the Claude desktop app, click the <strong>+</strong> button at the bottom of the chat box and choose <strong>Plugins</strong> from the menu that appears.</p>
+          <p class="gs-plugin-step"><span class="gs-plugin-step-num">2</span> Find <strong>GitHub</strong> in the list and click the <strong>+</strong> button next to it.</p>
+          <p class="gs-plugin-step"><span class="gs-plugin-step-num">3</span> A browser window will open asking you to authorise Claude. Sign in with your GitHub account (the one from step 1) and click <strong>Authorize</strong>. When asked about organisation access, approve <strong>THG-AltitudeSiteBuilds</strong>.</p>
+          <p class="gs-plugin-step"><span class="gs-plugin-step-num">4</span> Done — you only need to do this once. The connection stays active across sessions.</p>
         </div>
         <p class="gs-body gs-body--note" style="margin-top: 12px; margin-bottom: 0;">
-          If GitHub doesn't appear in the plugin list, it may not be available on your Claude plan.
-          Basic git operations still work without it — GitHub Desktop handles authentication for pushes.
+          If GitHub doesn't appear in the plugin list, it may not be included in your current Claude plan.
+          Claude can still save reports without it, but contact Richard Gill if you're having trouble publishing.
         </p>
       </div>
 
@@ -370,25 +387,25 @@ import ReportLayout from '@/components/ReportLayout.astro';
   <div class="gs-part">
     <div class="gs-part-header">
       <span class="gs-part-badge">Part 4</span>
-      <h2 class="gs-part-title">Agent skills</h2>
-      <p class="gs-part-desc">Register each agent skill using the built-in skill creator. This takes about 2 minutes per skill and only needs to be done once.</p>
+      <h2 class="gs-part-title">Install the tools</h2>
+      <p class="gs-part-desc">The UX Intelligence tools are loaded into Claude one at a time. This takes about 2 minutes each and only needs to be done once — after that they're always available.</p>
     </div>
 
     <section class="gs-section">
       <h3 class="gs-section-heading">
         <span class="gs-step-badge">8</span>
-        Install each skill using /skill-creator
+        Load each tool into Claude
       </h3>
       <p class="gs-body">
-        The UX Intelligence agents are packaged as <em>skills</em> — named workflows that Claude
-        runs when you type a slash command. Skills must be registered through Claude's built-in
-        <code>/skill-creator</code> tool. This writes each skill into Claude's local manifest so
-        it persists across sessions and app restarts.
+        Claude's UX Intelligence tools — like the UX Review, Competitor Analysis, and Design QA —
+        are stored as instruction files in the project folder. You need to register each one with
+        Claude so it knows they exist. You do this by typing a special command and pasting a short
+        prompt. Claude reads the instruction file and saves the tool — it only takes a minute each.
       </p>
       <div class="gs-callout gs-callout--info">
-        <strong>Install one at a time.</strong> Type <code>/skill-creator</code> in Claude Code,
-        paste the prompt for that skill, and wait for it to finish before moving to the next.
-        Do this with the <code>ux-prototyping</code> repo open as your project folder.
+        <strong>Do these one at a time.</strong> In Claude Code (with the ux-prototyping folder open),
+        type <strong>/skill-creator</strong> in the chat, then paste the prompt for the first tool
+        below and press Enter. Wait for Claude to finish, then repeat for the next one.
       </div>
 
       <div class="gs-skill-install-list" style="margin-top: 20px;">
@@ -474,36 +491,36 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <section class="gs-section">
       <h3 class="gs-section-heading">
         <span class="gs-step-badge">9</span>
-        Verify all five skills are registered
+        Confirm all five tools are available
       </h3>
       <p class="gs-body">
-        Type <code>/</code> in Claude Code to open the slash command picker. You should see all
-        five agent commands in the list:
+        In the Claude Code chat box, type <strong>/</strong> — a list of available commands will
+        appear. You should see all five tools in the list:
       </p>
       <div class="gs-skill-list">
         <div class="gs-skill-row">
           <code class="gs-skill-cmd">/myprotein-ux-review</code>
-          <span class="gs-skill-label">UX Review agent</span>
+          <span class="gs-skill-label">UX Review</span>
         </div>
         <div class="gs-skill-row">
           <code class="gs-skill-cmd">/competitor-analysis</code>
-          <span class="gs-skill-label">Competitor Analysis agent</span>
+          <span class="gs-skill-label">Competitor Analysis</span>
         </div>
         <div class="gs-skill-row">
           <code class="gs-skill-cmd">/design-qa</code>
-          <span class="gs-skill-label">Design QA agent</span>
+          <span class="gs-skill-label">Design QA</span>
         </div>
         <div class="gs-skill-row">
           <code class="gs-skill-cmd">/myprotein-prep-agent</code>
-          <span class="gs-skill-label">Project Prep agent</span>
+          <span class="gs-skill-label">Project Prep</span>
         </div>
         <div class="gs-skill-row">
           <code class="gs-skill-cmd">/figma-engineering-handover</code>
-          <span class="gs-skill-label">Engineering Handover agent</span>
+          <span class="gs-skill-label">Engineering Handover</span>
         </div>
       </div>
       <p class="gs-body" style="margin-top: 12px;">
-        If a skill is missing, re-run <code>/skill-creator</code> for that skill only.
+        If one is missing, repeat step 8 for that tool only.
       </p>
     </section>
   </div>
@@ -511,71 +528,69 @@ import ReportLayout from '@/components/ReportLayout.astro';
   <!-- ── First run ────────────────────────────────────────────── -->
   <section class="gs-section">
     <h2 class="gs-section-heading">
-      <span class="gs-step-badge">9</span>
-      Run your first report
+      <span class="gs-step-badge">10</span>
+      You're ready — run your first review
     </h2>
     <p class="gs-body">
-      You're ready. Trigger the UX Review agent with any Myprotein URL:
+      Type the command below into Claude Code, replacing the URL with any Myprotein page
+      you want to review, and press Enter:
     </p>
     <pre class="gs-code">/myprotein-ux-review https://www.myprotein.com/sports-nutrition/impact-whey-protein/10530943.html</pre>
     <p class="gs-body">
-      Claude Code will navigate to the page in Chrome, take screenshots, analyse the UX, write
-      the report file, and commit and push it to GitHub — all automatically. Once it's pushed,
-      you'll need to trigger a deploy in the <strong>Altitude dashboard</strong> to make it
-      live on the site. The agent will remind you of this when it finishes.
+      Claude will open the page in Chrome, read through it, write up a structured UX report,
+      and save it to GitHub automatically. The whole process takes a few minutes — you'll see
+      it working in the chat as it goes.
     </p>
     <div class="gs-tip">
-      <strong>What is Altitude?</strong>
-      Altitude is THG's internal hosting platform — it's where this site is deployed from.
-      Pushing to GitHub doesn't automatically publish your changes; someone with Altitude
-      access needs to log in and trigger a manual deploy. If you don't have access, ask
-      Richard Gill to either set you up with an account or deploy on your behalf after you push.
+      <strong>One manual step at the end — publishing to the site</strong>
+      After Claude saves the report, it needs to be published to the live site manually. This
+      is done through <strong>Altitude</strong> — THG's internal publishing platform. If you
+      have Altitude access, log in and trigger a deploy. If not, ask Richard Gill to publish
+      it for you — just let him know when Claude has finished saving the report.
     </div>
 
     <p class="gs-body" style="margin-top: 8px;">
-      See the <a href="/agents/ux-review" class="gs-inline-link">agent guides</a> for a
-      detailed walkthrough of each agent, what to expect at every step, and how to handle
-      common issues.
+      See the <a href="/agents/ux-review" class="gs-inline-link">tool guides</a> for a full
+      walkthrough of each tool, what to expect, and how to handle any issues.
     </p>
   </section>
 
   <!-- ── Troubleshooting ────────────────────────────────────── -->
   <section class="gs-section">
-    <h2 class="gs-section-heading">Common setup issues</h2>
+    <h2 class="gs-section-heading">If something isn't working</h2>
     <ul class="gs-tips-list">
       <li>
-        <strong>Claude Code can't find the repo folder.</strong>
-        Make sure you selected the root <code>ux-prototyping</code> folder — not a subfolder
-        like <code>src/</code> or <code>src/pages/</code>. The repo root is the folder that
-        contains <code>package.json</code> and <code>src/</code>. If you're not sure, use
-        GitHub Desktop's <strong>Show in Finder / Explorer</strong> to open the exact folder,
-        then drag that folder into Claude Code's project selector.
+        <strong>Claude says it can't find the project folder.</strong>
+        Make sure you selected the <strong>ux-prototyping</strong> folder itself — not a folder
+        inside it. If you're not sure which one to pick, open GitHub Desktop, go to
+        <strong>Repository → Show in Finder</strong> (Mac) or <strong>Show in Explorer</strong>
+        (Windows), and that will open exactly the right folder. Then go back to Claude Code and
+        select that same folder.
       </li>
       <li>
-        <strong>Slash commands show up but the agents don't run — just errors.</strong>
-        The most common cause is the Chrome extension not being connected. Open Chrome, click
-        the Claude extension icon, and make sure it shows as connected (not "disconnected" or
-        "sign in required"). The UX Review and Competitor Analysis agents both need Chrome open
-        and connected before they'll work.
+        <strong>Claude starts a review but immediately hits an error.</strong>
+        The most likely cause is Chrome not being connected. Open Chrome, click the Claude icon
+        in the top-right of the browser, and check that it says <em>Connected</em> — not
+        <em>Sign in</em> or <em>Disconnected</em>. If it's not connected, sign in with your
+        Claude account. Chrome must be open and connected for page reviews to work.
       </li>
       <li>
-        <strong>GitHub Desktop push fails — "permission denied" or "authentication failed".</strong>
-        This usually means you accepted the repo invite but GitHub Desktop hasn't refreshed your
-        permissions. In GitHub Desktop, go to <strong>GitHub Desktop → Preferences → Accounts</strong>,
-        sign out, and sign back in. Then try the push again.
+        <strong>The report saved but isn't appearing on the site.</strong>
+        Reports need to be published manually after saving. Log into Altitude and trigger a
+        deploy, or ask Richard Gill to do it. Claude saves the report automatically — the
+        publishing step is separate and always manual.
       </li>
       <li>
-        <strong>A skill isn't appearing after running /skill-creator.</strong>
-        Wait a moment then type <code>/</code> again — registration can take a few seconds to
-        reflect. If it's still missing, run <code>/skill-creator</code> again for that skill
-        only. Make sure the <code>ux-prototyping</code> repo is open as your project folder
-        when you do — the SKILL.md files need to be readable from the current working directory.
+        <strong>A tool isn't appearing in the / command list.</strong>
+        Type <strong>/skill-creator</strong> in Claude Code and repeat the install step for
+        that tool only (the prompts are in step 8 above). Make sure the ux-prototyping folder
+        is open as your project when you do.
       </li>
       <li>
-        <strong>Can I use Claude.ai in a browser tab instead of the desktop app?</strong>
-        For exploring and analysing, yes. But Claude.ai can't write to this repo, commit
-        screenshots, or push to the site. For anything that produces a saved report, use the
-        Claude Code desktop app with the repo folder open.
+        <strong>Can I just use Claude in my browser instead of the desktop app?</strong>
+        For general questions, yes. But the browser version of Claude can't save files or
+        publish anything to the site. For anything that produces a saved report, you need the
+        desktop app with the project folder open.
       </li>
     </ul>
   </section>

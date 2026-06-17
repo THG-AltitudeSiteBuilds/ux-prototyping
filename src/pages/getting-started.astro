@@ -10,9 +10,9 @@ import ReportLayout from '@/components/ReportLayout.astro';
     <p class="gs-summary">
       The UX Intelligence agents run inside <strong>Claude Code</strong> — available as a desktop
       app that connects Claude directly to a local copy of this repository on your machine.
-      You'll need a GitHub account with access to the repo, the repo cloned locally, the Claude
-      Code desktop app installed, two plugins (a Chrome extension and a GitHub connector), and
-      the agent skills activated. This guide walks you through each step.
+      There are four things to set up: GitHub access and cloning the repo, the Git command-line
+      tool, the Claude Code desktop app with its connectors, and the agent skills. This guide
+      walks you through each in order.
     </p>
     <div class="gs-notice">
       <strong>Why Claude Code, not Claude.ai?</strong>
@@ -28,498 +28,487 @@ import ReportLayout from '@/components/ReportLayout.astro';
     </p>
   </section>
 
-  <!-- ── Step 1: GitHub account ─────────────────────────────── -->
-  <section class="gs-section">
-    <h2 class="gs-section-heading">
-      <span class="gs-step-badge">1</span>
-      Create a GitHub account
-    </h2>
-    <p class="gs-body">
-      If you don't already have one, sign up for a free GitHub account. You'll need this to
-      request access to the private repository.
-    </p>
-    <a href="https://github.com/signup" target="_blank" rel="noopener" class="gs-external-link">
-      <span class="gs-external-icon">↗</span>
-      github.com/signup — create a free account
-    </a>
-    <p class="gs-body gs-body--note">
-      Use your THG work email address so it's easy for the repo admin to verify who you are
-      when granting access.
-    </p>
-  </section>
+  <!-- ════════════════════════════════════════════════════════
+       PART 1 — GITHUB
+  ═════════════════════════════════════════════════════════ -->
+  <div class="gs-part">
+    <div class="gs-part-header">
+      <span class="gs-part-badge">Part 1</span>
+      <h2 class="gs-part-title">GitHub</h2>
+      <p class="gs-part-desc">Create an account, get repo access, install GitHub Desktop, and clone the repo to your machine.</p>
+    </div>
 
-  <!-- ── Step 2: Repo access ───────────────────────────────── -->
-  <section class="gs-section">
-    <h2 class="gs-section-heading">
-      <span class="gs-step-badge">2</span>
-      Request access to the repository
-    </h2>
-    <p class="gs-body">
-      The repository is private. Once you have a GitHub account, contact Richard Gill and
-      share your GitHub username — he'll add you as a collaborator and GitHub will send you
-      an email invite. Accept the invite to gain write access.
-    </p>
-    <div class="gs-repo-card">
-      <div class="gs-repo-header">
-        <span class="gs-repo-icon">◈</span>
-        <div>
-          <p class="gs-repo-org">THG-AltitudeSiteBuilds</p>
-          <p class="gs-repo-name">ux-prototyping</p>
-        </div>
-      </div>
-      <p class="gs-repo-desc">
-        The UX Intelligence site and all agent-generated reports. Private — requires an invite.
+    <!-- Account -->
+    <section class="gs-section">
+      <h3 class="gs-section-heading">
+        <span class="gs-step-badge">1</span>
+        Create a GitHub account
+      </h3>
+      <p class="gs-body">
+        If you don't already have one, sign up for a free GitHub account. You'll need this to
+        request access to the private repository.
       </p>
-      <a href="https://github.com/THG-AltitudeSiteBuilds/ux-prototyping" target="_blank" rel="noopener" class="gs-repo-link">
-        View on GitHub →
+      <a href="https://github.com/signup" target="_blank" rel="noopener" class="gs-external-link">
+        <span class="gs-external-icon">↗</span>
+        github.com/signup — create a free account
       </a>
+      <p class="gs-body gs-body--note">
+        Use your THG work email address so it's easy for the repo admin to verify who you are
+        when granting access.
+      </p>
+    </section>
+
+    <!-- Repo access -->
+    <section class="gs-section">
+      <h3 class="gs-section-heading">
+        <span class="gs-step-badge">2</span>
+        Request access to the repository
+      </h3>
+      <p class="gs-body">
+        The repository is private. Once you have a GitHub account, contact Richard Gill and
+        share your GitHub username — he'll add you as a collaborator and GitHub will send you
+        an email invite. Accept the invite to gain write access.
+      </p>
+      <div class="gs-repo-card">
+        <div class="gs-repo-header">
+          <span class="gs-repo-icon">◈</span>
+          <div>
+            <p class="gs-repo-org">THG-AltitudeSiteBuilds</p>
+            <p class="gs-repo-name">ux-prototyping</p>
+          </div>
+        </div>
+        <p class="gs-repo-desc">
+          The UX Intelligence site and all agent-generated reports. Private — requires an invite.
+        </p>
+        <a href="https://github.com/THG-AltitudeSiteBuilds/ux-prototyping" target="_blank" rel="noopener" class="gs-repo-link">
+          View on GitHub →
+        </a>
+      </div>
+      <p class="gs-body gs-body--note">
+        Write access is required — not just read access. This is what allows Claude Code to commit
+        new report files and push them to the site on your behalf.
+      </p>
+      <div class="gs-tip">
+        <strong>Authorise for SSO</strong>
+        The <code>THG-AltitudeSiteBuilds</code> organisation uses single sign-on. After accepting
+        the invite, go to <a href="https://github.com/settings/organizations" target="_blank" rel="noopener" class="gs-inline-link">github.com/settings/organizations</a>
+        and click <strong>Authorize</strong> next to <code>THG-AltitudeSiteBuilds</code>. If you skip
+        this, GitHub Desktop will look like it's working but pushes will silently fail with a
+        permissions error.
+      </div>
+    </section>
+
+    <!-- GitHub Desktop + clone -->
+    <section class="gs-section">
+      <h3 class="gs-section-heading">
+        <span class="gs-step-badge">3</span>
+        Install GitHub Desktop and clone the repo
+      </h3>
+      <p class="gs-body">
+        The agents write report files directly into the local repo folder on your machine.
+        <strong>GitHub Desktop</strong> is the easiest way to clone the repo and push changes
+        back to GitHub — it handles authentication so you don't need to set up SSH keys or
+        use the terminal.
+      </p>
+
+      <div class="gs-substeps">
+
+        <div class="gs-substep">
+          <span class="gs-substep-label">3a</span>
+          <div>
+            <p class="gs-substep-title">Download GitHub Desktop</p>
+            <p class="gs-substep-body">Install GitHub Desktop and sign in with your GitHub account.</p>
+            <a href="https://desktop.github.com" target="_blank" rel="noopener" class="gs-external-link">
+              <span class="gs-external-icon">↗</span>
+              desktop.github.com
+            </a>
+          </div>
+        </div>
+
+        <div class="gs-substep">
+          <span class="gs-substep-label">3b</span>
+          <div>
+            <p class="gs-substep-title">Clone the repository</p>
+            <p class="gs-substep-body">
+              In GitHub Desktop: <strong>File → Clone Repository</strong>, then search for
+              <code>THG-AltitudeSiteBuilds/ux-prototyping</code>. Choose a local path you'll
+              remember — for example <code>~/Documents/GitHub/ux-prototyping</code>. Click
+              <strong>Clone</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div class="gs-substep">
+          <span class="gs-substep-label">3c</span>
+          <div>
+            <p class="gs-substep-title">Note the local path</p>
+            <p class="gs-substep-body">
+              In GitHub Desktop, go to <strong>Repository → Show in Finder</strong> (Mac) or
+              <strong>Show in Explorer</strong> (Windows). Note the full folder path — you'll
+              need to point Claude Code at this folder in Part 3.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       PART 2 — GIT
+  ═════════════════════════════════════════════════════════ -->
+  <div class="gs-part">
+    <div class="gs-part-header">
+      <span class="gs-part-badge">Part 2</span>
+      <h2 class="gs-part-title">Git</h2>
+      <p class="gs-part-desc">Install the Git command-line tool that Claude Code needs to commit and push files.</p>
     </div>
-    <p class="gs-body gs-body--note">
-      Write access is required — not just read access. This is what allows Claude Code to commit
-      new report files and push them to the site on your behalf.
-    </p>
-    <div class="gs-tip">
-      <strong>One more thing — authorise for SSO</strong>
-      The <code>THG-AltitudeSiteBuilds</code> organisation uses single sign-on. After accepting
-      the invite, go to <a href="https://github.com/settings/organizations" target="_blank" rel="noopener" class="gs-inline-link">github.com/settings/organizations</a>
-      and click <strong>Authorize</strong> next to <code>THG-AltitudeSiteBuilds</code>. If you skip
-      this, GitHub Desktop will look like it's working but pushes will silently fail with a
-      permissions error.
+
+    <section class="gs-section">
+      <h3 class="gs-section-heading">
+        <span class="gs-step-badge">4</span>
+        Install Git
+      </h3>
+      <p class="gs-body">
+        Claude Code needs the <code>git</code> command-line tool to commit changes and push
+        reports to the site. <strong>GitHub Desktop doesn't include it</strong> — you need to
+        install it separately.
+      </p>
+
+      <div class="gs-substeps">
+
+        <div class="gs-substep">
+          <span class="gs-substep-label">Mac</span>
+          <div>
+            <p class="gs-substep-title">Install via Xcode Command Line Tools</p>
+            <p class="gs-substep-body">
+              Open the <strong>Terminal</strong> app (search Spotlight for "Terminal") and paste
+              this command, then press Enter:
+            </p>
+            <div class="gs-copyblock">
+              <pre class="gs-code gs-code--wrap" id="git-install-mac">xcode-select --install</pre>
+              <button class="gs-copy-btn" onclick="
+                navigator.clipboard.writeText(document.getElementById('git-install-mac').innerText);
+                this.textContent = 'Copied!';
+                setTimeout(() => this.textContent = 'Copy', 2000);
+              ">Copy</button>
+            </div>
+            <p class="gs-substep-body">
+              A dialog will appear asking to install the Command Line Tools — minimise any open
+              windows so you can see it, then click <strong>Install</strong>. It takes 5–10 minutes.
+              Once done, run <code>git --version</code> in Terminal to confirm.
+            </p>
+          </div>
+        </div>
+
+        <div class="gs-substep">
+          <span class="gs-substep-label">Win</span>
+          <div>
+            <p class="gs-substep-title">Download Git for Windows</p>
+            <p class="gs-substep-body">
+              Download and run the installer from the official Git site. Accept all the defaults.
+            </p>
+            <a href="https://git-scm.com/download/win" target="_blank" rel="noopener" class="gs-external-link">
+              <span class="gs-external-icon">↗</span>
+              git-scm.com/download/win
+            </a>
+            <p class="gs-substep-body">
+              Once installed, open <strong>Command Prompt</strong> or <strong>PowerShell</strong>
+              and run <code>git --version</code> to confirm it worked.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════════
+       PART 3 — CLAUDE DESKTOP
+  ═════════════════════════════════════════════════════════ -->
+  <div class="gs-part">
+    <div class="gs-part-header">
+      <span class="gs-part-badge">Part 3</span>
+      <h2 class="gs-part-title">Claude Desktop</h2>
+      <p class="gs-part-desc">Install the Claude Code desktop app, open the repo as a project, and connect the Chrome and GitHub plugins.</p>
     </div>
-  </section>
 
-  <!-- ── Step 3: Clone the repo ────────────────────────────── -->
-  <section class="gs-section">
-    <h2 class="gs-section-heading">
-      <span class="gs-step-badge">3</span>
-      Clone the repository to your machine
-    </h2>
-    <p class="gs-body">
-      The agents need the repo to exist as a local folder on your machine — they write files
-      directly into it. The easiest way to clone it is with <strong>GitHub Desktop</strong>,
-      a free app that handles authentication and gives you a simple UI for committing and
-      pushing changes.
-    </p>
+    <!-- Install app -->
+    <section class="gs-section">
+      <h3 class="gs-section-heading">
+        <span class="gs-step-badge">5</span>
+        Install the Claude Code desktop app
+      </h3>
+      <p class="gs-body">
+        Claude Code is built into the Claude desktop app. Download it from Anthropic and sign in
+        with your Anthropic account. A Claude Pro plan ($20/month) is sufficient for running the agents.
+      </p>
+      <p class="gs-body gs-body--note">
+        <strong>Who pays for this?</strong> Check with your team lead before signing up — THG may
+        already have Claude seats or an expense process for this.
+      </p>
+      <a href="https://claude.ai/download" target="_blank" rel="noopener" class="gs-external-link">
+        <span class="gs-external-icon">↗</span>
+        claude.ai/download — download the desktop app
+      </a>
+      <div class="gs-tip">
+        <strong>Already use Claude.ai?</strong>
+        Use the same credentials to log in to the desktop app — it's the same account.
+      </div>
+    </section>
 
-    <div class="gs-substeps">
+    <!-- Open repo -->
+    <section class="gs-section">
+      <h3 class="gs-section-heading">
+        <span class="gs-step-badge">6</span>
+        Open the repository in Claude Code
+      </h3>
+      <p class="gs-body">
+        This connects Claude Code to the local repo folder — without this, the agents can't
+        write report files or commit screenshots.
+      </p>
 
-      <div class="gs-substep">
-        <span class="gs-substep-label">3a</span>
-        <div>
-          <p class="gs-substep-title">Download GitHub Desktop</p>
-          <p class="gs-substep-body">Install GitHub Desktop and sign in with your GitHub account.</p>
-          <a href="https://desktop.github.com" target="_blank" rel="noopener" class="gs-external-link">
+      <div class="gs-substeps">
+
+        <div class="gs-substep">
+          <span class="gs-substep-label">6a</span>
+          <div>
+            <p class="gs-substep-title">Switch to Claude Code</p>
+            <p class="gs-substep-body">
+              Open the Claude desktop app. In the top-left, click the <strong>Claude</strong>
+              menu (or the dropdown next to your workspace name) and select
+              <strong>Claude Code</strong>. It's still just a chat window — but with access to
+              files on your machine.
+            </p>
+          </div>
+        </div>
+
+        <div class="gs-substep">
+          <span class="gs-substep-label">6b</span>
+          <div>
+            <p class="gs-substep-title">Select the repo folder</p>
+            <p class="gs-substep-body">
+              Claude Code will prompt you to select a project folder. Navigate to the
+              <code>ux-prototyping</code> folder you cloned in step 3 and select it. Claude
+              Code now has access to all the repo files and can write new ones.
+            </p>
+          </div>
+        </div>
+
+        <div class="gs-substep">
+          <span class="gs-substep-label">6c</span>
+          <div>
+            <p class="gs-substep-title">Confirm it's working</p>
+            <p class="gs-substep-body">
+              Type <code>/</code> in the prompt. You should see a list of available slash commands.
+              If the list appears, the session is running correctly inside the repo.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Connectors -->
+    <section class="gs-section">
+      <h3 class="gs-section-heading">
+        <span class="gs-step-badge">7</span>
+        Connect the Chrome and GitHub plugins
+      </h3>
+      <p class="gs-body">
+        Two plugins are needed: a Chrome browser extension so Claude can navigate to pages and
+        take screenshots, and a GitHub connector for deeper repo integration.
+      </p>
+
+      <div class="gs-plugin-card">
+        <div class="gs-plugin-header">
+          <span class="gs-plugin-badge gs-plugin-badge--chrome">Chrome</span>
+          <h3 class="gs-plugin-name">Claude in Chrome extension</h3>
+        </div>
+        <p class="gs-plugin-desc">
+          Connects Claude Code to your Chrome browser. Without it, the UX Review and Competitor
+          Analysis agents can't open URLs, scroll pages, or take screenshots.
+        </p>
+        <div class="gs-plugin-steps">
+          <p class="gs-plugin-step"><span class="gs-plugin-step-num">1</span> Install the extension from the Chrome Web Store:</p>
+          <a href="https://chromewebstore.google.com/detail/claude/pnaoflhkifljdmpmollaobhbknaeeafh" target="_blank" rel="noopener" class="gs-external-link gs-external-link--sm">
             <span class="gs-external-icon">↗</span>
-            desktop.github.com
+            Claude extension — Chrome Web Store
           </a>
+          <p class="gs-plugin-step"><span class="gs-plugin-step-num">2</span> Once installed, click the extension icon in Chrome and sign in with the same account you use in the desktop app.</p>
+          <p class="gs-plugin-step"><span class="gs-plugin-step-num">3</span> In Claude Code, type <code>/</code> and look for Chrome-related tools in the list to confirm it's connected.</p>
         </div>
       </div>
 
-      <div class="gs-substep">
-        <span class="gs-substep-label">3b</span>
-        <div>
-          <p class="gs-substep-title">Clone the repository</p>
-          <p class="gs-substep-body">
-            In GitHub Desktop: <strong>File → Clone Repository</strong>, then search for
-            <code>THG-AltitudeSiteBuilds/ux-prototyping</code>. Choose a local path you'll
-            remember — for example <code>~/Documents/GitHub/ux-prototyping</code>. Click
-            <strong>Clone</strong>.
-          </p>
+      <div class="gs-plugin-card">
+        <div class="gs-plugin-header">
+          <span class="gs-plugin-badge gs-plugin-badge--github">GitHub</span>
+          <h3 class="gs-plugin-name">GitHub MCP connector</h3>
         </div>
+        <p class="gs-plugin-desc">
+          Gives Claude Code deeper GitHub integration — it can read repository structure, check
+          commit history, and authenticate pushes more reliably.
+        </p>
+        <div class="gs-plugin-steps">
+          <p class="gs-plugin-step"><span class="gs-plugin-step-num">1</span> In the Claude desktop app, click the <strong>+</strong> button at the bottom of the chat box and select <strong>Plugins</strong>.</p>
+          <p class="gs-plugin-step"><span class="gs-plugin-step-num">2</span> Find <strong>GitHub</strong> in the plugin list and click <strong>+</strong> to add it.</p>
+          <p class="gs-plugin-step"><span class="gs-plugin-step-num">3</span> If prompted, authorise Claude to access your GitHub account and approve access for the <code>THG-AltitudeSiteBuilds</code> organisation.</p>
+          <p class="gs-plugin-step"><span class="gs-plugin-step-num">4</span> Once added, it persists across sessions — you only need to do this once.</p>
+        </div>
+        <p class="gs-body gs-body--note" style="margin-top: 12px; margin-bottom: 0;">
+          If GitHub doesn't appear in the plugin list, it may not be available on your Claude plan.
+          Basic git operations still work without it — GitHub Desktop handles authentication for pushes.
+        </p>
       </div>
 
-      <div class="gs-substep">
-        <span class="gs-substep-label">3c</span>
-        <div>
-          <p class="gs-substep-title">Note the local path</p>
-          <p class="gs-substep-body">
-            In GitHub Desktop, go to <strong>Repository → Show in Finder</strong> (Mac) or
-            <strong>Show in Explorer</strong> (Windows). Note the full folder path — you'll
-            need to point Claude Code at this folder in step 5.
-          </p>
-        </div>
-      </div>
+    </section>
+  </div>
 
+  <!-- ════════════════════════════════════════════════════════
+       PART 4 — AGENT SKILLS
+  ═════════════════════════════════════════════════════════ -->
+  <div class="gs-part">
+    <div class="gs-part-header">
+      <span class="gs-part-badge">Part 4</span>
+      <h2 class="gs-part-title">Agent skills</h2>
+      <p class="gs-part-desc">Register each agent skill using the built-in skill creator. This takes about 2 minutes per skill and only needs to be done once.</p>
     </div>
-  </section>
 
-  <!-- ── Step 4: Install Git ───────────────────────────────── -->
-  <section class="gs-section">
-    <h2 class="gs-section-heading">
-      <span class="gs-step-badge">4</span>
-      Install Git
-    </h2>
-    <p class="gs-body">
-      Claude Code needs the <code>git</code> command-line tool to write files, commit changes,
-      and push reports to the site. <strong>GitHub Desktop doesn't include it</strong> — you
-      need to install it separately before Claude Code will work with the repo.
-    </p>
+    <section class="gs-section">
+      <h3 class="gs-section-heading">
+        <span class="gs-step-badge">8</span>
+        Install each skill using /skill-creator
+      </h3>
+      <p class="gs-body">
+        The UX Intelligence agents are packaged as <em>skills</em> — named workflows that Claude
+        runs when you type a slash command. Skills must be registered through Claude's built-in
+        <code>/skill-creator</code> tool. This writes each skill into Claude's local manifest so
+        it persists across sessions and app restarts.
+      </p>
+      <div class="gs-callout gs-callout--info">
+        <strong>Install one at a time.</strong> Type <code>/skill-creator</code> in Claude Code,
+        paste the prompt for that skill, and wait for it to finish before moving to the next.
+        Do this with the <code>ux-prototyping</code> repo open as your project folder.
+      </div>
 
-    <div class="gs-substeps">
+      <div class="gs-skill-install-list" style="margin-top: 20px;">
 
-      <div class="gs-substep">
-        <span class="gs-substep-label">Mac</span>
-        <div>
-          <p class="gs-substep-title">Install via Xcode Command Line Tools (recommended)</p>
-          <p class="gs-substep-body">
-            Open the <strong>Terminal</strong> app (search Spotlight for "Terminal") and paste
-            this command, then press Enter:
-          </p>
+        <div class="gs-skill-install-item">
+          <div class="gs-skill-install-header">
+            <code class="gs-skill-cmd">/myprotein-ux-review</code>
+            <span class="gs-skill-label">UX Review agent</span>
+          </div>
           <div class="gs-copyblock">
-            <pre class="gs-code gs-code--wrap" id="git-install-mac">xcode-select --install</pre>
+            <pre class="gs-code gs-code--wrap" id="skill-prompt-1">Please create a new skill using the content from this file: src/skills/user/myprotein-ux-review/SKILL.md</pre>
             <button class="gs-copy-btn" onclick="
-              navigator.clipboard.writeText(document.getElementById('git-install-mac').innerText);
+              navigator.clipboard.writeText(document.getElementById('skill-prompt-1').innerText);
               this.textContent = 'Copied!';
               setTimeout(() => this.textContent = 'Copy', 2000);
             ">Copy</button>
           </div>
-          <p class="gs-substep-body">
-            A dialog will appear in the background asking to install the Command Line Tools —
-            <strong>minimise or move any open windows</strong> so you can see it, then click
-            <strong>Install</strong>. It can take 5–10 minutes to complete. Once done, run
-            <code>git --version</code> in Terminal to confirm it worked — you should see
-            something like <code>git version 2.x.x</code>.
-          </p>
         </div>
-      </div>
 
-      <div class="gs-substep">
-        <span class="gs-substep-label">Win</span>
-        <div>
-          <p class="gs-substep-title">Download Git for Windows</p>
-          <p class="gs-substep-body">
-            Download and run the installer from the official Git site. Accept all the defaults
-            during installation.
-          </p>
-          <a href="https://git-scm.com/download/win" target="_blank" rel="noopener" class="gs-external-link">
-            <span class="gs-external-icon">↗</span>
-            git-scm.com/download/win
-          </a>
-          <p class="gs-substep-body">
-            Once installed, open <strong>Command Prompt</strong> or <strong>PowerShell</strong>
-            and run <code>git --version</code> to confirm it worked.
-          </p>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="gs-tip" style="margin-top: 14px;">
-      <strong>Why can't Claude Code install Git for me?</strong>
-      It can — but only once it's already running. If you try to open the repo in Claude Code
-      without Git installed, it won't work at all. Installing Git first means you only have
-      to do this once, and everything else works smoothly from step 5 onwards.
-    </div>
-  </section>
-
-  <!-- ── Step 5: Install Claude Code desktop app ───────────── -->
-  <section class="gs-section">
-    <h2 class="gs-section-heading">
-      <span class="gs-step-badge">5</span>
-      Install the Claude Code desktop app
-    </h2>
-    <p class="gs-body">
-      Claude Code is built into the Claude desktop app. Download it from Anthropic and sign in
-      with your Anthropic account. If you don't have one, a Claude Pro plan ($20/month) is
-      sufficient for running the agents.
-    </p>
-    <p class="gs-body gs-body--note">
-      <strong>Who pays for this?</strong> Check with your team lead before signing up — THG may
-      already have Claude seats or an expense process for this rather than you paying personally.
-    </p>
-    <a href="https://claude.ai/download" target="_blank" rel="noopener" class="gs-external-link">
-      <span class="gs-external-icon">↗</span>
-      claude.ai/download — download the desktop app
-    </a>
-    <p class="gs-body">
-      Once installed, open the app and sign in. You'll land in a standard Claude chat interface —
-      Claude Code is accessed via the project/folder selector, which you'll set up in the next step.
-    </p>
-    <div class="gs-tip">
-      <strong>Not sure if you have an Anthropic account?</strong>
-      If you use Claude.ai in a browser already, you have an account — use the same credentials
-      to log in to the desktop app.
-    </div>
-  </section>
-
-  <!-- ── Step 6: Open the repo ─────────────────────────────── -->
-  <section class="gs-section">
-    <h2 class="gs-section-heading">
-      <span class="gs-step-badge">6</span>
-      Open the repository in Claude Code
-    </h2>
-    <p class="gs-body">
-      This is the step that connects Claude Code to the local repo on your machine — without
-      this, the agents can't write report files or commit screenshots.
-    </p>
-
-    <div class="gs-substeps">
-
-      <div class="gs-substep">
-        <span class="gs-substep-label">6a</span>
-        <div>
-          <p class="gs-substep-title">Open a new project</p>
-          <p class="gs-substep-body">
-            Open the Claude desktop app. In the top-left corner, click the
-            <strong>Claude</strong> menu (or the dropdown next to your workspace name) and
-            look for <strong>Claude Code</strong> in the list — click it to switch into the
-            Claude Code view. Don't worry if it looks different to a normal chat — it's still
-            just a chat window, with extra access to files on your computer.
-          </p>
-        </div>
-      </div>
-
-      <div class="gs-substep">
-        <span class="gs-substep-label">6b</span>
-        <div>
-          <p class="gs-substep-title">Select the repo folder</p>
-          <p class="gs-substep-body">
-            Claude Code will prompt you to select a project folder. Navigate to the
-            <code>ux-prototyping</code> folder you cloned in step 3 and select it. Claude
-            Code will start in the context of that folder — it now has access to all the
-            repo files and can write new ones.
-          </p>
-        </div>
-      </div>
-
-      <div class="gs-substep">
-        <span class="gs-substep-label">6c</span>
-        <div>
-          <p class="gs-substep-title">Confirm it's working</p>
-          <p class="gs-substep-body">
-            Type <code>/</code> in the Claude Code prompt. You should see a list of available
-            slash commands. If you can see the list, the session is running correctly inside
-            the repo.
-          </p>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ── Step 7: Plugins ────────────────────────────────────── -->
-  <section class="gs-section">
-    <h2 class="gs-section-heading">
-      <span class="gs-step-badge">7</span>
-      Install required plugins
-    </h2>
-    <p class="gs-body">
-      Two plugins are needed for the agents to work properly: a Chrome browser extension so
-      Claude can navigate to pages and take screenshots, and a GitHub connector so Claude can
-      push commits to the repo. Both are configured in Claude Code's settings.
-    </p>
-
-    <!-- Chrome extension -->
-    <div class="gs-plugin-card">
-      <div class="gs-plugin-header">
-        <span class="gs-plugin-badge gs-plugin-badge--chrome">Chrome</span>
-        <h3 class="gs-plugin-name">Claude in Chrome extension</h3>
-      </div>
-      <p class="gs-plugin-desc">
-        This extension connects Claude Code to your Chrome browser. Without it, the UX Review
-        and Competitor Analysis agents can't open URLs, scroll pages, or take screenshots —
-        which are the core of what those agents do.
-      </p>
-      <div class="gs-plugin-steps">
-        <p class="gs-plugin-step"><span class="gs-plugin-step-num">1</span> Install the extension from the Chrome Web Store:</p>
-        <a href="https://chromewebstore.google.com/detail/claude/pnaoflhkifljdmpmollaobhbknaeeafh" target="_blank" rel="noopener" class="gs-external-link gs-external-link--sm">
-          <span class="gs-external-icon">↗</span>
-          Claude extension — Chrome Web Store
-        </a>
-        <p class="gs-plugin-step"><span class="gs-plugin-step-num">2</span> Once installed, open a Chrome tab and click the extension icon — you'll be prompted to connect it to your Claude account. Sign in with the same account you use in the desktop app.</p>
-        <p class="gs-plugin-step"><span class="gs-plugin-step-num">3</span> In Claude Code, the extension will appear automatically as an available tool. You can confirm it's connected by typing <code>/</code> and looking for Chrome-related tools in the list.</p>
-      </div>
-    </div>
-
-    <!-- GitHub MCP -->
-    <div class="gs-plugin-card">
-      <div class="gs-plugin-header">
-        <span class="gs-plugin-badge gs-plugin-badge--github">GitHub</span>
-        <h3 class="gs-plugin-name">GitHub MCP connector</h3>
-      </div>
-      <p class="gs-plugin-desc">
-        This connector gives Claude Code deeper GitHub integration — it can read repository
-        structure, check commit history, and authenticate pushes. Without it, Claude can still
-        run git commands locally but won't have full GitHub context.
-      </p>
-      <div class="gs-plugin-steps">
-        <p class="gs-plugin-step"><span class="gs-plugin-step-num">1</span> In the Claude desktop app, click the <strong>+</strong> button at the bottom of the chat box, then select <strong>Plugins</strong>.</p>
-        <p class="gs-plugin-step"><span class="gs-plugin-step-num">2</span> Find <strong>GitHub</strong> in the plugin list and click the <strong>+</strong> next to it to add it.</p>
-        <p class="gs-plugin-step"><span class="gs-plugin-step-num">3</span> If prompted, authorise Claude to access your GitHub account — approve access for the <code>THG-AltitudeSiteBuilds</code> organisation.</p>
-        <p class="gs-plugin-step"><span class="gs-plugin-step-num">4</span> Once added, GitHub will appear as an available tool in Claude Code sessions. You only need to do this once — it persists across sessions.</p>
-      </div>
-      <p class="gs-body gs-body--note" style="margin-top: 12px; margin-bottom: 0;">
-        If GitHub doesn't appear in the plugin list, it may not be available on your Claude
-        plan. Basic git operations (commit, push, pull) still work without it — the agents use
-        your local git credentials directly. GitHub Desktop handles authentication automatically
-        so pushes should work even without this plugin.
-      </p>
-    </div>
-
-  </section>
-
-  <!-- ── Step 8: Install skills ────────────────────────────── -->
-  <section class="gs-section">
-    <h2 class="gs-section-heading">
-      <span class="gs-step-badge">8</span>
-      Install the agent skills
-    </h2>
-    <p class="gs-body">
-      The UX Intelligence agents are packaged as <em>skills</em> — reusable, named workflows
-      that Claude runs when you type a slash command. Each skill must be registered through
-      Claude's built-in <code>/skill-creator</code> tool. This takes about 2 minutes per skill
-      and only needs to be done once — skills persist across sessions and app restarts.
-    </p>
-    <div class="gs-callout gs-callout--info">
-      <strong>Why not just copy the files?</strong> Skills are registered in a local manifest
-      that Claude manages. Copying files directly bypasses that registration, so Claude won't
-      see them. Using <code>/skill-creator</code> handles the registration automatically.
-    </div>
-
-    <div class="gs-substeps">
-
-      <div class="gs-substep">
-        <span class="gs-substep-label">8a</span>
-        <div>
-          <p class="gs-substep-title">Open a new Claude Code session with the repo</p>
-          <p class="gs-substep-body">
-            Make sure the ux-prototyping repo is open as your project folder in Claude Code.
-            You'll be running <code>/skill-creator</code> five times — once per skill.
-          </p>
-        </div>
-      </div>
-
-      <div class="gs-substep">
-        <span class="gs-substep-label">8b</span>
-        <div>
-          <p class="gs-substep-title">Install each skill using /skill-creator</p>
-          <p class="gs-substep-body">
-            For each skill below, type <code>/skill-creator</code> in Claude Code and paste
-            the corresponding prompt. Claude will read the SKILL.md from the repo and register
-            it. Install them one at a time — wait for each to finish before starting the next.
-          </p>
-
-          <div class="gs-skill-install-list">
-
-            <div class="gs-skill-install-item">
-              <div class="gs-skill-install-header">
-                <code class="gs-skill-cmd">/myprotein-ux-review</code>
-                <span class="gs-skill-label">UX Review agent</span>
-              </div>
-              <div class="gs-copyblock">
-                <pre class="gs-code gs-code--wrap" id="skill-prompt-1">Please create a new skill using the content from this file: src/skills/user/myprotein-ux-review/SKILL.md</pre>
-                <button class="gs-copy-btn" onclick="
-                  navigator.clipboard.writeText(document.getElementById('skill-prompt-1').innerText);
-                  this.textContent = 'Copied!';
-                  setTimeout(() => this.textContent = 'Copy', 2000);
-                ">Copy</button>
-              </div>
-            </div>
-
-            <div class="gs-skill-install-item">
-              <div class="gs-skill-install-header">
-                <code class="gs-skill-cmd">/competitor-analysis</code>
-                <span class="gs-skill-label">Competitor Analysis agent</span>
-              </div>
-              <div class="gs-copyblock">
-                <pre class="gs-code gs-code--wrap" id="skill-prompt-2">Please create a new skill using the content from this file: src/skills/user/competitor-analysis/SKILL.md</pre>
-                <button class="gs-copy-btn" onclick="
-                  navigator.clipboard.writeText(document.getElementById('skill-prompt-2').innerText);
-                  this.textContent = 'Copied!';
-                  setTimeout(() => this.textContent = 'Copy', 2000);
-                ">Copy</button>
-              </div>
-            </div>
-
-            <div class="gs-skill-install-item">
-              <div class="gs-skill-install-header">
-                <code class="gs-skill-cmd">/design-qa</code>
-                <span class="gs-skill-label">Design QA agent</span>
-              </div>
-              <div class="gs-copyblock">
-                <pre class="gs-code gs-code--wrap" id="skill-prompt-3">Please create a new skill using the content from this file: src/skills/user/design-qa/SKILL.md</pre>
-                <button class="gs-copy-btn" onclick="
-                  navigator.clipboard.writeText(document.getElementById('skill-prompt-3').innerText);
-                  this.textContent = 'Copied!';
-                  setTimeout(() => this.textContent = 'Copy', 2000);
-                ">Copy</button>
-              </div>
-            </div>
-
-            <div class="gs-skill-install-item">
-              <div class="gs-skill-install-header">
-                <code class="gs-skill-cmd">/myprotein-prep-agent</code>
-                <span class="gs-skill-label">Project Prep agent</span>
-              </div>
-              <div class="gs-copyblock">
-                <pre class="gs-code gs-code--wrap" id="skill-prompt-4">Please create a new skill using the content from this file: src/skills/user/myprotein-prep-agent/SKILL.md</pre>
-                <button class="gs-copy-btn" onclick="
-                  navigator.clipboard.writeText(document.getElementById('skill-prompt-4').innerText);
-                  this.textContent = 'Copied!';
-                  setTimeout(() => this.textContent = 'Copy', 2000);
-                ">Copy</button>
-              </div>
-            </div>
-
-            <div class="gs-skill-install-item">
-              <div class="gs-skill-install-header">
-                <code class="gs-skill-cmd">/figma-engineering-handover</code>
-                <span class="gs-skill-label">Engineering Handover agent</span>
-              </div>
-              <div class="gs-copyblock">
-                <pre class="gs-code gs-code--wrap" id="skill-prompt-5">Please create a new skill using the content from this file: src/skills/user/figma-engineering-handover/SKILL.md</pre>
-                <button class="gs-copy-btn" onclick="
-                  navigator.clipboard.writeText(document.getElementById('skill-prompt-5').innerText);
-                  this.textContent = 'Copied!';
-                  setTimeout(() => this.textContent = 'Copy', 2000);
-                ">Copy</button>
-              </div>
-            </div>
-
+        <div class="gs-skill-install-item">
+          <div class="gs-skill-install-header">
+            <code class="gs-skill-cmd">/competitor-analysis</code>
+            <span class="gs-skill-label">Competitor Analysis agent</span>
+          </div>
+          <div class="gs-copyblock">
+            <pre class="gs-code gs-code--wrap" id="skill-prompt-2">Please create a new skill using the content from this file: src/skills/user/competitor-analysis/SKILL.md</pre>
+            <button class="gs-copy-btn" onclick="
+              navigator.clipboard.writeText(document.getElementById('skill-prompt-2').innerText);
+              this.textContent = 'Copied!';
+              setTimeout(() => this.textContent = 'Copy', 2000);
+            ">Copy</button>
           </div>
         </div>
-      </div>
 
-      <div class="gs-substep">
-        <span class="gs-substep-label">8c</span>
-        <div>
-          <p class="gs-substep-title">Confirm all five agents are available</p>
-          <p class="gs-substep-body">
-            Type <code>/</code> in Claude Code to open the slash command picker. You should
-            see all five agent commands in the list:
-          </p>
-          <div class="gs-skill-list">
-            <div class="gs-skill-row">
-              <code class="gs-skill-cmd">/myprotein-ux-review</code>
-              <span class="gs-skill-label">UX Review agent</span>
-            </div>
-            <div class="gs-skill-row">
-              <code class="gs-skill-cmd">/competitor-analysis</code>
-              <span class="gs-skill-label">Competitor Analysis agent</span>
-            </div>
-            <div class="gs-skill-row">
-              <code class="gs-skill-cmd">/design-qa</code>
-              <span class="gs-skill-label">Design QA agent</span>
-            </div>
-            <div class="gs-skill-row">
-              <code class="gs-skill-cmd">/myprotein-prep-agent</code>
-              <span class="gs-skill-label">Project Prep agent</span>
-            </div>
-            <div class="gs-skill-row">
-              <code class="gs-skill-cmd">/figma-engineering-handover</code>
-              <span class="gs-skill-label">Engineering Handover agent</span>
-            </div>
+        <div class="gs-skill-install-item">
+          <div class="gs-skill-install-header">
+            <code class="gs-skill-cmd">/design-qa</code>
+            <span class="gs-skill-label">Design QA agent</span>
           </div>
-          <p class="gs-substep-body" style="margin-top: 12px;">
-            If a skill is missing, re-run the <code>/skill-creator</code> step for that skill only.
-          </p>
+          <div class="gs-copyblock">
+            <pre class="gs-code gs-code--wrap" id="skill-prompt-3">Please create a new skill using the content from this file: src/skills/user/design-qa/SKILL.md</pre>
+            <button class="gs-copy-btn" onclick="
+              navigator.clipboard.writeText(document.getElementById('skill-prompt-3').innerText);
+              this.textContent = 'Copied!';
+              setTimeout(() => this.textContent = 'Copy', 2000);
+            ">Copy</button>
+          </div>
+        </div>
+
+        <div class="gs-skill-install-item">
+          <div class="gs-skill-install-header">
+            <code class="gs-skill-cmd">/myprotein-prep-agent</code>
+            <span class="gs-skill-label">Project Prep agent</span>
+          </div>
+          <div class="gs-copyblock">
+            <pre class="gs-code gs-code--wrap" id="skill-prompt-4">Please create a new skill using the content from this file: src/skills/user/myprotein-prep-agent/SKILL.md</pre>
+            <button class="gs-copy-btn" onclick="
+              navigator.clipboard.writeText(document.getElementById('skill-prompt-4').innerText);
+              this.textContent = 'Copied!';
+              setTimeout(() => this.textContent = 'Copy', 2000);
+            ">Copy</button>
+          </div>
+        </div>
+
+        <div class="gs-skill-install-item">
+          <div class="gs-skill-install-header">
+            <code class="gs-skill-cmd">/figma-engineering-handover</code>
+            <span class="gs-skill-label">Engineering Handover agent</span>
+          </div>
+          <div class="gs-copyblock">
+            <pre class="gs-code gs-code--wrap" id="skill-prompt-5">Please create a new skill using the content from this file: src/skills/user/figma-engineering-handover/SKILL.md</pre>
+            <button class="gs-copy-btn" onclick="
+              navigator.clipboard.writeText(document.getElementById('skill-prompt-5').innerText);
+              this.textContent = 'Copied!';
+              setTimeout(() => this.textContent = 'Copy', 2000);
+            ">Copy</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="gs-section">
+      <h3 class="gs-section-heading">
+        <span class="gs-step-badge">9</span>
+        Verify all five skills are registered
+      </h3>
+      <p class="gs-body">
+        Type <code>/</code> in Claude Code to open the slash command picker. You should see all
+        five agent commands in the list:
+      </p>
+      <div class="gs-skill-list">
+        <div class="gs-skill-row">
+          <code class="gs-skill-cmd">/myprotein-ux-review</code>
+          <span class="gs-skill-label">UX Review agent</span>
+        </div>
+        <div class="gs-skill-row">
+          <code class="gs-skill-cmd">/competitor-analysis</code>
+          <span class="gs-skill-label">Competitor Analysis agent</span>
+        </div>
+        <div class="gs-skill-row">
+          <code class="gs-skill-cmd">/design-qa</code>
+          <span class="gs-skill-label">Design QA agent</span>
+        </div>
+        <div class="gs-skill-row">
+          <code class="gs-skill-cmd">/myprotein-prep-agent</code>
+          <span class="gs-skill-label">Project Prep agent</span>
+        </div>
+        <div class="gs-skill-row">
+          <code class="gs-skill-cmd">/figma-engineering-handover</code>
+          <span class="gs-skill-label">Engineering Handover agent</span>
         </div>
       </div>
+      <p class="gs-body" style="margin-top: 12px;">
+        If a skill is missing, re-run <code>/skill-creator</code> for that skill only.
+      </p>
+    </section>
+  </div>
 
-    </div>
-  </section>
-
-  <!-- ── Step 9: First report ───────────────────────────────── -->
+  <!-- ── First run ────────────────────────────────────────────── -->
   <section class="gs-section">
     <h2 class="gs-section-heading">
       <span class="gs-step-badge">9</span>
@@ -576,12 +565,11 @@ import ReportLayout from '@/components/ReportLayout.astro';
         sign out, and sign back in. Then try the push again.
       </li>
       <li>
-        <strong>The skills aren't appearing after following step 8.</strong>
-        Make sure you fully quit and restarted Claude Desktop after running the install prompt —
-        skills are only loaded at startup. If they're still missing, run the install prompt
-        again (it's safe to run more than once) and check that Claude confirms the files were
-        copied. If Claude says it can't find the skills folder, make sure you've opened Claude
-        Code at least once first — the folder is only created on first launch.
+        <strong>A skill isn't appearing after running /skill-creator.</strong>
+        Wait a moment then type <code>/</code> again — registration can take a few seconds to
+        reflect. If it's still missing, run <code>/skill-creator</code> again for that skill
+        only. Make sure the <code>ux-prototyping</code> repo is open as your project folder
+        when you do — the SKILL.md files need to be readable from the current working directory.
       </li>
       <li>
         <strong>Can I use Claude.ai in a browser tab instead of the desktop app?</strong>
@@ -701,17 +689,71 @@ import ReportLayout from '@/components/ReportLayout.astro';
   }
   .gs-terminal-note strong { font-weight: 700; opacity: 1; color: var(--color-text-heading); }
 
+  /* ── Part blocks ────────────────────────────────────────── */
+  .gs-part {
+    margin-bottom: 64px;
+    border: var(--card-border);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--color-bg-card);
+  }
+  .gs-part-header {
+    background: var(--color-primary);
+    padding: 24px 28px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .gs-part-badge {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-mint);
+    opacity: 0.7;
+  }
+  .gs-part-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.1;
+  }
+  .gs-part-desc {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.65);
+    max-width: 560px;
+  }
+  .gs-part .gs-section {
+    padding: 28px 28px 0;
+  }
+  .gs-part .gs-section:last-child {
+    padding-bottom: 28px;
+  }
+  .gs-part .gs-substeps {
+    max-width: 100%;
+  }
+  .gs-part .gs-body {
+    max-width: 100%;
+  }
+  .gs-part .gs-tip,
+  .gs-part .gs-callout,
+  .gs-part .gs-repo-card,
+  .gs-part .gs-plugin-card {
+    max-width: 100%;
+  }
+
   /* ── Sections ───────────────────────────────────────────── */
   .gs-section {
-    margin-bottom: 52px;
+    margin-bottom: 32px;
   }
   .gs-section-heading {
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 800;
     color: var(--color-text-heading);
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     padding-bottom: 12px;
-    border-bottom: 2px solid rgba(0,57,66,0.08);
+    border-bottom: 1px solid rgba(0,57,66,0.08);
     display: flex;
     align-items: center;
     gap: 14px;

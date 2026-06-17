@@ -113,9 +113,8 @@ import ReportLayout from '@/components/ReportLayout.astro';
           <div>
             <p class="gs-substep-title">Download and install GitHub Desktop</p>
             <p class="gs-substep-body">
-              Download GitHub Desktop from the link below, open the installer, and follow the prompts.
-              When it opens, click <strong>Sign in to GitHub.com</strong> and use the GitHub account
-              you created in step 1.
+              Download GitHub Desktop from the link below and open the installer. Follow the
+              prompts to install it, then open the app.
             </p>
             <a href="https://desktop.github.com" target="_blank" rel="noopener" class="gs-external-link">
               <span class="gs-external-icon">↗</span>
@@ -127,16 +126,13 @@ import ReportLayout from '@/components/ReportLayout.astro';
         <div class="gs-substep">
           <span class="gs-substep-label">3b</span>
           <div>
-            <p class="gs-substep-title">Download the project folder</p>
+            <p class="gs-substep-title">Sign in to GitHub Desktop</p>
             <p class="gs-substep-body">
-              In GitHub Desktop, click <strong>File → Clone Repository</strong>. You'll see a list
-              of projects you have access to — find <strong>ux-prototyping</strong> and click it.
-              Under <strong>Local Path</strong>, choose somewhere easy to find — your
-              <strong>Documents</strong> folder is a good option. Then click <strong>Clone</strong>.
-            </p>
-            <p class="gs-substep-body">
-              This downloads a copy of the project to your computer. You'll see a folder called
-              <strong>ux-prototyping</strong> appear in the location you chose.
+              When GitHub Desktop opens for the first time, you'll see a welcome screen with
+              a few options. Click <strong>Sign in to GitHub.com</strong>. A browser window
+              will open — sign in using the GitHub account you created in step 1, then click
+              <strong>Authorize desktop</strong> when prompted. Switch back to GitHub Desktop
+              once it's done.
             </p>
           </div>
         </div>
@@ -144,12 +140,47 @@ import ReportLayout from '@/components/ReportLayout.astro';
         <div class="gs-substep">
           <span class="gs-substep-label">3c</span>
           <div>
+            <p class="gs-substep-title">Choose "Clone a Repository from the Internet"</p>
+            <p class="gs-substep-body">
+              Back in GitHub Desktop you'll see a screen with three options — click
+              <strong>Clone a Repository from the Internet</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div class="gs-substep">
+          <span class="gs-substep-label">3d</span>
+          <div>
+            <p class="gs-substep-title">Enter the repository URL</p>
+            <p class="gs-substep-body">
+              A window will appear with three tabs at the top: <em>GitHub.com</em>,
+              <em>GitHub Enterprise</em>, and <em>URL</em>. Click the <strong>URL</strong> tab.
+              Then paste the following address into the <strong>Repository URL</strong> field:
+            </p>
+            <div class="gs-copyblock">
+              <pre class="gs-code gs-code--wrap" id="repo-url">https://github.com/THG-AltitudeSiteBuilds/ux-prototyping</pre>
+              <button class="gs-copy-btn" onclick="
+                navigator.clipboard.writeText(document.getElementById('repo-url').innerText);
+                this.textContent = 'Copied!';
+                setTimeout(() => this.textContent = 'Copy', 2000);
+              ">Copy</button>
+            </div>
+            <p class="gs-substep-body">
+              Under <strong>Local Path</strong>, choose where to save the folder on your computer.
+              Your <strong>Documents</strong> folder is a good choice — somewhere easy to find.
+              Then click <strong>Clone</strong>.
+            </p>
+          </div>
+        </div>
+
+        <div class="gs-substep">
+          <span class="gs-substep-label">3e</span>
+          <div>
             <p class="gs-substep-title">Find the folder on your computer</p>
             <p class="gs-substep-body">
-              In GitHub Desktop, go to <strong>Repository → Show in Finder</strong> (Mac) or
+              Once cloning finishes, go to <strong>Repository → Show in Finder</strong> (Mac) or
               <strong>Show in Explorer</strong> (Windows). This opens the project folder — keep
-              this window open or note where it is, because you'll need to point Claude Code at
-              this folder in Part 3.
+              that window handy, because you'll need to point Claude Code at it in Part 3.
             </p>
           </div>
         </div>

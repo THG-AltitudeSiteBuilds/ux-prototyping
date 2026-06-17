@@ -235,10 +235,19 @@ import ReportLayout from '@/components/ReportLayout.astro';
               ">Copy</button>
             </div>
             <p class="gs-substep-body">
-              A pop-up window will appear in the background — minimise any open windows so you
-              can see it, then click <strong>Install</strong>. It takes 5–10 minutes. Once it
-              finishes, you're done — you can close Terminal.
+              One of two things will happen:
             </p>
+            <ul class="gs-outcome-list">
+              <li>
+                <strong>A pop-up window appears</strong> — minimise any open windows so you can
+                see it, then click <strong>Install</strong>. It takes 5–10 minutes. Once it
+                finishes, you're done — close Terminal and move on.
+              </li>
+              <li>
+                <strong>The terminal shows a message saying "already installed"</strong> — that's
+                good news. Git is already on your computer. Close Terminal and move on.
+              </li>
+            </ul>
           </div>
         </div>
 
@@ -1135,6 +1144,41 @@ import ReportLayout from '@/components/ReportLayout.astro';
     align-items: center;
     gap: 12px;
     margin-bottom: 10px;
+  }
+
+  /* ── Outcome list (e.g. "one of two things will happen") ── */
+  .gs-outcome-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 8px 0 0;
+    padding: 0;
+  }
+  .gs-outcome-list li {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--color-text-body);
+    padding: 10px 14px;
+    background: var(--color-bg-muted);
+    border: var(--card-border);
+    border-radius: 8px;
+    padding-left: 38px;
+    position: relative;
+  }
+  .gs-outcome-list li::before {
+    content: '→';
+    position: absolute;
+    left: 14px;
+    top: 10px;
+    color: var(--color-primary);
+    opacity: 0.4;
+    font-weight: 700;
+  }
+  .gs-outcome-list strong {
+    color: var(--color-text-heading);
+    display: block;
+    margin-bottom: 2px;
   }
 
   /* ── Tips list ──────────────────────────────────────────── */

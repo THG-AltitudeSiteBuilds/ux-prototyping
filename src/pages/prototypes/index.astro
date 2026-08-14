@@ -1,17 +1,17 @@
 ---
 import ReportLayout from '@/components/ReportLayout.astro';
 
-// Add an entry here for every standalone HTML prototype dropped into
-// public/assets/prototypes/. The `file` is the filename inside that folder.
+// Add an entry here for every standalone HTML prototype. The `slug` is the
+// filename (without .html) of a raw HTML file sitting next to this one in
+// src/pages/prototypes/ — Astro serves those as routes off the SSR worker.
 //
-// The files MUST live under public/assets/ — altitude.yaml only declares a
-// static route for /assets/. Anything outside it falls through to the SSR
-// worker, which has no asset binding in production and throws a 1101.
+// Do NOT put prototypes in public/assets/: the /assets/ static route on the
+// deployed site currently returns 500 for every file under it.
 const prototypes = [
   {
     title: 'MyProtein Checkout',
     desc: 'Mobile checkout prototype — guest and logged-in journeys, delivery vs click & collect, Premier/MyDemand delivery promo variants, and the payment method flows.',
-    file: 'myprotein-checkout.html',
+    slug: 'myprotein-checkout',
     date: '14 August 2026',
     tags: ['Checkout', 'Mobile'],
   }
@@ -32,7 +32,7 @@ const prototypes = [
   <div class="proto-list">
     {prototypes.map((proto) => (
       <a
-        href={`/assets/prototypes/${proto.file}`}
+        href={`/prototypes/${proto.slug}`}
         class="proto-card"
         target="_blank"
         rel="noopener"

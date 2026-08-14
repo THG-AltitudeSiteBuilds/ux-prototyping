@@ -2,7 +2,11 @@
 import ReportLayout from '@/components/ReportLayout.astro';
 
 // Add an entry here for every standalone HTML prototype dropped into
-// public/prototypes/. The `file` is the filename inside that folder.
+// public/assets/prototypes/. The `file` is the filename inside that folder.
+//
+// The files MUST live under public/assets/ — altitude.yaml only declares a
+// static route for /assets/. Anything outside it falls through to the SSR
+// worker, which has no asset binding in production and throws a 1101.
 const prototypes = [
   {
     title: 'MyProtein Checkout',
@@ -28,7 +32,7 @@ const prototypes = [
   <div class="proto-list">
     {prototypes.map((proto) => (
       <a
-        href={`/prototypes/${proto.file}`}
+        href={`/assets/prototypes/${proto.file}`}
         class="proto-card"
         target="_blank"
         rel="noopener"

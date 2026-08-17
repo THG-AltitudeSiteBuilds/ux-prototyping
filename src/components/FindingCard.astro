@@ -101,11 +101,11 @@ const DESIGN_BOARD_ID = 'TBC';
 
     const prompt = `You are raising a Monday.com ${ticketType} ticket from a UX audit report.
 
-Use the monday.com MCP tool to create an item on board ID ${boardId} with the following details:
+Use the monday.com MCP tool to:
 
-Item name: [UX ${ticketType === 'engineering' ? 'Bug' : 'Design'}] ${finding.title}
+1. Create an item on board ID ${boardId} named "[UX ${ticketType === 'engineering' ? 'Bug' : 'Design'}] ${finding.title}", with its Status column set to "To do" (not the board's default — check the board's Status column labels and use the "To do" one specifically).
+2. Add an Update on that item (the Updates/activity feed, not the Description column) containing:
 
-Description:
 Source: UX Audit — ${document.title} (${auditDate})
 Priority: ${finding.priority} | Viewport: ${finding.viewport} | Type: ${ticketType}
 

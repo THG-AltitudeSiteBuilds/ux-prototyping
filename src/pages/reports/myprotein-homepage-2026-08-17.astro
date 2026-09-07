@@ -1,0 +1,172 @@
+---
+import ReportLayout from '@/components/ReportLayout.astro';
+import FindingCard from '@/components/FindingCard.astro';
+---
+
+<ReportLayout title="Myprotein — Homepage">
+
+  <section class="report-intro">
+    <h1 class="report-h1">UX Audit: Myprotein Homepage</h1>
+    <p class="report-meta">Myprotein Homepage &mdash; Audited 17 August 2026</p>
+    <p class="report-summary">
+      Focused audit of myprotein.com at desktop (1440px) and mobile (390px) viewports, run as a
+      live test of the newly-installed <code>myprotein-ux-review</code> skill and its design-token
+      reference file. This pass covers the hero banner, Best Sellers product carousel, Clothing
+      Sale carousel, and primary CTAs at both viewports. It is a first-pass, not an exhaustive
+      audit — full nav mega-menus, search, footer, and every carousel item were not individually
+      checked. The standout issue is an inaccessible hero CTA baked into a static image with no
+      accessible name, present at both viewports.
+    </p>
+  </section>
+
+  <section class="findings-section">
+    <h2 class="section-heading">Findings</h2>
+
+    <!-- HIGH PRIORITY -->
+
+    <FindingCard
+      title="Hero CTA is baked into a static image with a blank accessible name"
+      viewport="Both"
+      priority="high"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="hero-cta-image-blank-label"
+    >
+      <p slot="what">
+        The entire hero — headline, subhead, and the "SHOP NOW" button — is rendered as a single
+        banner <code>&lt;img&gt;</code> wrapped in one <code>&lt;a&gt;</code>, at both desktop and
+        mobile viewports. DOM inspection confirms the image's <code>alt</code> attribute is a
+        single space character (<code>" "</code>), and the wrapping link's <code>aria-label</code>
+        is also just a space. There is no real "SHOP NOW" button element in the DOM for this hero —
+        it's pixels in the graphic.
+      </p>
+      <p slot="why">
+        Screen reader users land on this link and hear nothing — not "Shop Now", not the
+        destination, not even the promo. This is the first and most prominent CTA on the homepage,
+        currently invisible to assistive technology (WCAG 2.1 SC 1.1.1 Non-text Content and SC 2.4.4
+        Link Purpose both fail). It's also a maintenance cost: any copy change to "25% OFF" or the
+        CTA label requires re-exporting an image rather than editing text, and the button doesn't
+        use the real pill/button component from the design system at all.
+      </p>
+      <p slot="fix">
+        Set a real <code>alt</code> on the image describing the promotion (e.g. "25% off almost
+        everything"), and give the wrapping link a proper <code>aria-label</code> such as "Shop 25%
+        off almost everything". Longer term, rebuild the hero as layered text + the real button
+        component over a background image, so the CTA is an actual interactive element using the
+        pill button token (radius 9999px, <code>#003942</code> fill) rather than flattened artwork.
+      </p>
+    </FindingCard>
+
+    <!-- MEDIUM PRIORITY -->
+
+    <FindingCard
+      title="Large dead whitespace gaps between homepage sections on mobile"
+      viewport="Mobile"
+      priority="medium"
+      ticketType="engineering"
+      ticketable={true}
+      findingId="mobile-dead-whitespace"
+    >
+      <p slot="what">
+        Scrolling the mobile homepage (390px), there's roughly 800&ndash;900px of combined blank
+        vertical space: a large empty gap below the Best Sellers product carousel and above its
+        "VIEW ALL" button, and a second gap between "VIEW ALL" and the "Clothing Sale" heading
+        below it. This persisted after a few seconds' wait, so it isn't just a lazy-load-in-progress
+        skeleton state.
+      </p>
+      <p slot="why">
+        On mobile, where scroll distance is already at a premium, roughly two screen-heights of
+        empty space between sections adds significant, purposeless scroll effort and makes the page
+        feel broken or unfinished at exactly the point where a user is browsing product carousels —
+        a core conversion path.
+      </p>
+      <p slot="fix">
+        Inspect the carousel and "VIEW ALL" wrapper elements for a fixed-height container that isn't
+        collapsing to its content on mobile (a common cause is a min-height or aspect-ratio rule
+        sized for a desktop layout leaking into the mobile breakpoint). Recommend re-checking this
+        live, since it's the kind of layout bug worth confirming isn't specific to this one session.
+      </p>
+    </FindingCard>
+
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Design Consistency</h2>
+    <p>
+      Core interactive elements match the design token reference well: the Quick Buy and hero
+      buttons use Figtree, uppercase bold labels, and the correct <code>#003942</code> primary
+      fill/border, and their computed border-radius (32px on a ~48px-tall button) renders as a full
+      pill visually identical to the <code>9999px</code> pill token — not a real deviation. Product
+      card background (<code>#f6f3ef</code>) is a close but not exact match for the documented
+      <code>secondary.lightest</code> token (<code>#F8F7F4</code>) — a minor, likely imperceptible
+      drift, not worth a ticket on its own.
+    </p>
+    <p>
+      Note for context: an earlier version of this skill (before its design-token reference file
+      existed) generated a prior homepage report on 2 June 2026 that raised a "Quick Buy button
+      missing the mint outer ring" finding, on the assumption that a mint (<code>#94E5B5</code>)
+      ring was the brand's primary CTA signature. The live-verified token data now available shows
+      that's incorrect — mint is a radio/toggle selection ring, not a button signature — so that
+      earlier finding (and the related hero-CTA-ring recommendation) should be treated as
+      superseded, not acted on as written.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Accessibility Notes</h2>
+    <p>
+      The hero CTA's blank <code>alt</code>/<code>aria-label</code> (WCAG 2.1 SC 1.1.1, SC 2.4.4) is
+      the significant issue found in this pass — it removes the primary homepage action from screen
+      reader users entirely. By contrast, the "What's New" carousel CTA checked during this audit
+      (a "SHOP NOW" link into New In clothing) does carry a correct <code>aria-label="SHOP NOW"</code>,
+      showing the pattern is inconsistently applied across the page rather than a blanket policy.
+      Colour contrast, focus order, and form labelling were not exhaustively checked in this pass.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Conversion Summary</h2>
+    <p>
+      The homepage's promotional messaging and product carousels are clear and the core buying
+      controls (Quick Buy, pricing, promo badges) are well-styled and on-brand. The most consequential
+      issue is invisible rather than visual: the primary hero CTA doesn't exist as far as assistive
+      technology is concerned, at both viewports, which is a hard conversion blocker for those users
+      rather than friction. The mobile whitespace gaps are a softer but still real tax on scroll
+      effort during browsing, right where users are comparing products.
+    </p>
+  </section>
+
+  <section class="prose-section">
+    <h2 class="section-heading">Recommended Implementation Order</h2>
+    <ol class="recommendations">
+      <li>Add a real <code>alt</code> and <code>aria-label</code> to the hero banner image/link at both viewports — small fix, removes a hard accessibility blocker on the page's primary CTA.</li>
+      <li>Investigate and fix the mobile dead-whitespace gaps around the Best Sellers carousel and "VIEW ALL" button.</li>
+      <li>Longer term: rebuild the hero as real text + button over a background image rather than flattened artwork, so copy and CTA changes don't require new image exports.</li>
+    </ol>
+  </section>
+
+</ReportLayout>
+
+<style is:global>
+  .finding-card code {
+    font-family: Menlo, Monaco, 'Courier New', monospace;
+    font-size: 12px;
+    background: var(--color-bg-muted);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--color-text-heading);
+  }
+</style>
+
+<style>
+  .report-intro { margin-bottom: 40px; }
+  .report-h1 { font-size: 26px; font-weight: 800; color: var(--color-text-heading); line-height: 1.25; margin-bottom: 6px; }
+  .report-meta { font-size: 13px; color: var(--color-text-body); opacity: 0.65; margin-bottom: 14px; }
+  .report-summary { font-size: 15px; line-height: 1.7; color: var(--color-text-body); max-width: 680px; }
+  .findings-section { margin-bottom: 48px; }
+  .section-heading { font-size: 18px; font-weight: 700; color: var(--color-text-heading); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(0, 57, 66, 0.1); }
+  .prose-section { margin-bottom: 36px; }
+  .prose-section p { font-size: 15px; line-height: 1.7; color: var(--color-text-body); }
+  .recommendations { padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
+  .recommendations li { font-size: 14px; line-height: 1.6; color: var(--color-text-body); }
+</style>

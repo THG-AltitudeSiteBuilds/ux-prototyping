@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Nutrition Squad — SLT view</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --teal:#003942; --ink:#0d2a30; --ink-2:#5b7076; --ink-3:#93a3a7;
+  --bg:#fff; --card:#f2f2f2; --line:#e2e2de; --soft:#e9e9e7;
+  --green:#1f8a5b; --green-sf:#eaf6f0; --amber:#b4690e; --amber-sf:#fdf4e7;
+  --red:#c0303f; --red-sf:#fceced; --r:14px;
+  --font:Figtree,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);
+  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:38px 26px 70px}
+
+/* thin strip back to the rest of the site, so the page is not a dead end */
+.sitebar{display:flex;align-items:center;gap:14px;padding:9px 26px;background:var(--teal);
+  font-size:12.5px;font-weight:700}
+.sitebar a{color:#cfe3e7;text-decoration:none}
+.sitebar a:hover{color:#fff}
+.sitebar .brand{color:#fff}
+
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+  flex-wrap:wrap;padding-bottom:22px;border-bottom:2px solid var(--teal);margin-bottom:30px}
+h1{font-size:27px;font-weight:800;letter-spacing:-.4px;margin:0;color:var(--teal)}
+.sub{font-size:14px;color:var(--ink-2);margin-top:5px}
+.asat{text-align:right;font-size:13px;color:var(--ink-2);white-space:nowrap}
+.asat b{display:block;font-size:15px;color:var(--ink);font-weight:700}
+.stale{display:inline-block;margin-top:6px;background:var(--amber-sf);color:var(--amber);
+  border-radius:100px;padding:3px 11px;font-size:12px;font-weight:700}
+.errbar{display:inline-block;margin-top:6px;background:var(--red-sf);color:var(--red);
+  border-radius:100px;padding:3px 11px;font-size:12px;font-weight:700}
+.loading{padding:70px 0;text-align:center;color:var(--ink-3);font-size:14px}
+
+h2{font-size:19px;font-weight:800;margin:0 0 4px;letter-spacing:-.2px}
+.sd{font-size:13.5px;color:var(--ink-2);margin:0 0 16px;max-width:74ch}
+section{margin-bottom:40px}
+
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:40px}
+.stat{background:var(--card);border-radius:var(--r);padding:19px 21px}
+.stat .v{font-size:31px;font-weight:800;letter-spacing:-1px;line-height:1.1;color:var(--teal)}
+.stat .k{font-size:12.5px;color:var(--ink-2);margin-top:5px;font-weight:600}
+.stat .n{font-size:11.5px;color:var(--ink-3);margin-top:3px}
+
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;
+  color:var(--ink-3);font-weight:700;padding:0 12px 9px 0;border-bottom:1px solid var(--line)}
+td{padding:14px 12px 14px 0;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td .nm{font-weight:700}
+td .mk{font-size:12.5px;color:var(--ink-2);margin-top:3px}
+.plat{display:inline-block;background:var(--soft);border-radius:100px;padding:2px 9px;
+  font-size:11.5px;font-weight:700;color:var(--ink-2);white-space:nowrap}
+.read{font-size:13px;color:var(--ink)}
+.read .dt{color:var(--ink-3);font-size:12px}
+.none{color:var(--ink-3);font-style:italic;font-size:13px}
+.due{white-space:nowrap;font-size:13px}
+.due.over{color:var(--red);font-weight:700}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.win{background:var(--green-sf);border-radius:var(--r);padding:18px 20px}
+.win .v{font-size:24px;font-weight:800;color:var(--green);letter-spacing:-.5px}
+.win .n{font-weight:700;margin-top:5px}
+.win .d{font-size:12.5px;color:var(--ink-2);margin-top:5px}
+
+.blk{background:var(--card);border-radius:0 var(--r) var(--r) 0;padding:14px 17px;
+  border-left:4px solid var(--amber);margin-bottom:10px}
+.blk .n{font-weight:700}
+.blk .w{font-size:13px;color:var(--ink-2);margin-top:4px}
+.blk .a{font-size:13px;color:var(--ink);margin-top:6px}
+.blk .a b{color:var(--amber)}
+
+.note{background:var(--card);border-radius:var(--r);padding:18px 21px;font-size:13.5px;
+  color:var(--ink-2);line-height:1.65}
+.note b{color:var(--ink)}
+footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--ink-3);line-height:1.7}
+
+@media print{
+  body{font-size:12px} .wrap{padding:0} .sitebar{display:none}
+  header{page-break-after:avoid} section{page-break-inside:avoid}
+}
+@media (max-width:640px){
+  .wrap{padding:24px 16px 50px} h1{font-size:22px}
+  table,thead,tbody,th,td,tr{display:block}
+  thead{display:none} td{border:none;padding:2px 0}
+  tr{border-bottom:1px solid var(--line);padding:14px 0}
+}
+</style>
+</head>
+<body>
+<div class="sitebar"><a class="brand" href="/">UX Intelligence</a></div>
+<div class="wrap">
+
+<div id="page"><div class="loading">Reading the boards…</div></div>
+
+<script>
+/* ===========================================================================
+   Nutrition Squad — SLT view
+
+   The page is generated at load time from the Nutrition Projects and UX
+   Experiment Results boards, through /api/monday, which holds the Monday token
+   server-side. There is no hand-maintained data block to keep up to date and
+   nothing to schedule: opening the page is the refresh.
+
+   Nothing here is invented. Every field maps to a column someone on the squad
+   actually fills in, and where a board has nothing to say the page says nothing
+   rather than guessing. If Monday cannot be reached, the last hand-written
+   snapshot renders instead and the header says so plainly.
+=========================================================================== */
+
+/* Snapshot of 2 September 2026 — the fallback, and the only hardcoded data left. */
+const FALLBACK = {
+  asAt: "2 September 2026, 07:30",
+  boardStale: "Several milestone dates have passed without the board being updated. Dates shown are what the board says, not confirmed slippage.",
+  stats: [
+    {v:"6",       k:"Live experiments",        n:"Reading now across web"},
+    {v:"£32.44m", k:"Programme value to date", n:"Since Jan 2024, wins plus loss avoided"},
+    {v:"22",      k:"Quantified experiments",  n:"Of 120 run"},
+    {v:"30",      k:"Projects in flight",      n:"Active, excluding parked and delivered"}
+  ],
+  live: [
+    {n:"PDP V3 Enhancements", p:"Web", m:"Myprotein IE only · 12 Aug – 9 Sep",
+     r:"RPV +3.89% · CVR +5.4% · AOV −1.43% · checkout +1.87%", d:"24 Aug",
+     note:"Not yet significant. Winning on conversion rather than order value — the inverse of the original PDP V3 result.",
+     due:"Readout 9 Sep", over:false},
+    {n:"Dynamic Yield basket recommendations", p:"Web + App", m:"23 EU markets · 13 Aug – 24 Sep",
+     r:"Basket recs RPV +12.61% · site RPV +1.01% · CVR +0.74%", d:"19 Aug",
+     note:"", due:"Readout 24 Sep", over:false},
+    {n:"Mobile Header V1", p:"Web", m:"16 markets · 29 Jul – 3 Sep",
+     r:"RPV +1.62% blended · GB +2.05% · CVR +0.78%", d:"13 Aug",
+     note:"Market spread is very wide (BE +15.7% to IN −14.6%). Rollout needs deciding market by market, not on the blended figure.",
+     due:"Ends 3 Sep", over:false},
+    {n:"PLP Improvements", p:"Web", m:"Board says IE — latest note says 18 sites across UK, JP, KR, US",
+     r:"CVR +0.51% · RPV flat — GB is the read to weight", d:"13 Aug",
+     note:"Board record and reality disagree on market scope. Being corrected.",
+     due:"Readout was 26 Aug", over:true},
+    {n:"Home Page & List Page Conversion", p:"Web", m:"Myprotein GB · 13 – 26 Aug",
+     r:"RPV +4.24% · CVR +3.19% · AOV +1.02%", d:"14 Aug",
+     note:"The read has since fallen sharply. Experiment end date has passed with no readout recorded.",
+     due:"Readout was 26 Aug", over:true},
+    {n:"Hide Floating Button", p:"Web", m:"Myprotein GB",
+     r:"", d:"",
+     note:"Picked up from the experimentation feed rather than from the squad. Owner, dates and hypothesis still to confirm.",
+     due:"No date set", over:true}
+  ],
+  wins: [
+    {v:"£1.53m", n:"Site Drawers", d:"+1.24% revenue per visitor, significant. GB and IE, concluded 19 Aug. Rollout decision outstanding."},
+    {v:"£1.40m", n:"PDP V3", d:"+3.16% revenue per visitor, significant. GB and IE, concluded 21 Jul. Now scaling by SKU and language."}
+  ],
+  blocked: [
+    {n:"Checkout Redesign", w:"Ingenuity — waiting on an account section fix before our work can progress",
+     a:"Needs a named build owner and a committed start date, or an explicit decision to deprioritise so dependent work can be replanned."},
+    {n:"App onboarding", w:"Ingenuity — 15 days of effort agreed, no start date",
+     a:"Needs a start date, or a date by which one will exist."},
+    {n:"Virtual Try-On — app integration", w:"App team — no timeline",
+     a:"Needs an owner and a date for the app integration."},
+    {n:"Basket V3", w:"Engineering — paused 21 Aug after bugs causing revenue loss and mobile crashes",
+     a:"Relaunched as Wave 2 on 25 Aug. Early reads show the same basket recommendation pattern that caused the pause — being checked."},
+    {n:"Educational landing pages", w:"UX capacity — Protein, Creatine and Fibre all past their go-live dates",
+     a:"Protein was due 14 Aug. All three need a realistic committed date."}
+  ],
+  ahead: [
+    {d:"3 Sep",  n:"Mobile Header V1 experiment ends"},
+    {d:"4 Sep",  n:"Homepage designs ready for user testing"},
+    {d:"9 Sep",  n:"PDP V3 Enhancements readout"},
+    {d:"15 Sep", n:"+Collagen landing page — template decision point"},
+    {d:"18 Sep", n:"Basket V3 readout, unblocking Mini Basket and Premier Delivery"},
+    {d:"24 Sep", n:"Dynamic Yield basket recommendations readout"}
+  ]
+};
+
+const B_PROJ = 5089014716, B_EXP = 5102000247;
+const PCOLS = ["person","status","color_mm64ptrz","color_mkyrtnd9","color_mkyr4n3v",
+  "date4","timerange_mkypf3zk","long_text_mm64qkhw","text_mm655aj7","text_mm65s82g",
+  "date_mm65e3k4","text_mm65q47v","text_mm65dr1n","text_mm65f9fx","text_mm67pbwg","text_mm67xp46"];
+
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const TODAY = new Date(new Date().toDateString());
+const num = v => { const n = parseFloat(String(v ?? "").replace(/[^0-9.\-]/g, "")); return isNaN(n) ? 0 : n; };
+const money = n => n ? "£" + (n / 1e6).toFixed(2) + "m" : "";
+const cut = (s, n) => { s = String(s || "").replace(/\s+/g, " ").trim(); return s.length > n ? s.slice(0, n - 1) + "…" : s; };
+const fmtD = d => { const t = new Date(d); return isNaN(t) ? "" : t.toLocaleDateString("en-GB", { day: "numeric", month: "short" }); };
+const daysTo = d => { if (!d) return null; const t = new Date(d); return isNaN(t) ? null : Math.round((t - TODAY) / 864e5); };
+
+async function board(boardId, columnIds) {
+  const res = await fetch("/api/monday", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ op: "items", args: { boardId, limit: 300, ...(columnIds ? { columnIds } : {}) } })
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok || !data || data.error) throw new Error((data && data.error) || ("HTTP " + res.status));
+  return data.result.items;
+}
+
+/* A reading is written as "CVR +0.51% · RPV flat (13 Aug)" — the figure and the
+   date it was taken. Split them so the date can be greyed out, and leave the
+   text alone if it was not written that way. */
+function splitReading(s) {
+  const m = String(s || "").match(/^(.*)\s*\(([^()]{3,24})\)\s*$/);
+  return m ? { r: m[1].trim(), d: m[2].trim() } : { r: String(s || "").trim(), d: "" };
+}
+
+function build(projects, experiments) {
+  const P = projects.map(it => {
+    const c = it.column_values || {};
+    const ms = c.date_mm65e3k4 || "";
+    return {
+      name: it.name, status: c.status || "", phase: c.color_mm64ptrz || "",
+      platform: c.color_mkyr4n3v || "", timeline: c.timerange_mkypf3zk || "",
+      latest: c.long_text_mm64qkhw || "", milestone: c.text_mm65s82g || "", msDate: ms,
+      waiting: c.text_mm65q47v || "", action: c.text_mm65dr1n || "",
+      reading: c.text_mm67pbwg || "", markets: c.text_mm67xp46 || "",
+      due: daysTo(ms), done: c.status === "Done", parked: c.color_mm64ptrz === "Parked"
+    };
+  });
+
+  const E = experiments.map(it => {
+    const c = it.column_values || {};
+    return {
+      name: it.name, group: it.group.title || "", project: c.text_mm64n3q8 || "",
+      outcome: c.color_mm64yf4a || "", sites: c.text_mm64j4wr || "", sig: c.color_mm64qk1c || "",
+      rpv: c.text_mm64mcej || "", rng: c.text_mm642fp3 || "",
+      inc: num(c.numeric_mm64436h), scaled: num(c.numeric_mm64qgf6),
+      run: num(c.numeric_mm64v0ef), quant: num(c.numeric_mm64gwg6)
+    };
+  });
+
+  const summary = E.find(e => e.group === "Programme summary");
+  const liveP = P.filter(p => p.status === "Live Experiment");
+  const inFlight = P.filter(p => !p.done && !p.parked);
+  const overdue = P.filter(p => !p.done && p.due !== null && p.due < 0);
+
+  // A stat with nothing behind it is dropped rather than shown as a zero.
+  const stats = [
+    { v: String(liveP.length), k: "Live experiments", n: "Reading now across web" },
+    summary && (summary.inc + summary.scaled)
+      ? { v: money(summary.inc + summary.scaled), k: "Programme value to date", n: "Since Jan 2024, wins plus loss avoided" }
+      : null,
+    summary && summary.run
+      ? { v: String(summary.quant), k: "Quantified experiments", n: "Of " + summary.run + " run" }
+      : null,
+    { v: String(inFlight.length), k: "Projects in flight", n: "Active, excluding parked and delivered" }
+  ].filter(Boolean);
+
+  const live = liveP.map(p => {
+    const { r, d } = splitReading(p.reading);
+    return {
+      n: p.name,
+      p: p.platform || "—",
+      m: p.markets || p.timeline || "",
+      r, d,
+      note: cut(p.latest, 150),   // the squad's own words, not editorialised here
+      // Some milestones are written with the date already in them ("readout
+      // 9 Sep"). Appending the column date to those gives two dates in one
+      // cell, which reads as a contradiction rather than a detail.
+      due: p.milestone
+        ? p.milestone + (p.msDate && !/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i.test(p.milestone)
+            ? " · " + fmtD(p.msDate) : "")
+        : (p.msDate ? fmtD(p.msDate) : "No date set"),
+      over: p.due !== null && p.due < 0
+    };
+  });
+
+  // This section promises "statistically significant", so it has to filter on
+  // significance and not just on outcome. Most of the Programme history archive
+  // is tagged Winner with the significance column left at Inconclusive — those
+  // are real historical wins, but they are not proven results and showing a
+  // £3.02m figure under a significance claim the board does not support would
+  // be the single most misleading thing on an SLT page. They are still counted
+  // in the programme total above, which is where they belong.
+  const wins = E
+    .filter(e => e.outcome === "Winner" && e.sig === "Significant" && e.inc > 0)
+    .sort((a, b) => b.inc - a.inc)
+    .map(e => ({
+      v: money(e.inc),
+      n: e.project || e.name,
+      d: [
+        e.rpv ? e.rpv + " revenue per visitor" : "",
+        "significant",
+        e.sites,
+        e.rng ? "Range " + e.rng : ""
+      ].filter(Boolean).join(". ") + "."
+    }));
+
+  const blocked = P
+    .filter(p => !p.done && (p.phase === "Blocked" || p.status === "Waiting"))
+    .filter(p => p.waiting || p.action)
+    .map(p => ({ n: p.name, w: p.waiting || "—", a: p.action || "No action recorded." }));
+
+  const ahead = P
+    .filter(p => !p.done && p.due !== null && p.due >= 0 && p.due <= 42 && p.milestone)
+    .sort((a, b) => (a.msDate < b.msDate ? -1 : 1))
+    .map(p => ({ d: fmtD(p.msDate), n: p.name + " — " + p.milestone }));
+
+  return {
+    asAt: new Date().toLocaleString("en-GB", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" }),
+    boardStale: overdue.length
+      ? overdue.length + " milestone date" + (overdue.length > 1 ? "s have" : " has") +
+        " passed without the board being updated. Dates shown are what the board says, not confirmed slippage."
+      : "",
+    stats, live, wins, blocked, ahead
+  };
+}
+
+function render(DATA, warning) {
+  document.getElementById("page").innerHTML = `
+<header>
+  <div>
+    <h1>Nutrition Squad</h1>
+    <div class="sub">Experiments, delivery and impact across Myprotein web and app</div>
+  </div>
+  <div class="asat">As at<b>${esc(DATA.asAt)}</b>
+    ${warning ? `<span class="errbar">${esc(warning)}</span>` : ""}
+    ${DATA.boardStale ? `<span class="stale">Some dates need confirming</span>` : ""}</div>
+</header>
+
+<div class="stats">
+  ${DATA.stats.map(s => `<div class="stat"><div class="v">${esc(s.v)}</div>
+    <div class="k">${esc(s.k)}</div><div class="n">${esc(s.n)}</div></div>`).join("")}
+</div>
+
+<section>
+  <h2>Live experiments</h2>
+  <p class="sd">Changes currently in front of customers. Every read below is directional and mid-flight
+  unless stated — experiments are called only when they conclude.</p>
+  ${DATA.live.length ? `<table>
+    <thead><tr><th style="width:26%">Experiment</th><th style="width:9%">Platform</th>
+      <th style="width:27%">Reading now</th><th style="width:23%">Latest</th><th style="width:15%">Next</th></tr></thead>
+    <tbody>
+      ${DATA.live.map(e => `<tr>
+        <td><div class="nm">${esc(e.n)}</div><div class="mk">${esc(e.m)}</div></td>
+        <td><span class="plat">${esc(e.p)}</span></td>
+        <td class="read">${e.r ? `${esc(e.r)}${e.d ? ` <span class="dt">(${esc(e.d)})</span>` : ""}`
+          : `<span class="none">No read recorded</span>`}</td>
+        <td class="read">${e.note ? esc(e.note) : `<span class="none">—</span>`}</td>
+        <td class="due ${e.over ? "over" : ""}">${esc(e.due)}</td>
+      </tr>`).join("")}
+    </tbody>
+  </table>` : `<p class="none">No experiments are reading right now.</p>`}
+</section>
+
+<section>
+  <h2>Concluded and proven</h2>
+  <p class="sd">Experiments that finished with a statistically significant result and a revenue figure
+  from the Experimentation team.</p>
+  ${DATA.wins.length ? `<div class="cards">
+    ${DATA.wins.map(w => `<div class="win"><div class="v">${esc(w.v)}</div>
+      <div class="n">${esc(w.n)}</div><div class="d">${esc(w.d)}</div></div>`).join("")}
+  </div>` : `<p class="none">Nothing concluded with a quantified result yet.</p>`}
+</section>
+
+<section>
+  <h2>Waiting on a decision or a dependency</h2>
+  <p class="sd">Work that cannot move without someone outside the squad. Listed because visibility is
+  the only lever we have on these.</p>
+  ${DATA.blocked.length ? DATA.blocked.map(b => `<div class="blk"><div class="n">${esc(b.n)}</div>
+    <div class="w">${esc(b.w)}</div><div class="a"><b>Needs:</b> ${esc(b.a)}</div></div>`).join("")
+    : `<p class="none">Nothing is blocked on anyone outside the squad.</p>`}
+</section>
+
+<section>
+  <h2>The next six weeks</h2>
+  ${DATA.ahead.length ? `<table>
+    <tbody>${DATA.ahead.map(a => `<tr><td style="width:90px;font-weight:700">${esc(a.d)}</td>
+      <td>${esc(a.n)}</td></tr>`).join("")}</tbody>
+  </table>` : `<p class="none">Nothing dated in the next six weeks.</p>`}
+</section>
+
+<section>
+  <h2>How to read the money</h2>
+  <div class="note">
+    <b>Every figure is an annual extrapolation</b> from the few weeks an experiment ran, and the
+    confidence intervals are wide — where a range is recorded above, that is the honest spread.<br><br>
+    <b>Saves are counterfactual.</b> Loss avoided by not shipping a losing variant. Real, but it will
+    never appear in a financial report.<br><br>
+    <b>Totals are not strictly additive.</b> Several experiments ran on the same surfaces and the same
+    customers, so summing annualised uplifts overstates the combined effect.<br><br>
+    <b>This is a squad number</b>, covering CRO, Engineering, Trading and UX — not UX alone.<br><br>
+    <b>One experiment is excluded.</b> A £13.0m Basket V3 save, originally the largest line in the
+    programme, has been removed: the variant contained a broken checkout button that went unnoticed
+    while the test ran, so the figure measured a technical fault rather than a design outcome. This
+    still needs correcting with the Experimentation team at source.
+  </div>
+</section>
+
+<footer>
+  Read live from the Nutrition Projects and UX Experiment Results boards in Monday each time this page
+  is opened; the timestamp at the top is the moment the data was read. Where a milestone date has
+  passed it is shown as the board records it — that usually means the board has not been updated
+  rather than that the work has slipped, and those are being chased separately.
+</footer>`;
+}
+
+(async () => {
+  try {
+    const [projects, experiments] = await Promise.all([board(B_PROJ, PCOLS), board(B_EXP, null)]);
+    render(build(projects, experiments), "");
+  } catch (e) {
+    console.error("board read failed:", e && e.message);
+    render(FALLBACK, "Couldn’t reach Monday — showing saved data");
+  }
+})();
+</script>
+</div>
+</body>
+</html>

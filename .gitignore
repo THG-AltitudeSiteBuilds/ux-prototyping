@@ -15,3 +15,5 @@ coverage
 dist
 .astro
 .wrangler
+# local secrets for wrangler dev — never commit
+.dev.vars

@@ -1,0 +1,5 @@
+# Copy to .dev.vars (gitignored) for local testing with `npm run dev`.
+# On the deployed site this lives as an Altitude platform variable instead.
+
+# Monday personal API token: monday.com -> avatar -> Developers -> My access tokens
+MONDAY_API_TOKEN=
